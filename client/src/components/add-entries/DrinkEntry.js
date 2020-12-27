@@ -5,7 +5,6 @@ import BottomNavbar from '../shared/BottomNavbar';
 import Icons from '../shared/Icons';
 import { Link } from 'react-router-dom';
 import SearchField from './SearchField';
-import IngredientList from './IngredientList'
 import AddIngDrink from './AddIngDrink';
 export default class AddDrinks extends Component {
   state = {
@@ -146,7 +145,7 @@ export default class AddDrinks extends Component {
               </div>
           </form>
       <SearchField {...this.state} query={this.state.query} setQuery={this.setQuery} />
-      <IngredientList {...this.state} query={this.state.query} setQuery={this.setQuery} handleClick={this.handleClick}/>
+      {/* <IngredientList {...this.state} query={this.state.query} setQuery={this.setQuery} handleClick={this.handleClick}/> */}
       <AddIngDrink {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleClick={this.handleClick} handleEditing={this.handleEditing} handleDelete={this.handleDelete}/>
       <Link className="link blue hover-silver dib mh3 tc" style={{
         "display": "flex", "flexDirection":"row", "justifyContent": "center", "alignItems":"center"}}>

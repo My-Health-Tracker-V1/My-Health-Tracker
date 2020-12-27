@@ -13,6 +13,7 @@ import FoodsList from './components/add-entries/FoodsList'
 import FoodEntry from './components/add-entries/FoodEntry';
 import DrinkEntry from './components/add-entries/DrinkEntry';
 import FoodEdit from './components/edit-entries/FoodEdit';
+import AddIngredient from './components/add-entries/AddIngredient'
 
 //Hortencia:components for the BottomNavBar Links
 import Analysis from './components/nav-bar-options/Analysis'
@@ -100,6 +101,9 @@ class App extends React.Component {
       />
       <Route exact path='/add/Foods' 
       render={(props) => <FoodEntry user={this.state.user} {...props}/>}
+      />
+      <Route exact path='/add/Ingredient' 
+      render={(props) => <AddIngredient user={this.state.user} {...props}/>}
       />
       <Route exact path='/add/Drinks' 
       render={(props) => <DrinkEntry user={this.state.user} {...props}/>}

@@ -3,12 +3,10 @@ import React, { Component } from 'react';
 import TopBar from '../shared/TopBar';
 import BottomNavbar from '../shared/BottomNavbar';
 import Icons from '../shared/Icons';
-import { Link } from 'react-router-dom';
-import AddRep from './AddRep';
-import AddIgt from './AddIgt';
-import SearchField from './SearchField';
-import IngredientList from './IngredientList';
-// import FoodsList from './FoodsList'
+import DateTimeInput from './DateTimeInput';
+import Buttons from './Buttons';
+import AddIngredient from './AddIngredient'
+import '../add-entries/FoodEntry.css'
 
 export default class FoodEntry extends Component {
   state = {
@@ -37,47 +35,6 @@ export default class FoodEntry extends Component {
     ingredientCount: 0,
     query: ''
 
-    // startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    // startTime: this.props.location.state?.symptoms.startTime ||new Date().toISOString().split('T')[1].slice(0,5),//this should bte the present time in the string format:"hh:mm"
-    // name:this.props.location.state?.symptoms.name,
-    // intensity:this.props.location.state?.symptoms.intensity,
-    // notes:this.props.location.state?.symptoms.notes,
-    // id:this.props.location.state?.symptoms._id,
-    // editing:this.props.location.state?.editing
-  }
-
-  // Get initial ingredients data
-  getAllIngredients = () => {
-    axios.get('/api/ingredients')
-     .then(response => {
-       console.log(response.data);
-       this.setState({
-          ingredients: response.data
-       })
-     })
-     .catch(err => {
-       console.log(err.response)
-     })
-  }
-
-  componentDidMount = () => {
-    this.getAllIngredients();
-  }
-
-  // Functions for search bar
-  setQuery = query => {
-    this.setState({
-      query: query
-    })
-  }
-  handleSearch = event => {
-    const filteredIngredients = this.state.ingredients.filter(ingredient => 
-      ingredient.name.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    this.setState({
-      query: event.target.value,
-      ingredients: filteredIngredients
-    })
   }
 
   // Function for fill out the ingredient form
@@ -313,49 +270,39 @@ export default class FoodEntry extends Component {
     }
   
   render() {
-    let inputComponent;
-    if (this.state.handleShowSingle) {     
-      inputComponent = <AddIgt {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSingleSubmit} handleDelete={this.handleDelete} handleEditing={this.handleEditing}/>;    
-      } 
-    else {      
-      inputComponent = <AddRep {...this.state} handleChange={this.handleChange} handleSubmit={this.handleRecipeSubmit} handleAddButton={this.handleAddButton} handleDelete={this.handleDelete} handleEditing={this.handleEditing}/>;  
-      } 
-      console.log(this.props.location.state)
+    // let inputComponent;
+    // if (this.state.handleShowSingle) {     
+    //   inputComponent = <AddIgt {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSingleSubmit} handleDelete={this.handleDelete} handleEditing={this.handleEditing}/>;    
+    //   } 
+    // else {      
+    //   inputComponent = <AddRep {...this.state} handleChange={this.handleChange} handleSubmit={this.handleRecipeSubmit} handleAddButton={this.handleAddButton} handleDelete={this.handleDelete} handleEditing={this.handleEditing}/>;  
+    //   } 
+    //   console.log(this.props.location.state)
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
-        <form onSubmit={this.handleSingleSubmit} onSubmit={this.handleRecipeSubmit}>
-        <div className="date-time">
-              <label htmlFor="date" className="f6 mt3">Date:</label>
-              <input type="date" id="date"
-                    name="date" value={this.state.date}
-                onChange={this.handleChange}
+
+        <Buttons />
+        <DateTimeInput {...this.state} handleChange={this.handleChange} handleSubmit={this.handleRecipeSubmit}/>
+        
+        <div className="food-container">
+          <div className="row-container">
+            <Icons icon="FoodsDetails" />
+            <form>
+              <input className="f6 pa1 mr3 ml1 w10 mv1"
+                type='text'
+                id='recipe-input'
+                name='recipeName' 
+                placeholder="Add a meal name, eg. Pizza"
+                onChange={this.props.handleChange}
               />
-              <label htmlFor="startTime" className="f6 mt3">Time:</label>
+            </form>
+          </div>
 
-              <input type="time" id="startTime"
-                  name="startTime" value={this.state.tempStartTime}
-                onChange={this.handleChange}
-              />
-            </div>
-        </form>
-        <button onClick={()=>this.toggleSingle()} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue" 
-        style={{"marginRight": "5px"}}>Single Ingredient</button>
-        <button onClick={()=>this.toggleRecipe()} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue" 
-        style={{"marginLeft": "5px"}}>Recipe</button>
-
-        <SearchField {...this.state} query={this.state.query} setQuery={this.setQuery} />
-        <IngredientList ingredients={this.state.ingredients} query={this.state.query} setQuery={this.setQuery} handleClick={this.handleClick}/>
-        <div>{inputComponent}</div>
-
-        <Link className="link blue hover-silver dib mh3 tc" style={{
-          "display": "flex", "flexDirection":"row", "justifyContent": "center", "alignItems":"center"}}>
-        <Icons icon="FoodsDetails"/>
-        <span className="f6 db" style={{"marginLeft": "10px"}}>{this.state.ingredientCount} ingredients added</span>
-        </Link>
-
+         <a className="f6 grow no-underline br-pill ba bw1 ph3 pv1 mb2 dib dark-blue" 
+         href="/add/Ingredient"> Add ingredients</a>
+        </div>
         <BottomNavbar {...this.state} />
-      
       </div>
     )
   }
