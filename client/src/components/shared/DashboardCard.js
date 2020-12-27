@@ -19,7 +19,7 @@ export default function DashboardCard(props) {
 
   return (
     <div className="pt5">
-      I'm a Card!
+      I'm a card
     </div>
   )
 }

@@ -56,7 +56,7 @@ class App extends React.Component {
         exact path='/dashboard'
         render={props => {
           if (this.state.user) 
-            return <Dashboard setUser={this.setUser} user={this.state.user}{...props} />
+            return <Dashboard2 setUser={this.setUser} user={this.state.user}{...props} />
           else
             return <Redirect to='/'/>
           }

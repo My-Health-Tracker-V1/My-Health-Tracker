@@ -29,28 +29,6 @@ const daySchema = new Schema({
       // here not sure
     ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
   }],
-
-  supplements : [{
-    startTime: String,
-    name: String,
-    imgUrl: String,
-    brand: String,
-    servingAmount: Number,
-    servingSize: String,
-      // here not sure
-    ingredients: []
-  }],
-
-  medications : [{
-    startTime: String,
-    name: String,
-    imgUrl: String,
-    brand: String,
-    servingAmount: Number,
-    servingSize: String,
-      // here not sure
-    ingredients: []
-  }],
   
   exercises: [{
     name: String,

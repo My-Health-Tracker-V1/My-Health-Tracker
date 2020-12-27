@@ -4,7 +4,7 @@ const router = express.Router();
 const Day = require('../models/Day');
 
 
-// Get the days from one user
+// Get the days from one user.For analysis later
 router.get('/user/:id',(req,res,next)=>{
   console.log('this is the user id', req.params.id)
   console.log('this is the req',req.body)
@@ -29,7 +29,6 @@ router.get('/user/:id',(req,res,next)=>{
 router.get('/user/:id/day/:date/',(req,res,next)=>{
 
   Day.findOne({$and:[{owner: req.params.id},{date: req.params.date}]})
-    // .populate('owner')
     .populate({
       path: 'foods',
       populate:{
