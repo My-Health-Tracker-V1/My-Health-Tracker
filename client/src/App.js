@@ -2,34 +2,30 @@ import './App.css';
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 
-//test views
-// import TestView from './components/testviews/TestView';
-// import TestHistorical from './components/testviews/TestHistorical';
-// import TestInput from './components/testviews/TestInput';
 
-//final views component
+//Components for general views
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './components/Home';
 import Dashboard from './components/nav-bar-options/Dashboard'
+import Dashboard2 from './components/nav-bar-options/Dashboard2'
 import FoodsList from './components/add-entries/FoodsList'
 
-// Xiaomei: components for Add Food Entry
-import FoodEntry from './components/add-entries/FoodEntry';
-import DrinkEntry from './components/add-entries/DrinkEntry';
-import FoodEdit from './components/edit-entries/FoodEdit';
 
-//Hortencia:components for the BottomNavBar Links
+//Components for the BottomNavBar Links
 import Analysis from './components/nav-bar-options/Analysis'
 import AddFrequent from './components/nav-bar-options/AddFrequent'
 import More from './components/nav-bar-options/More'
 import AddItem from './components/nav-bar-options/AddItem'
 
-//Hortencia:components for adding entries
+//Components for adding entries
 import AddEnergy from './components/add-entries/AddEnergy'
 import AddExercise from './components/add-entries/AddExercise'
 import AddSleep from './components/add-entries/AddSleep'
 import AddSymptoms from './components/add-entries/AddSymptoms'
+import FoodEntry from './components/add-entries/FoodEntry';
+import DrinkEntry from './components/add-entries/DrinkEntry';
+import FoodEdit from './components/edit-entries/FoodEdit';
 
 
 
@@ -48,7 +44,6 @@ class App extends React.Component {
 
   render() {
 
-    // console.log(this.state.user)
     return (
       <div className="App">
        

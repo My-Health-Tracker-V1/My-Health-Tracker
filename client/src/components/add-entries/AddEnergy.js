@@ -65,7 +65,7 @@ export default class AddEnergy extends Component {
   }
 
   render() {
-    console.log('props heeeeeere',this.props)
+    
     return (
       <div className='flex flex-column'>
 
