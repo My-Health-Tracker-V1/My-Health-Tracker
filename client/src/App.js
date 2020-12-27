@@ -2,11 +2,6 @@ import './App.css';
 import React from 'react';
 import {Route, Redirect} from 'react-router-dom';
 
-//test views
-// import TestView from './components/testviews/TestView';
-// import TestHistorical from './components/testviews/TestHistorical';
-// import TestInput from './components/testviews/TestInput';
-
 //final views component
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
@@ -14,7 +9,7 @@ import Home from './components/Home';
 import Dashboard from './components/nav-bar-options/Dashboard'
 import FoodsList from './components/add-entries/FoodsList'
 
-// Xiaomei: components for Add Food Entry
+// Food Entry
 import FoodEntry from './components/add-entries/FoodEntry';
 import DrinkEntry from './components/add-entries/DrinkEntry';
 import FoodEdit from './components/edit-entries/FoodEdit';
@@ -44,7 +39,6 @@ class App extends React.Component {
       user: user
     })
   }
-
 
   render() {
 

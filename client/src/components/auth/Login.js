@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { login } from '../../services/auth';
-import { GoogleLogin } from 'react-google-login';
-import TopBar from '../shared/TopBar'
+import TopBar from '../shared/TopBar';
 
 
 export default class Login extends Component {
@@ -41,23 +40,13 @@ export default class Login extends Component {
     });
   };
 
-  responseSuccessGoogle = (response) => {
-    console.log(response)
-  };
-
-  responseFailureGoogle = (response) => {
-    console.log(response)
-  }
-
   render() {
     return (
       <div>
       <TopBar icon='health-icon' title='My Health Diary'/>
-
-        {/* <h2 className="f10 dark-blue">Login</h2> */}
         <form onSubmit={this.handleSubmit} className="pt5 flex flex-column">
           <div className="flex flex-column items-center">
-              <label className="mv1" htmlFor='email'>Email:</label>
+              <label className="mv1" htmlFor='email'> Email: </label>
               <input
                 type='text'
                 name='email'
@@ -66,10 +55,10 @@ export default class Login extends Component {
                 id='email'
                 className="mt1 mb3 w5"
               />
-            </div>
+          </div>
          
-         <div className="flex flex-column items-center">
-            <label htmlFor='password'>Password: </label>
+          <div className="flex flex-column items-center">
+            <label htmlFor='password'> Password: </label>
             <input
               type='password'
               name='password'
@@ -80,24 +69,12 @@ export default class Login extends Component {
             />
           </div>
 
-          
-
           <div className="w-100 pa3 mr2">
-          <button className="f6 link dim br-pill ba bw1 ph3 pv2 mb2 dib dark-blue" type='submit'>Login</button>
+            <button className="f6 link dim br-pill ba bw1 ph3 pv2 mb2 dib dark-blue" 
+                    type='submit'> Login 
+            </button>
           </div>
         </form>
-
-        <p className="f6 gray">Or signup with your Google account</p>
-
-        <div>
-        <GoogleLogin
-            clientId="1030428239425-h5l4joog9bknfmisj0it01l8thqh0lln.apps.googleusercontent.com"
-            buttonText="Login with Google"
-            onSuccess={this.responseSuccessGoogle}
-            onFailure={this.responseFailureGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
-        </div>
       </div>
     );
   }
