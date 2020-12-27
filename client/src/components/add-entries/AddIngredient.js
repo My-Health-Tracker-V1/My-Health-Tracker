@@ -8,7 +8,14 @@ export default class AddFood extends Component {
   state = {
     ingredients: [],
     query: '',
-    selectedIngr: []
+    selectedIngr: [],
+    tempIngredient: {
+      name: "",
+      category: "",
+      servingAmount: "",
+      servingSize: ""
+    },
+    
   }
 
   getIngredientsFromEdamam = () => {
@@ -43,7 +50,8 @@ export default class AddFood extends Component {
   };
 
   handleQuery = (event) => {
-    event.preventDefault();
+    event?.preventDefault();
+    console.log(this.state.query)
     axios.get(`https://api.edamam.com/api/food-database/v2/parser?ingr=${this.state.query}&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`)
     .then(res => {
       console.log(res.data);
@@ -57,11 +65,28 @@ export default class AddFood extends Component {
     })
   }
 
-  render() {
+  handleClick = event => {
+    event.preventDefault();
+    const key = event.target.getAttribute('data-key')
+    console.log(this.state.selectedIngr);
+    console.log('this.state.ingredients is:', this.state.ingredients)
+    const clickedIngredient = this.state.ingredients.filter(ingredient => {
+      return ingredient.food.foodId === key;
+    });
+    const newTempIngredient = this.state.tempIngredient;
+    newTempIngredient.name = clickedIngredient[0].food.label;
+    newTempIngredient.category = clickedIngredient[0].food.categoryLabel;
+    let selectedIngr = this.state.selectedIngr
+    selectedIngr.push(newTempIngredient);
+    this.setState ({
+      tempIngredient: newTempIngredient,
+      selectedIngr: selectedIngr
+    })
+    console.log(this.state.selectedIngr)
+    console.log('clicked');
+  }
 
-    // const filteredIngredients = this.state.ingredients.filter(ingredient => 
-    //   ingredient.name.toLowerCase().includes(this.state.query.toLowerCase())
-    // );
+  render() {
 
     return (
       <div>
@@ -71,9 +96,13 @@ export default class AddFood extends Component {
         <SearchField {...this.state} handleChange={this.handleChange} handleQuery={this.handleQuery}/>
 
        <h4>Selected Ingredients</h4>
-       <div>
-
-       </div>
+       {/* <div>
+          {this.state.selectedIngr.map(ingredient => {
+            return (
+              <button>{ingredient.name}</button>
+            )
+          })}
+       </div> */}
        <h4>Suggested Ingredients</h4>
         <div className="list pa3 ml0 center mw12 ba b--light-silver br3" style={{height:"400px", width: "70%", overflow: "hidden", overflowY: "scroll", border:"solid 1px #ccc"}} >
         {
@@ -90,7 +119,6 @@ export default class AddFood extends Component {
                 <div className="dtc v-mid">
                   <form className="w-100 tr">
                     <button className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60" 
-                    type="submit"
                     onClick={this.handleClick} key={ingredient.food.foodId} data-key={ingredient.food.foodId}>+ Add</button>
                   </form>
                 </div>
