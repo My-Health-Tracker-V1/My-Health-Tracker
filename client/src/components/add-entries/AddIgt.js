@@ -6,7 +6,7 @@ export default class AddIgt extends Component {
     
     return (
       <div>
-          <h3 className="f6 db">Custom Ingredient:</h3>
+          <h3 className="f6 db">Add a single food</h3>
             <div>
                 <form onSubmit={this.props.handleSubmit}>
              
@@ -17,7 +17,8 @@ export default class AddIgt extends Component {
                             type='text'
                             id='name'
                             placeholder="e.g. Apple"
-                            name='name' value={this.props.tempIngredient.name}
+                            name='name' 
+                            value={this.props.tempIngredient.name}
                             onChange={this.props.handleChange}
                           />
                         </div>

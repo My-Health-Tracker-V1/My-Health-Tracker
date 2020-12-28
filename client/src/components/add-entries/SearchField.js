@@ -18,7 +18,7 @@ export default class SearchField extends Component {
               name="query"
               placeholder="Ingredients in your dish..."
               value={this.props.query}
-              onChange={this.props.handleChange}
+              onChange={this.props.handleSearch}
             />
           </label>
         </form>

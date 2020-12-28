@@ -2,15 +2,14 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import TopBar from '../shared/TopBar';
 import BottomNavbar from '../shared/BottomNavbar';
-import Icons from '../shared/Icons';
 import DateTimeInput from './DateTimeInput';
-import Buttons from './Buttons';
-import AddIngredient from './AddIngredient'
+import AddIngredient from './AddIngredient';
+import SearchField from './SearchField'
+import AddIgt from './AddIgt';
 import '../add-entries/FoodEntry.css'
 
 export default class FoodEntry extends Component {
   state = {
-    // this is the loggedin user from App.js
     user: this.props.user,
     date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
     ingredients: [],
@@ -34,27 +33,70 @@ export default class FoodEntry extends Component {
     handleShowSingle: true,
     ingredientCount: 0,
     query: ''
-
   }
 
+  getIngredientsFromEdamam = () => {
+    axios.get(`https://api.edamam.com/api/food-database/v2/parser?ingr=apple&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`)
+     .then(res => {
+       console.log(res.data);
+       this.setState({
+         ingredients: res.data.hints
+       })   
+     })
+     .catch(err => {
+        console.log(err.response)
+     })
+  }
+  componentDidMount = () => {
+    this.getIngredientsFromEdamam();
+  }
   // Function for fill out the ingredient form
   handleClick = event => {
+    event.preventDefault();
     const key = event.target.getAttribute('data-key')
     console.log(key);
     console.log('this.state.ingredients is:', this.state.ingredients)
-    const clickedIngredient = this.state.ingredients.filter(ingredient => {
-      return ingredient._id === key;
-    });
+    const clickedIngr = this.state.ingredients.find(ingredient => ingredient.food.foodId === key);
     const newTempIngredient = this.state.tempIngredient;
-    newTempIngredient.name = clickedIngredient[0].name;
-    newTempIngredient.brand = clickedIngredient[0].brand;
-    newTempIngredient.category = clickedIngredient[0].category;
+    newTempIngredient.name = clickedIngr.food.label;
+    newTempIngredient.brand = clickedIngr.food.brand;
+    newTempIngredient.category = clickedIngr.food.category;
     this.setState ({
       tempIngredient: newTempIngredient
     })
     console.log(this.state.tempIngredient);
   }
 
+  setQuery = query => {
+    this.setState({
+      query: query
+    })
+  }
+
+  handleSearch = event => {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({
+      [name]: value
+    });
+  };
+
+// handle query
+  handleQuery = (event) => {
+    event?.preventDefault();
+    console.log(this.state.query)
+    axios.get(`https://api.edamam.com/api/food-database/v2/parser?ingr=${this.state.query}&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`)
+    .then(res => {
+      console.log(res.data);
+      this.setState({
+        query: event.target.value,
+        ingredients: res.data.hints
+      })   
+    })
+    .catch(err => {
+      console.log(err.response)
+    })
+  }
 // Functions for toggle Recipe
   toggleRecipe = () => {
     this.setState({
@@ -68,7 +110,6 @@ export default class FoodEntry extends Component {
       ingredientCount: 0
     })
   }
-
   // Functions for submit form
   handleChange = event => {
     const name = event.target.name;
@@ -107,7 +148,7 @@ export default class FoodEntry extends Component {
       });
     };
   }
-
+  
   handleSingleSubmit = event => {
     event.preventDefault();
     const newFood = this.state.food;
@@ -221,8 +262,6 @@ export default class FoodEntry extends Component {
       .catch(err => console.log(err))
   }
 
-// Function for get an array of object and then send it back to server
-
 // Function to get the user day history
     getAllDaysFromUser = () => {
       axios.get(`/api/days/user/${this.state.user._id}`)
@@ -233,7 +272,6 @@ export default class FoodEntry extends Component {
           })
       })
     }
-
 // delete
     handleDelete = event => {
       event?.preventDefault();
@@ -270,37 +308,26 @@ export default class FoodEntry extends Component {
     }
   
   render() {
-    // let inputComponent;
-    // if (this.state.handleShowSingle) {     
-    //   inputComponent = <AddIgt {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSingleSubmit} handleDelete={this.handleDelete} handleEditing={this.handleEditing}/>;    
-    //   } 
-    // else {      
-    //   inputComponent = <AddRep {...this.state} handleChange={this.handleChange} handleSubmit={this.handleRecipeSubmit} handleAddButton={this.handleAddButton} handleDelete={this.handleDelete} handleEditing={this.handleEditing}/>;  
-    //   } 
-    //   console.log(this.props.location.state)
+    
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
 
-        <Buttons />
-        <DateTimeInput {...this.state} handleChange={this.handleChange} handleSubmit={this.handleRecipeSubmit}/>
+        {/* <Buttons /> */}
+        <DateTimeInput {...this.state} handleChange={this.handleChange} 
+        handleSubmit={this.handleRecipeSubmit}/>
         
         <div className="food-container">
-          <div className="row-container">
-            <Icons icon="FoodsDetails" />
-            <form>
-              <input className="f6 pa1 mr3 ml1 w10 mv1"
-                type='text'
-                id='recipe-input'
-                name='recipeName' 
-                placeholder="Add a meal name, eg. Pizza"
-                onChange={this.props.handleChange}
-              />
-            </form>
-          </div>
-
-         <a className="f6 grow no-underline br-pill ba bw1 ph3 pv1 mb2 dib dark-blue" 
-         href="/add/Ingredient"> Add ingredients</a>
+          <SearchField {...this.state} handleSearch={this.handleSearch} handleQuery={this.handleQuery}/>
+          <AddIngredient {...this.state} handleClick={this.handleClick} 
+          setQuery={this.setQuery} 
+          handleSearch={this.handleSearch}
+          handleQuery={this.handleQuery}
+          />
+          <AddIgt AddIgt {...this.state} handleChange={this.handleChange} 
+          handleSubmit={this.handleSingleSubmit} 
+          handleDelete={this.handleDelete} 
+          handleEditing={this.handleEditing}/>
         </div>
         <BottomNavbar {...this.state} />
       </div>

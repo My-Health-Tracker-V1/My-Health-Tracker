@@ -1,6 +1,6 @@
 /* SearchField */
 #input-style {
-  width: 65%;
+  width: 35%;
   height: 27px;
   margin: 0 auto;
   border: none;
@@ -71,5 +71,5 @@ input{
 .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
 }
