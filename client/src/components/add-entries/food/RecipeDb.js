@@ -5,9 +5,6 @@ export default class RecipeDb extends Component {
   render() {
 
     return (
-      <div>
-        
-       {/* <h4>Suggested Foods</h4> */}
         <div className="list pa3 ml0 center mw12 ba b--light-silver br3" style={{height:"300px", width: "400px", overflow: "hidden", overflowY: "scroll", border:"solid 1px #ccc"}} >
         {
         this.props.recipes.map(recipe => {
@@ -23,14 +20,13 @@ export default class RecipeDb extends Component {
                 <div className="dtc v-mid">
                   <form className="w-100 tr">
                     <button className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60" 
-                    onClick={this.props.handleClick} key={recipe.recipe.uri} data-key={recipe.recipe.uri}>+ Add</button>
+                    onClick={this.props.handleClickRecipe} key={recipe.recipe.uri} data-key={recipe.recipe.uri}>+ Add</button>
                   </form>
                 </div>
               </article>
           )
         })
         }
-      </div>
       </div>
     )
   }

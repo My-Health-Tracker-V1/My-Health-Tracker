@@ -16,21 +16,20 @@ export default class FoodEntry extends Component {
     date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
     ingredients: [],
     recipes: [],
-    tempStartTime: "",
+    tempStartTime: '',
     tempIngredient: {
-      name: "",
-      brand: "",
-      category: "",
-      servingAmount: "",
-      servingSize: ""
+      name: '',
+      brand: '',
+      category: '',
+      servingAmount: '',
+      servingSize: ''
     },
     food: {
       startTime: '',
       name: '',
       portion: '',
       eatenPortion: '',
-      ingredients: [
-      ]
+      ingredients: []
     },
     selectedIngredient: false,
     handleShowSingle: true,
@@ -85,6 +84,31 @@ export default class FoodEntry extends Component {
       tempIngredient: newTempIngredient
     })
     console.log(this.state.tempIngredient);
+  }
+
+  apiFormat = (apiObj) => {
+    return {
+      name: apiObj.text,
+      servingAmount: apiObj.weight,
+      servingSize: 'g'
+    }
+  }
+
+  handleClickRecipe = event => {
+    event.preventDefault();
+    const key = event.target.getAttribute('data-key')
+    console.log(key);
+    console.log('this.state.recipes is:', this.state.recipes)
+    const clickedRecipe = this.state.recipes.find(recipe => recipe.recipe.uri === key);
+    const newFood = this.state.food;
+    newFood.name = clickedRecipe.recipe.label;
+    newFood.portion = clickedRecipe.recipe.yield;
+    newFood.category = clickedRecipe.recipe.healthLabels;
+    newFood.ingredients = clickedRecipe.recipe.ingredients.map(this.apiFormat);
+    this.setState ({
+      food: newFood
+    })
+    console.log(this.state.food);
   }
 
   setQuery = query => {
@@ -352,7 +376,7 @@ export default class FoodEntry extends Component {
                         handleDelete={this.handleDelete} 
                         handleEditing={this.handleEditing}/>;
     } else {      
-      dataComponent = <RecipeDb {...this.state} handleClick={this.handleClick} 
+      dataComponent = <RecipeDb {...this.state} handleClickRecipe={this.handleClickRecipe} 
                         setRecipeQuery={this.setRecipeQuery} 
                         handleSearch={this.handleSearch}
                         handleRecipeQuery={this.handleRecipeQuery}/>; 
@@ -365,8 +389,6 @@ export default class FoodEntry extends Component {
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
-
-        {/* <Buttons /> */}
         <DateTimeInput {...this.state} handleChange={this.handleChange} 
         handleSubmit={this.handleRecipeSubmit}/>
         

@@ -46,7 +46,7 @@ export default class IngrForm extends Component {
                   </div>
                   
                   <div >
-                    <label htmlFor='servingAmount' className="f6 w3 dib">Amount: </label>
+                    <label htmlFor='servingAmount' className="f6 w3 dib">QT: </label>
                     <input className="f6 pa1 mr3 ml1 w4 mv1"
                       type='number'
                       id='servingAmount'
@@ -58,7 +58,7 @@ export default class IngrForm extends Component {
                     />
                   </div>
                   <div>
-                      <label htmlFor='servingSize'  className="f6 w3 dib">Size: </label>
+                      <label htmlFor='servingSize'  className="f6 w3 dib">Unit: </label>
                       <input className="f6 pa1 mr3 ml1 w4 mv1"
                         type='text'
                         id='servingSize'

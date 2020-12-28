@@ -44,7 +44,7 @@ export default class RepForm extends Component {
                         />
                   </div>
                 
-                  {/* Single Ingredients form
+                  {/* Single Ingredients form */}
                   
                  <input className="f6 pa1 mr3 ml1 w4 mv1"
                     type='text'
@@ -85,21 +85,12 @@ export default class RepForm extends Component {
                     placeholder="e.g. Kg"
                     value='g'
                     onChange={this.props.handleChange}
-                  />  */}
+                  /> 
                 
                 <button type='submit' className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue">Save</button>
               </form>
               <button onClick={this.props.handleAddButton} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue">Add ingredient to the recipe</button>
-      </div>
-      <ul className="ingredients-list">
-        {
-          this.props.food.ingredients.map(ingr => {
-            return (
-              <li>{ingr.name} {ingr.servingAmount} {ingr.servingSize}</li>
-            )
-          })
-        }
-      </ul>
+        </div>
 </div>
     )
   }
