@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import TopBar from '../shared/TopBar';
-import BottomNavbar from '../shared/BottomNavbar';
-import Icons from '../shared/Icons';
+import TopBar from '../../shared/TopBar';
+import BottomNavbar from '../../shared/BottomNavbar';
+import Icons from '../../shared/Icons';
 import { Link } from 'react-router-dom';
 import SearchField from './SearchField';
 import AddIngDrink from './AddIngDrink';
+
 export default class AddDrinks extends Component {
   state = {
     // this is the loggedin user from App.js

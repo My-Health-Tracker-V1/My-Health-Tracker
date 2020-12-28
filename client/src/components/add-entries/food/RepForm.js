@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class AddRep extends Component {
+export default class RepForm extends Component {
 
   render() {
     return (

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Icons from '../shared/Icons'
-import '../add-entries/FoodEntry.css'
+import Icons from '../../shared/Icons'
+import './FoodEntry.css'
 
 export default class DateTimeInput extends Component {
   render() {

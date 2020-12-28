@@ -1,12 +1,12 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import TopBar from '../shared/TopBar';
-import BottomNavbar from '../shared/BottomNavbar';
+import TopBar from '../../shared/TopBar';
+import BottomNavbar from '../../shared/BottomNavbar';
 import DateTimeInput from './DateTimeInput';
-import AddIngredient from './AddIngredient';
+import SingleDb from './SingleDb';
 import SearchField from './SearchField'
-import AddIgt from './AddIgt';
-import '../add-entries/FoodEntry.css'
+import IngrForm from './IngrForm';
+import './FoodEntry.css'
 
 export default class FoodEntry extends Component {
   state = {
@@ -80,7 +80,6 @@ export default class FoodEntry extends Component {
       [name]: value
     });
   };
-
 // handle query
   handleQuery = (event) => {
     event?.preventDefault();
@@ -319,12 +318,12 @@ export default class FoodEntry extends Component {
         
         <div className="food-container">
           <SearchField {...this.state} handleSearch={this.handleSearch} handleQuery={this.handleQuery}/>
-          <AddIngredient {...this.state} handleClick={this.handleClick} 
+          <SingleDb {...this.state} handleClick={this.handleClick} 
           setQuery={this.setQuery} 
           handleSearch={this.handleSearch}
           handleQuery={this.handleQuery}
           />
-          <AddIgt AddIgt {...this.state} handleChange={this.handleChange} 
+          <IngrForm AddIgt {...this.state} handleChange={this.handleChange} 
           handleSubmit={this.handleSingleSubmit} 
           handleDelete={this.handleDelete} 
           handleEditing={this.handleEditing}/>

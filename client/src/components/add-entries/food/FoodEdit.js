@@ -1,12 +1,9 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import TopBar from '../shared/TopBar';
-import BottomNavbar from '../shared/BottomNavbar';
-import Icons from '../shared/Icons';
-import { Link } from 'react-router-dom';
-import AddRep from '../add-entries/AddRep';
-import AddIgt from '../add-entries/AddIgt';
-import SearchField from '../add-entries/SearchField';
+import TopBar from '../../shared/TopBar';
+import BottomNavbar from '../../shared/BottomNavbar';
+import Icons from '../../shared/Icons';
+import IngrForm from './IngrForm';
 
 
 export default class FoodEdit extends Component {
@@ -267,7 +264,7 @@ export default class FoodEdit extends Component {
       if(this.state.edit === true){
         editInterface = (
           <div>
-            <AddIgt {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSingleSubmit}/>    
+            <IngrForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSingleSubmit}/>    
           </div>
         )
       } else {
@@ -281,7 +278,7 @@ export default class FoodEdit extends Component {
       if(this.state.add === true){
         addInterface = (
           <div>
-            <AddIgt {...this.state} handleChange={this.handleChange} handleSubmit={this.handleAddSubmit}/> 
+            <IngrForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleAddSubmit}/> 
           </div>
         )
       } else {
