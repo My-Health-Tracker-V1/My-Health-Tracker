@@ -3,9 +3,6 @@ import DashboardCard from '../shared/DashboardCard'
 import Calendar from '../shared/Calendar'
 import BottomNavbar from '../shared/BottomNavbar'
 import axios from 'axios';
-import Energy from '../Entries/Energy';
-import Foods from '../Entries/Foods';
-import Drinks from '../Entries/Drinks.js';
 
 
 export default class Dashboard2 extends Component {
@@ -46,13 +43,18 @@ export default class Dashboard2 extends Component {
       .catch(err=>console.log(err))
   }
 
+  componentDidMount(){
+    this.setDate();
+    this.getUserData();
+  }
 
   render() {
+
     let allDayEntries;
 
     if(!this.state.isDayEmpty){
 
-      allDayEntries=(<div>
+      allDayEntries=(<div >
         {!this.state.energy ? <></> : <DashboardCard entryType='energy' energy={this.state.energy} user={this.state.user} day={this.state.day}/>}
         {this.state.symptoms.length === 0 ? <></> : <DashboardCard entryType='symptom' symptoms={this.state.symptoms} user={this.state.user} day={this.state.day}/>}
         {this.state.foods.length === 0 ? <></> : <DashboardCard entryType='food' foods={this.state.foods} user={this.state.user} day={this.state.day}/>}
@@ -62,11 +64,13 @@ export default class Dashboard2 extends Component {
         </div>)
     
     }
-
+  
     return (
       <div>
         <Calendar setDate={this.setDate}/>
-        { this.state.isDayEmpty ? <h1 className="pt5">No entries for this day!</h1> : allDayEntries }
+        <div className="flex flex-column items-center pv5">
+          { this.state.isDayEmpty ? <h1 >No entries for this day!</h1> : allDayEntries }
+        </div>
         <BottomNavbar/>
       </div>
     )

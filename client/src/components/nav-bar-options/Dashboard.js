@@ -81,7 +81,8 @@ export default class Dashboard extends Component {
     // console.log(this.state.excercises)
     return (
       <div>
-          <Calendar setDate={this.setDate}/>
+      
+        <Calendar setDate={this.setDate}/>
         <div className="mt10">
           {/* <h1 className="fw4 blue">Daily entries</h1> */}
           <section className="ph4 ph4-ns pt4 pb5">
