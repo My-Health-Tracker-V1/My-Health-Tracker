@@ -7,8 +7,8 @@ import BottomNavbar from '../shared/BottomNavbar'
 export default class AddSleep extends Component {
 
   state={
-    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    startTime: this.props.location.state?.element.startTime,//this should bte the present time in the string format:"hh:mm"
+    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state?.element.startTime,
     duration:this.props.location.state?.element.duration,
     notes:this.props.location.state?.element.notes,
     id:this.props.location.state?.element._id,

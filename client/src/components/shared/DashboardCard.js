@@ -14,8 +14,8 @@ export default function DashboardCard(props) {
                 </div>
                 <div className="tl ml2 w4">
                   <p className="pv0 f4 b gray mb1 mt0">{title}</p>
-                  {!specificName ? <></>:<p className="f6 gray mv0 i">{specificName}</p>}
-                  <p className="f6 gray mv0 ">{subtitle}: {subtitleValue}</p>
+                  {!specificName ? <></> : <p className="f6 gray mv0 i">{specificName}</p>}
+                  {!subtitle ? <></> : <p className="f6 gray mv0 ">{subtitle}: {subtitleValue}</p>}
                 </div>
               </div>
               <Link to={{pathname: path, state:{ element: element, editing: true, day:props.day}}} className="link blue hover-silver dib mh3 tc" >
@@ -27,7 +27,7 @@ export default function DashboardCard(props) {
 
   switch(props.entryType){
     case 'energy':
-      return returnCard("Energy3","Energy","Energy level",props.energy,'/add/Energy')
+      return returnCard(props.energy,"Energy3","Energy","Energy level",props.energy.energyLevel,'/add/Energy')
 
     case 'exercise':
       return props.exercises.map(exercise=>returnCard(exercise,"Exercise3","Exercise","Intensity",exercise.intensityLevel,'/add/Exercise',exercise.name))
@@ -39,9 +39,11 @@ export default function DashboardCard(props) {
       return props.sleep.map(sleep=>returnCard(sleep,"Sleep3","Sleep","Duration",sleep.duration,'/add/Sleep'))
 
     case 'food':
-      break;
+      return props.foods.map(food=>returnCard(food,"Foods3","Foods",null,null,'/edit/Foods',food.name))
+
     case 'drink':
-      break;
+      return props.drinks.map(drink=>returnCard(drink,"Drinks3","Drinks",null,null,'/add/Drinks',drink.name))
+
   }
 
 }
