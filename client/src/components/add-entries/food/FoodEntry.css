@@ -1,6 +1,6 @@
 /* SearchField */
 #input-style {
-  width: 35%;
+  width: 380px;
   height: 27px;
   margin: 0 auto;
   border: none;
@@ -24,7 +24,7 @@
 }
 
 .search-bar {
-  padding-top: 10px;
+  padding-bottom: 20px;
 }
 
 .search-icon {
@@ -33,7 +33,7 @@
 
 /* DateTimeInput */
 .date-form {
-  padding-top: 20px;
+  padding: 20px 0;
 }
 
 .row-container {
@@ -65,7 +65,7 @@ input{
 }
 
 .food-container {
-  padding-top: 30px;
+  padding-top: 10px;
 }
 
 .buttons {

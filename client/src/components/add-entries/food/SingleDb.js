@@ -3,12 +3,8 @@ import React, { Component } from 'react';
 export default class SingleDb extends Component {
 
   render() {
-
     return (
-      <div>
-        
-       <h4>Suggested Foods</h4>
-        <div className="list pa3 ml0 center mw12 ba b--light-silver br3" style={{height:"300px", width: "50%", overflow: "hidden", overflowY: "scroll", border:"solid 1px #ccc"}} >
+        <div className="list pa3 ml0 center mw12 ba b--light-silver br3" style={{height:"300px", width: "400px", overflow: "hidden", overflowY: "scroll", border:"solid 1px #ccc"}} >
         {
         this.props.ingredients.map(ingredient => {
           return (
@@ -30,7 +26,6 @@ export default class SingleDb extends Component {
           )
         })
         }
-      </div>
       </div>
     )
   }

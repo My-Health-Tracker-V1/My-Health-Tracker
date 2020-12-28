@@ -4,8 +4,10 @@ import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import DateTimeInput from './DateTimeInput';
 import SingleDb from './SingleDb';
-import SearchField from './SearchField'
+import RecipeDb from './RecipeDb';
+import SearchField from './SearchField';
 import IngrForm from './IngrForm';
+import RepForm from './RepForm';
 import './FoodEntry.css'
 
 export default class FoodEntry extends Component {
@@ -13,6 +15,7 @@ export default class FoodEntry extends Component {
     user: this.props.user,
     date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
     ingredients: [],
+    recipes: [],
     tempStartTime: "",
     tempIngredient: {
       name: "",
@@ -32,9 +35,11 @@ export default class FoodEntry extends Component {
     selectedIngredient: false,
     handleShowSingle: true,
     ingredientCount: 0,
-    query: ''
+    query: '',
+    recipeQuery: ''
   }
 
+// API
   getIngredientsFromEdamam = () => {
     axios.get(`https://api.edamam.com/api/food-database/v2/parser?ingr=apple&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`)
      .then(res => {
@@ -47,10 +52,25 @@ export default class FoodEntry extends Component {
         console.log(err.response)
      })
   }
+
+  getRecipeFromEdamam = () => {
+    axios.get("https://api.edamam.com/search?q=chicken&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf")
+     .then(res => {
+       console.log(res.data);
+       this.setState({
+         recipes: res.data.hits
+       })
+     })
+     .catch(err => {
+      console.log(err.response)
+     })
+  }
+
   componentDidMount = () => {
     this.getIngredientsFromEdamam();
+    this.getRecipeFromEdamam()
   }
-  // Function for fill out the ingredient form
+// Fill out the ingredient form
   handleClick = event => {
     event.preventDefault();
     const key = event.target.getAttribute('data-key')
@@ -69,10 +89,16 @@ export default class FoodEntry extends Component {
 
   setQuery = query => {
     this.setState({
-      query: query
+      query: query,
+    })
+  }
+  setRecipeQuery = recipeQuery => {
+    this.setState({
+      recipeQuery: recipeQuery,
     })
   }
 
+// Handle search bar
   handleSearch = event => {
     const name = event.target.name;
     const value = event.target.value;
@@ -80,7 +106,7 @@ export default class FoodEntry extends Component {
       [name]: value
     });
   };
-// handle query
+// Handle query
   handleQuery = (event) => {
     event?.preventDefault();
     console.log(this.state.query)
@@ -96,7 +122,22 @@ export default class FoodEntry extends Component {
       console.log(err.response)
     })
   }
-// Functions for toggle Recipe
+  handleRecipeQuery = (event) => {
+    event?.preventDefault();
+    console.log(this.state.recipeQuery)
+    axios.get(`https://api.edamam.com/search?q=${this.state.recipeQuery}&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf`)
+    .then(res => {
+      console.log(res.data);
+      this.setState({
+        recipeQuery: event.target.value,
+        recipes: res.data.hits
+      })   
+    })
+    .catch(err => {
+      console.log(err.response)
+    })
+  }
+// Toggle Recipe
   toggleRecipe = () => {
     this.setState({
       handleShowSingle: false,
@@ -109,7 +150,8 @@ export default class FoodEntry extends Component {
       ingredientCount: 0
     })
   }
-  // Functions for submit form
+
+// Form on Change
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
@@ -147,7 +189,8 @@ export default class FoodEntry extends Component {
       });
     };
   }
-  
+
+// Submit Single form
   handleSingleSubmit = event => {
     event.preventDefault();
     const newFood = this.state.food;
@@ -197,7 +240,7 @@ export default class FoodEntry extends Component {
       })
       .catch(err => console.log(err))
   }
-
+// Temp save button
   handleAddButton = () => {
     const addedIngredients = this.state.food.ingredients;
     addedIngredients.push({
@@ -219,7 +262,7 @@ export default class FoodEntry extends Component {
     })
     console.log(this.state.food);
   }
-
+// Submit Recipe form
   handleRecipeSubmit = event => {
     event.preventDefault();
     const newFood = this.state.food;
@@ -261,53 +304,64 @@ export default class FoodEntry extends Component {
       .catch(err => console.log(err))
   }
 
-// Function to get the user day history
-    getAllDaysFromUser = () => {
-      axios.get(`/api/days/user/${this.state.user._id}`)
-      .then(response => {
-          console.log(response.data)
-          this.setState({
-            days: response.data
-          })
-      })
-    }
-// delete
-    handleDelete = event => {
-      event?.preventDefault();
-      // const date = event.target.name;
-      // const foodId = event.target.value;
-      axios.put(`/api/ingredients/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/delete`)
-      .then(res => {
-        console.log(res);
-        this.props.history.push("/dashboard")
-      })
-      .catch(err=>console.log(err))
-    }
-    
-    handleEditing = event => {
-      event?.preventDefault();
-      console.log('this is props', this.props);
-      const newFood = this.state.food;
-      newFood.startTime = this.state.tempStartTime;
-      this.setState({
-        food: newFood
-      })
-      const payload = {
-        user: this.state.user,
-        date: this.state.date,
-        food: this.state.food
-      };
-      axios.put(`/api/ingredients/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/edit`, 
-      payload)
-      .then(res => {
-        console.log('hallo');
-        this.props.history.push("/dashboard")
-      })
-      .catch(err=>console.log(err))
-    }
+// Delete
+  handleDelete = event => {
+    event?.preventDefault();
+    // const date = event.target.name;
+    // const foodId = event.target.value;
+    axios.put(`/api/ingredients/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/delete`)
+    .then(res => {
+      console.log(res);
+      this.props.history.push("/dashboard")
+    })
+    .catch(err=>console.log(err))
+  }
+// Edit
+  handleEditing = event => {
+    event?.preventDefault();
+    console.log('this is props', this.props);
+    const newFood = this.state.food;
+    newFood.startTime = this.state.tempStartTime;
+    this.setState({
+      food: newFood
+    })
+    const payload = {
+      user: this.state.user,
+      date: this.state.date,
+      food: this.state.food
+    };
+    axios.put(`/api/ingredients/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/edit`, 
+    payload)
+    .then(res => {
+      console.log('hallo');
+      this.props.history.push("/dashboard")
+    })
+    .catch(err=>console.log(err))
+  }
   
   render() {
-    
+    let dataComponent;
+    let formComponent;
+    if (this.state.handleShowSingle) {     
+      dataComponent = <SingleDb {...this.state} handleClick={this.handleClick} 
+                        setQuery={this.setQuery} 
+                        handleSearch={this.handleSearch}
+                        handleQuery={this.handleQuery}/>;
+      formComponent = <IngrForm {...this.state} handleChange={this.handleChange} 
+                        handleSubmit={this.handleSingleSubmit} 
+                        handleDelete={this.handleDelete} 
+                        handleEditing={this.handleEditing}/>;
+    } else {      
+      dataComponent = <RecipeDb {...this.state} handleClick={this.handleClick} 
+                        setRecipeQuery={this.setRecipeQuery} 
+                        handleSearch={this.handleSearch}
+                        handleRecipeQuery={this.handleRecipeQuery}/>; 
+      formComponent = <RepForm {...this.state} handleChange={this.handleChange} 
+                        handleSubmit={this.handleRecipeSubmit} 
+                        handleDelete={this.handleDelete} 
+                        handleEditing={this.handleEditing}/>
+    } 
+
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
@@ -316,17 +370,20 @@ export default class FoodEntry extends Component {
         <DateTimeInput {...this.state} handleChange={this.handleChange} 
         handleSubmit={this.handleRecipeSubmit}/>
         
+        <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
+        onClick={this.toggleSingle} > + Add a single food </button>
+        <button className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue" 
+        onClick={this.toggleRecipe}> + Add a recipe </button>
+
         <div className="food-container">
-          <SearchField {...this.state} handleSearch={this.handleSearch} handleQuery={this.handleQuery}/>
-          <SingleDb {...this.state} handleClick={this.handleClick} 
-          setQuery={this.setQuery} 
-          handleSearch={this.handleSearch}
+          {this.state.handleShowSingle ? (<h4>Suggested Foods</h4>) 
+          : <h4>Suggested Recipes</h4>}
+          <SearchField {...this.state} handleSearch={this.handleSearch} 
           handleQuery={this.handleQuery}
+          handleRecipeQuery={this.handleRecipeQuery}
           />
-          <IngrForm AddIgt {...this.state} handleChange={this.handleChange} 
-          handleSubmit={this.handleSingleSubmit} 
-          handleDelete={this.handleDelete} 
-          handleEditing={this.handleEditing}/>
+          <div>{dataComponent}</div>
+          <div>{formComponent}</div>
         </div>
         <BottomNavbar {...this.state} />
       </div>

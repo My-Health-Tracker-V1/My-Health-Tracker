@@ -283,7 +283,7 @@ export default function Icons(props) {
           </g>
         </svg>
         </div>)
-        
+
     case 'Exercise':
       return (
         <div>
@@ -720,7 +720,12 @@ export default function Icons(props) {
           </svg>
           </div>
         )
-        
+      case 'fast-food':
+        return (
+          <div>
+            
+          </div>
+        )
     default:
       // code block
   }
