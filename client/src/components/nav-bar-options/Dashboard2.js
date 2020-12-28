@@ -3,7 +3,12 @@ import DashboardCard from '../shared/DashboardCard'
 import Calendar from '../shared/Calendar'
 import BottomNavbar from '../shared/BottomNavbar'
 import axios from 'axios';
-
+import Energy from '../Entries/Energy';
+import Foods from '../Entries/Foods';
+import Drinks from '../Entries/Drinks.js';
+import Exercise from '../Entries/Exercise.js';
+import Sleep from '../Entries/Sleep.js';
+import Symptoms from '../Entries/Symptoms.js';
 
 export default class Dashboard2 extends Component {
 
@@ -45,18 +50,25 @@ export default class Dashboard2 extends Component {
 
 
   render() {
+    let allDayEntries;
+
+    if(!this.state.isDayEmpty){
+      
+      allDayEntries=(<div>
+        {!this.state.energy ? <></> : <Energy energy={this.state.energy.energyLevel} user={this.state.user} day={this.state.day}/>}
+        {this.state.symptoms.length === 0 ? <></> : <DashboardCard entryType='symptom' symptoms={this.state.symptoms} user={this.state.user} day={this.state.day}/>}
+        {this.state.foods.length === 0 ? <></> : <Foods foods={this.state.foods} user={this.state.user} day={this.state.day}/>}
+        {this.state.drinks.length === 0 ? <></> : <Drinks drinks={this.state.drinks} user={this.state.user} day={this.state.day}/>}
+        {this.state.exercises.length === 0 ? <></> : <DashboardCard entryType='exercise' exercises={this.state.exercises} user={this.state.user} day={this.state.day}/>}
+        {this.state.sleep.length === 0 ? <></> : <DashboardCard entryType='sleep' sleep={this.state.sleep} user={this.state.user} day={this.state.day}/>}
+        </div>)
+    
+    }
+
     return (
       <div>
         <Calendar setDate={this.setDate}/>
-
-        {
-          this.state.isDayEmpty?<h1 className="pt5">No entries for this day!</h1>:
-          (
-            <DashboardCard />
-          )
-        
-        }
-      
+        { this.state.isDayEmpty ? <h1 className="pt5">No entries for this day!</h1> : allDayEntries }
         <BottomNavbar/>
       </div>
     )

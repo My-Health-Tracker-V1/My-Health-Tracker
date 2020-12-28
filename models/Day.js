@@ -29,6 +29,7 @@ const daySchema = new Schema({
       // here not sure
     ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
   }],
+
   
   exercises: [{
     name: String,
