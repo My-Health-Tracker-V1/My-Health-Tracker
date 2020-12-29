@@ -6,13 +6,13 @@ import {Route, Redirect} from 'react-router-dom';
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './components/Home';
-import Dashboard from './components/nav-bar-options/Dashboard'
-import FoodsList from './components/add-entries/FoodsList'
+// import Dashboard from './components/nav-bar-options/Dashboard'
 
 // Food Entry
-import FoodEntry from './components/add-entries/FoodEntry';
-import DrinkEntry from './components/add-entries/DrinkEntry';
-import FoodEdit from './components/edit-entries/FoodEdit';
+import FoodEntry from './components/add-entries/food/FoodEntry';
+import DrinkEntry from './components/add-entries/food/DrinkEntry';
+import FoodEdit from './components/add-entries/food/FoodEdit';
+// import RecipeDb from './components/add-entries/food/RecipeDb';
 
 //Hortencia:components for the BottomNavBar Links
 import Analysis from './components/nav-bar-options/Analysis'
@@ -51,7 +51,7 @@ class App extends React.Component {
        />
 
       {/* Routes for Dashboard */}
-        <Route
+        {/* <Route
         exact path='/dashboard'
         render={props => {
           if (this.state.user) 
@@ -60,7 +60,7 @@ class App extends React.Component {
             return <Redirect to='/'/>
           }
         }
-      />
+      /> */}
 
       {/* Routes for Signup and Login */}
       <Route 
@@ -80,11 +80,6 @@ class App extends React.Component {
       <Route exact path='/add-frequent' component={AddFrequent}/>
       <Route exact path='/more' render={(props) => <More setUser={this.setUser} {...props}/>}/>
       
-      {/* Routes for food list */}
-      <Route exact path='/foods-list' 
-      render={(props) => <FoodsList user={this.state.user} {...props}/>}
-      />
-
       {/* Routes to add entries */}
       <Route exact path='/add/Energy' 
       render={(props) => <AddEnergy user={this.state.user} {...props}/>}
@@ -101,6 +96,9 @@ class App extends React.Component {
       <Route exact path='/add/Foods' 
       render={(props) => <FoodEntry user={this.state.user} {...props}/>}
       />
+      {/* <Route exact path='/add/Recipe' 
+      render={(props) => <RecipeDb user={this.state.user} {...props}/>}
+      /> */}
       <Route exact path='/add/Drinks' 
       render={(props) => <DrinkEntry user={this.state.user} {...props}/>}
       />
