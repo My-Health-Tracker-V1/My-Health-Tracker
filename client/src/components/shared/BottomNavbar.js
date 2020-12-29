@@ -22,13 +22,13 @@ export default function BottomNavbar() {
         </Link>
 
         <Link to='/add-frequent' className="link blue hover-silver dib mh3 tc">
-          <Icons icon="frequent"/>
-          <span className="f6 db">Frequent</span>
+          <Icons icon="recipes"/>
+          <span className="f6 db">Recipes</span>
         </Link>
 
-        <Link to='/more' className="link blue hover-silver dib mh3 tc">
-          <Icons icon="more"/>
-          <span className="f6 db">More</span>
+        <Link to='/settings' className="link blue hover-silver dib mh3 tc">
+          <Icons icon="settings"/>
+          <span className="f6 db">Settings</span>
         </Link>
 
       </nav>
