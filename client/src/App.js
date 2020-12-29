@@ -8,7 +8,6 @@ import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './components/Home';
 import Dashboard from './components/nav-bar-options/Dashboard'
-import Dashboard2 from './components/nav-bar-options/Dashboard2'
 import FoodsList from './components/add-entries/FoodsList'
 
 
@@ -56,7 +55,7 @@ class App extends React.Component {
         exact path='/dashboard'
         render={props => {
           if (this.state.user) 
-            return <Dashboard2 setUser={this.setUser} user={this.state.user}{...props} />
+            return <Dashboard setUser={this.setUser} user={this.state.user}{...props} />
           else
             return <Redirect to='/'/>
           }
