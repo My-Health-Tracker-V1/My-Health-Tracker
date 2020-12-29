@@ -7,11 +7,11 @@ import BottomNavbar from '../shared/BottomNavbar'
 export default class AddSymptoms extends Component {
   state={
     startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    startTime: this.props.location.state?.symptoms.startTime,//this should bte the present time in the string format:"hh:mm"
-    name:this.props.location.state?.symptoms.name,
-    intensity:this.props.location.state?.symptoms.intensity,
-    notes:this.props.location.state?.symptoms.notes,
-    id:this.props.location.state?.symptoms._id,
+    startTime: this.props.location.state?.element.startTime,//this should bte the present time in the string format:"hh:mm"
+    name:this.props.location.state?.element.name,
+    intensity:this.props.location.state?.element.intensity,
+    notes:this.props.location.state?.element.notes,
+    id:this.props.location.state?.element._id,
     editing:this.props.location.state?.editing
   }
 

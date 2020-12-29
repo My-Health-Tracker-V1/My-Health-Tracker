@@ -4,7 +4,9 @@ import Calendar from '../shared/Calendar'
 import BottomNavbar from '../shared/BottomNavbar'
 import axios from 'axios';
 
+
 export default class Dashboard extends Component {
+
   state ={
     day: new Date().toISOString().split('T')[0],
     user: this.props.user._id,
@@ -42,9 +44,13 @@ export default class Dashboard extends Component {
     this.setDate();
     this.getUserData();
   }
+
   render() {
+
     let allDayEntries;
+
     if(!this.state.isDayEmpty){
+
       allDayEntries=(<div >
         {!this.state.energy ? <></> : <DashboardCard entryType='energy' energy={this.state.energy} user={this.state.user} day={this.state.day}/>}
         {this.state.symptoms.length === 0 ? <></> : <DashboardCard entryType='symptom' symptoms={this.state.symptoms} user={this.state.user} day={this.state.day}/>}
@@ -53,7 +59,9 @@ export default class Dashboard extends Component {
         {this.state.exercises.length === 0 ? <></> : <DashboardCard entryType='exercise' exercises={this.state.exercises} user={this.state.user} day={this.state.day}/>}
         {this.state.sleep.length === 0 ? <></> : <DashboardCard entryType='sleep' sleep={this.state.sleep} user={this.state.user} day={this.state.day}/>}
         </div>)
+    
     }
+  
     return (
       <div>
         <Calendar setDate={this.setDate}/>

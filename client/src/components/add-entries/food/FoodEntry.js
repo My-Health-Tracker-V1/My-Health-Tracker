@@ -390,23 +390,25 @@ export default class FoodEntry extends Component {
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
-        <DateTimeInput {...this.state} handleChange={this.handleChange} 
-        handleSubmit={this.handleRecipeSubmit}/>
-        
-        <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
-        onClick={this.toggleSingle} > + Add a single food </button>
-        <button className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue" 
-        onClick={this.toggleRecipe}> + Add a recipe </button>
+        <div className="pt4 pb5">
+          <DateTimeInput {...this.state} handleChange={this.handleChange} 
+          handleSubmit={this.handleRecipeSubmit}/>
+          
+          <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
+          onClick={this.toggleSingle} > + Add a single food </button>
+          <button className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue" 
+          onClick={this.toggleRecipe}> + Add a recipe </button>
 
-        <div className="food-container">
-          {this.state.handleShowSingle ? (<h4>Suggested Foods</h4>) 
-          : <h4>Suggested Recipes</h4>}
-          <SearchField {...this.state} handleSearch={this.handleSearch} 
-          handleQuery={this.handleQuery}
-          handleRecipeQuery={this.handleRecipeQuery}
-          />
-          <div>{dataComponent}</div>
-          <div>{formComponent}</div>
+          <div className="food-container">
+            {this.state.handleShowSingle ? (<h4>Suggested Foods</h4>) 
+            : <h4>Suggested Recipes</h4>}
+            <SearchField {...this.state} handleSearch={this.handleSearch} 
+            handleQuery={this.handleQuery}
+            handleRecipeQuery={this.handleRecipeQuery}
+            />
+            <div>{dataComponent}</div>
+            <div>{formComponent}</div>
+          </div>
         </div>
         <BottomNavbar {...this.state} />
       </div>

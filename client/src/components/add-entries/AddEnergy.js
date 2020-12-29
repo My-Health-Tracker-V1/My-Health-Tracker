@@ -6,10 +6,9 @@ import axios from 'axios'
 export default class AddEnergy extends Component {
 
   state={
-    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    startTime: this.props.location.state?.energy.startTime,//this should bte the present time in the string format:"hh:mm"
-    energyLevel:this.props.location.state?.energy.name,
-    // id:this.props.id,
+    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state.element?.startTime,
+    energyLevel:this.props.location.state.element?.energyLevel,
     editing:this.props.location.state?.editing
   }
 
@@ -65,7 +64,8 @@ export default class AddEnergy extends Component {
   }
 
   render() {
-    console.log('props heeeeeere',this.props)
+    console.log(this.props)
+    
     return (
       <div className='flex flex-column'>
 

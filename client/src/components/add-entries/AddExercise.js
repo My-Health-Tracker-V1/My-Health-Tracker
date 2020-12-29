@@ -7,13 +7,13 @@ export default class AddExercise extends Component {
 
   state={
     startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    startTime: this.props.location.state?.exercises.startTime,//this should bte the present time in the string format:"hh:mm"
-    name:this.props.location.state?.exercises.name,
-    intensityLevel:this.props.location.state?.exercises.intensityLevel,
-    duration:this.props.location.state?.exercises.duration,
-    id:this.props.location.state?.exercises._id,//normally undefined. Just defined when this component is used in the dashboard
+    startTime: this.props.location.state?.element.startTime,//this should bte the present time in the string format:"hh:mm"
+    name:this.props.location.state?.element.name,
+    intensityLevel:this.props.location.state?.element.intensityLevel,
+    duration:this.props.location.state?.element.duration,
+    id:this.props.location.state?.element._id,//normally undefined. Just defined when this component is used in the dashboard
     editing:this.props.location.state?.editing //true when this component is used in the dashboard
-    // saveToFrequent:false
+
   }
 
   handleChange=event=>{

@@ -20,7 +20,7 @@ export default class FoodEdit extends Component {
       servingAmount: "",
       servingSize: ""
     },
-    food: this.props.location.state.food,
+    food: this.props.location.state.element,
     editing: true,
     add: false,
     edit: false,
