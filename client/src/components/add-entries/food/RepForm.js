@@ -29,13 +29,13 @@ export default class RepForm extends Component {
 
     return (
       <div>
-        {this.props.editing ? (<h3 className="f5 db">Edit a Recipe:</h3>) 
+        {this.props.editing ? (<h3 className="f5 db">What did you eat? </h3>) 
         : (<h3 className="f5 db">Add a Recipe:</h3>)}
         
         <form onSubmit={this.props.editing? 
                         this.props.editRecipeSubmit : this.props.handleSubmit}>
             <div>
-              <label htmlFor='name' className="f6 w3 dib" >Recipe Name: </label>
+              <label htmlFor='name' className="f6 w3 dib" >{this.props.editing ? ("Food Name: "): ("Recipe Name: ")}</label>
               <input className="f6 pa1 mr3 ml1 w6 mv1"
                 type='text'
                 id='recipeName'

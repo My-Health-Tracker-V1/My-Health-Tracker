@@ -80,11 +80,11 @@ export default class IngrForm extends Component {
                         className="f7 link dim br4 ba ph2 pv1 mb4 dib dark-green mr2"> ✔️ Save Ingredient
                      </button>)
                      : (
-                      <form>
-                      <button type='submit' 
-                      className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Ingredient
-                      </button>
-                    </form>
+                      <form onSubmit={this.props.editing? this.props.handleEdit : this.props.handleSubmit}>
+                        <button type='submit' 
+                        className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Ingredient
+                        </button>
+                     </form>
                      )   
                   }
         </div>
