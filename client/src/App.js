@@ -6,7 +6,7 @@ import {Route, Redirect} from 'react-router-dom';
 import Signup from './components/auth/Signup';
 import Login from './components/auth/Login';
 import Home from './components/Home';
-import Dashboard from './components/nav-bar-options/Dashboard'
+// import Dashboard from './components/nav-bar-options/Dashboard'
 
 // Food Entry
 import FoodEntry from './components/add-entries/food/FoodEntry';
@@ -51,7 +51,7 @@ class App extends React.Component {
        />
 
       {/* Routes for Dashboard */}
-        <Route
+        {/* <Route
         exact path='/dashboard'
         render={props => {
           if (this.state.user) 
@@ -60,7 +60,7 @@ class App extends React.Component {
             return <Redirect to='/'/>
           }
         }
-      />
+      /> */}
 
       {/* Routes for Signup and Login */}
       <Route 
