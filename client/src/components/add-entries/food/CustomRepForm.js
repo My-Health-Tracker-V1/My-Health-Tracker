@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class AddRep extends Component {
+export default class RepForm extends Component {
 
   render() {
     return (
@@ -15,7 +15,8 @@ export default class AddRep extends Component {
                           <input className="f6 pa1 mr3 ml1 w4 mv1"
                             type='text'
                             id='recipeName'
-                            name='recipeName' 
+                            name='recipeName'
+                            value={this.props.food.name} 
                             onChange={this.props.handleChange}
                           />
                         </div>
@@ -50,7 +51,7 @@ export default class AddRep extends Component {
                     id='name'
                     name='name'
                     placeholder="e.g. Chicken"
-                    value={this.props.tempIngredient.name}
+                    value={this.props.food.ingredients.name}
                     onChange={this.props.handleChange}
                   />
                   <input className="f6 pa1 mr3 ml1 w4 mv1"
@@ -58,7 +59,7 @@ export default class AddRep extends Component {
                     id='brand'
                     name='brand'
                     placeholder="e.g. Edeka"
-                    value={this.props.tempIngredient.brand}
+                    value={this.props.food.brand}
                     onChange={this.props.handleChange}
                   />
                   <input className="f6 pa1 mr3 ml1 w4 mv1"
@@ -66,7 +67,7 @@ export default class AddRep extends Component {
                     id='category'
                     name='category'
                     placeholder="e.g. Foods"
-                    value={this.props.tempIngredient.category}
+                    value={this.props.food.category}
                     onChange={this.props.handleChange}
                   />
                   <input className="f6 pa1 mr3 ml1 w4 mv1"
@@ -74,7 +75,7 @@ export default class AddRep extends Component {
                     id='servingAmount'
                     name='servingAmount'
                     placeholder="e.g. 2"
-                    value={this.props.tempIngredient.servingAmount}
+                    value={this.props.food.ingredients.servingAmount}
                     onChange={this.props.handleChange}
                   />
                   <input className="f6 pa1 mr3 ml1 w4 mv1"
@@ -82,7 +83,7 @@ export default class AddRep extends Component {
                     id='servingSize'
                     name='servingSize'
                     placeholder="e.g. Kg"
-                    value={this.props.tempIngredient.servingSize}
+                    value='g'
                     onChange={this.props.handleChange}
                   /> 
                 

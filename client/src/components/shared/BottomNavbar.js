@@ -4,7 +4,7 @@ import Icons from './Icons'
 
 export default function BottomNavbar() {
   return (
-      <nav className='ba blue pv2 w-100 fixed bottom-0 bg-white'>
+      <nav className='ba blue pv2 w-100 bottom-0 bg-white fixed'>
 
         <Link to='/dashboard' className="link blue hover-silver dib mh3 tc">
           <Icons icon="diary"/>

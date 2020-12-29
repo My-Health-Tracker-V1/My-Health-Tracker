@@ -26,7 +26,6 @@ const daySchema = new Schema({
     category: String,
     servingAmount: Number,
     servingSize: String,
-      // here not sure
     ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
   }],
 

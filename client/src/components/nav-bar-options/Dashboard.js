@@ -5,7 +5,7 @@ import BottomNavbar from '../shared/BottomNavbar'
 import axios from 'axios';
 
 
-export default class Dashboard2 extends Component {
+export default class Dashboard extends Component {
 
   state ={
     day: new Date().toISOString().split('T')[0],

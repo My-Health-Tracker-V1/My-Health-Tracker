@@ -1,11 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose')
 const router = express.Router();
-
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-
 
 router.post('/signup', (req, res, next) => {
   const { email, password } = req.body;
@@ -16,6 +14,7 @@ router.post('/signup', (req, res, next) => {
   if (email === '') {
     return res.status(400).json({ message: 'Your email cannot be empty' });
   }
+  
   // check if email exists in database -> show message
   User.findOne({ email: email })
     .then(found => {
@@ -49,15 +48,13 @@ router.post('/signup', (req, res, next) => {
 
 router.post('/login', (req, res) => {
   passport.authenticate('local', (err, user) => {
-    console.log('from authenticate', user)
     if (err) {
       return res.status(500).json({ message: 'Error while authenticating' });
     }
     if (!user) {
-      return res.status(400).json({ message: '???Wrong credentials' });
+      return res.status(400).json({ message: 'Wrong credentials' });
     }
     req.login(user, err => {
-      console.log('from authenticate', user)
       if (err) {
         return res.status(500).json({ message: 'Error while attempting to login' })
       }
@@ -77,24 +74,5 @@ router.get('/loggedin', (req, res) => {
   res.json(req.user);
 })
 
-// Google-login
-
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email",
-    ],
-  })
-);
-
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/initial-diary",
-    failureRedirect: "/login", // here you would redirect to the login page using traditional login approach
-  })
-);
 
 module.exports = router;

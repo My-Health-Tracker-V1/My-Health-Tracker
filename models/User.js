@@ -3,12 +3,24 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   username: String,
-  email: String,
-  password: String,
+  email: {
+    type:String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
   days: [{ type: Schema.Types.ObjectId, ref: 'Day'}],
-  googleID: String,
-  // days: [{ type: Schema.Types.ObjectId, ref: 'Day', default:null}],
-  // need to check with Hortencia
+  recipes: [{
+    recipeName: String,
+    servings: Number,
+    ingredients: [{
+      name: String,
+      quantity: Number,
+      unit: String
+    }]
+  }]
 },
 
 {

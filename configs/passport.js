@@ -1,9 +1,7 @@
-
 const User = require('../models/User.js');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
@@ -25,9 +23,9 @@ passport.use(
     User.findOne({ email: email })
       .then(found => {
         if (found === null) {
-          done(null, false, { message: 'hahahhaWrong Credentials' })
+          done(null, false, { message: 'Wrong Credentials' })
         } else if (!bcrypt.compareSync(password, found.password)) {
-          done(null, false, { message: 'hihihiWrong Credentials' })
+          done(null, false, { message: 'Wrong Credentials' })
         } else {
           done(null, found);
         }
@@ -37,34 +35,3 @@ passport.use(
       })
   })
 )
-
-//Google strategy HERE
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_ID,
-      clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: "http://localhost:5555/api/auth/google/callback",
-    },
-    (accessToken, refreshToken, profile, done) => {
-      // to see the structure of the data in received response:
-      console.log("Google account details:", profile);
-
-      User.findOne({ googleID: profile.id })
-        .then((user) => {
-          if (user) {
-            done(null, user);
-            return;
-          }
-
-          User.create({ googleID: profile.id })
-            .then((newUser) => {
-              done(null, newUser);
-            })
-            .catch((err) => done(err)); // closes User.create()
-        })
-        .catch((err) => done(err)); // closes User.findOne()
-    }
-  )
-);
