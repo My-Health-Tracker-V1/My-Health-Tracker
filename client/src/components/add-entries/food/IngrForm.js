@@ -6,9 +6,10 @@ export default class IngrForm extends Component {
     
     return (
       <div>
-          <h3 className="f6 db">Add a single food</h3>
+          <h3 className="f6 db">Custom single ingredient</h3>
             <div>
-                <form onSubmit={this.props.handleSubmit}>
+                <form onSubmit={this.props.editing? 
+                      this.props.handleEdit : this.props.handleSubmit}>
                   <div className="custom-ingredient">
                       <div>
                         <label htmlFor='name'  className="f6 w3 dib" >Name: </label>
@@ -68,7 +69,13 @@ export default class IngrForm extends Component {
                         onChange={this.props.handleChange}
                       />
                   </div>
-                  <button type='submit' class="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma2">Save</button>
+                  {this.props.editing ? (
+                    <button type='submit' 
+                  className="f7 link dim br4 ba ph2 pv1 mb4 dib dark-green mr2"> ✔️ Save Ingredient</button>
+                  ) : (
+                    <button type='submit' 
+                  className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Ingredient</button>
+                  )} 
               </form>
         </div>
       </div>

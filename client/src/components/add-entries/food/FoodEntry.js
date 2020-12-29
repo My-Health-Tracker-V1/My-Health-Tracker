@@ -35,7 +35,8 @@ export default class FoodEntry extends Component {
     handleShowSingle: true,
     ingredientCount: 0,
     query: '',
-    recipeQuery: ''
+    recipeQuery: '',
+    editing: false
   }
 
 // API

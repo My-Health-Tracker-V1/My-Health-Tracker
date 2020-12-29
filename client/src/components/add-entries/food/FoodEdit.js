@@ -2,13 +2,13 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
-import Icons from '../../shared/Icons';
 import IngrForm from './IngrForm';
+import DateTimeInput from './DateTimeInput'
+import RepForm from './RepForm';
 
 
 export default class FoodEdit extends Component {
   state = {
-    // this is the loggedin user from App.js
     user: this.props.user,
     date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
     ingredients: [],
@@ -21,8 +21,9 @@ export default class FoodEdit extends Component {
       servingSize: ""
     },
     food: this.props.location.state.food,
-    edit: false,
+    editing: true,
     add: false,
+    edit: false,
     tempIngId: '',
     selectedIngredient: false,
     handleShowSingle: true,
@@ -278,7 +279,10 @@ export default class FoodEdit extends Component {
       if(this.state.add === true){
         addInterface = (
           <div>
-            <IngrForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleAddSubmit}/> 
+            <IngrForm {...this.state} handleChange={this.handleChange} 
+            handleSubmit={this.handleAddSubmit}
+            handleEdit={this.handleEdit}
+            /> 
           </div>
         )
       } else {
@@ -291,41 +295,19 @@ export default class FoodEdit extends Component {
       return (
         <div>
         <TopBar icon="Foods" title="Your Foods"/>
+        <DateTimeInput {...this.state} handleChange={this.handleChange} 
+        handleSubmit={this.handleRecipeSubmit}/>
         <div className="mw6 center" >
-         <article class="dt w-100 bb b--black-05 pb2 mt2" href="#0">
          
-          {/* <ul className="list pl0 ml0 center mw5 ba b--light-silver br3" style={{"height":"200px", "width": "60%", "overflow": "hidden", "overflowY": "scroll"}} > */}
-          {
-            this.state.food.ingredients.map((ingredient, index) => {
-              return (
-                <div style={{"display":"flex", "flexDirection": "row", "justifyContent":"space-around", "alignItems": "center", "margin": "20px"}}>
-               
-                <div class="dtc w2 w3-ns v-mid">
-                <Icons icon="Foods"/>
-                </div>
-
-                <div class="dtc v-mid pl3">
-                  <h1 class="f6 f5-ns fw6 lh-title black mv0">{ingredient.name} </h1>
-                  <h2 class="f6 fw4 mt0 mb0 black-60">@ {ingredient.brand}</h2>
-                </div>
-
-                <div class="dtc v-mid">
-                  <form class="w-100 tr">
-                  <button onClick={this.handleEdit} value={index} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue ma2">Edit</button>
-                  <button onClick={this.handleDeleteIngredient} value={index}  className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue ma2">Delete</button>
-                </form>
-              </div>
-               </div>
-              )
-            })
-          }
-          </article>
-          {/* </ul> */}
-          <button onClick={this.handleDeleteFood} value={this.state.food._id} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue">Delete entire recipe</button>
-          <button onClick={this.handleAdd} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue">Add new ingredient</button>
-          <button onClick={this.handleRecipeSubmit} value={this.state.food._id} className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue">Save</button>
-          {editInterface}
-          {addInterface}
+        <RepForm {...this.state} handleChange={this.handleChange} 
+                        handleSubmit={this.handleRecipeSubmit} 
+                        handleDeleteFood={this.handleDeleteFood} 
+                        handleEdit={this.handleEdit}
+                        handleDeleteIngredient={this.handleDeleteIngredient}
+                        handleAdd={this.handleAdd}
+                        />
+          {/* {editInterface}
+          {addInterface} */}
         </div>
         <BottomNavbar />
         </div>
