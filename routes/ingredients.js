@@ -389,7 +389,6 @@ router.put('/drinks/user/:userId/day/:date/:foodId/delete', (req, res, next) => 
 
 router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
   const food = req.body.food;
- 
   const ingredients = req.body.food.ingredients.map(ing => {
     return {
       name: ing.name,
@@ -402,16 +401,14 @@ router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
   });
   Ingredient.create(ingredients)
     .then(dbIngredients => {
-      console.log('these are the ingredients', dbIngredients)
       Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
         .then(dbday => {
-          console.log("db index", dbday.foods.map(f => f._id));
-          
           const newFoods = dbday.foods;
-          console.log("food id", req.params.foodId);
           const changedIdx = newFoods.findIndex(food => food._id == req.params.foodId);
-          console.log("gefundener Index", changedIdx);
           newFoods[changedIdx].ingredients = dbIngredients.map(ing => ing._id);
+          newFoods[changedIdx].name = food.name;
+          newFoods[changedIdx].portion = food.portion;
+          newFoods[changedIdx].eatenPortion = food.eatenPortion;
           Day.findByIdAndUpdate(dbday._id, {foods: newFoods}, {new: true})
           .then(dbIngredients => {
           res.status(201).json(dbIngredients);
@@ -422,7 +419,6 @@ router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
           })
         })
         })
-      
-  })
+})
 
 module.exports = router;

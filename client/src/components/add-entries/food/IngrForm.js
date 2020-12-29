@@ -69,14 +69,24 @@ export default class IngrForm extends Component {
                         onChange={this.props.handleChange}
                       />
                   </div>
-                  {this.props.editing ? (
-                    <button type='submit' 
-                  className="f7 link dim br4 ba ph2 pv1 mb4 dib dark-green mr2"> ✔️ Save Ingredient</button>
-                  ) : (
-                    <button type='submit' 
-                  className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Ingredient</button>
-                  )} 
-              </form>
+                  </form>
+                  {
+                    this.props.editing && this.props.add ? 
+                     ( <button onClick={this.props.addNewIngrSave}
+                        className="f7 link dim br4 ba ph2 pv1 mb4 dib dark-green mr2"> ✔️ Save Ingredient
+                        </button>)
+                      : this.props.editing && this.props.edit ?
+                      (<button onClick={this.props.editIngrSave}
+                        className="f7 link dim br4 ba ph2 pv1 mb4 dib dark-green mr2"> ✔️ Save Ingredient
+                     </button>)
+                     : (
+                      <form>
+                      <button type='submit' 
+                      className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Ingredient
+                      </button>
+                    </form>
+                     )   
+                  }
         </div>
       </div>
     )

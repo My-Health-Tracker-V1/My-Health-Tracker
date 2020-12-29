@@ -8,7 +8,9 @@ export default class RepForm extends Component {
     if(this.props.edit === true) {
       editInterface = <IngrForm {...this.props} 
                       handleChange={this.props.handleChange} 
-                      handleSubmit={this.props.handleSingleSubmit}/>    
+                      handleSubmit={this.props.handleSingleSubmit}
+                      saveIngr2Rep={this.props.saveIngr2Rep}
+                      />    
     } else {
       editInterface = <></>
     }
@@ -17,7 +19,10 @@ export default class RepForm extends Component {
       addInterface = <IngrForm {...this.props} 
                     handleChange={this.props.handleChange} 
                     handleSubmit={this.props.handleAddSubmit}
-                    handleEdit={this.props.handleEdit} />
+                    handleEdit={this.props.handleEdit} 
+                    saveIngr2Rep={this.props.saveIngr2Rep}
+                    addNewIngr={this.props.addNewIngr}
+                    />
     } else {
       addInterface = <></>
     }
@@ -28,7 +33,7 @@ export default class RepForm extends Component {
         : (<h3 className="f5 db">Add a Recipe:</h3>)}
         
         <form onSubmit={this.props.editing? 
-                        this.props.handleEdit : this.props.handleSubmit}>
+                        this.props.editRecipeSubmit : this.props.handleSubmit}>
             <div>
               <label htmlFor='name' className="f6 w3 dib" >Recipe Name: </label>
               <input className="f6 pa1 mr3 ml1 w6 mv1"
@@ -67,27 +72,27 @@ export default class RepForm extends Component {
             { this.props.food.ingredients.map((ingr, index) => {
               return (
                 <div>
-                  <a onClick={this.props.handleEdit} value={index} 
+                  <a onClick={this.props.editing? this.props.toggleEditIngr : ()=>{}} data-key={index} 
                   className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green">{ingr.name}</a>
-                  {this.props.editing && <a onClick={this.props.handleDeleteIngredient} value={index}  
+                  {this.props.editing && <a onClick={this.props.handleDeleteIngredient} data-key={index}  
                   className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"> ✖️ </a>}
                 </div>)
             })}
           </div>
 
-          {this.props.editing && <a onClick={this.props.handleAdd} 
+          {this.props.editing && <a onClick={this.props.toggleAddIngr} 
           className="f7 link dim br4 ba ph2 pv1 mb3 dib dark-green"> ➕ Add a new ingredient</a>}
           {editInterface}
           {addInterface}
           <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
             <div>
               {this.props.editing && <a onClick={this.props.handleDeleteFood} 
-              value={this.props.food._id} className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue">
+              data-key={this.props.food._id} className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue">
               Delete Recipe</a>}
             </div>
             <form onSubmit={this.props.editing? 
-                          this.props.handleEdit : this.props.handleSubmit}>
-              <button type='submit' 
+                          this.props.editRecipeSubmit : this.props.handleSubmit}>
+              <button
               className="f6 link dim br-pill ph4 pv2 mb2 dib white bg-dark-blue">Save all</button>
             </form>
           </div>
