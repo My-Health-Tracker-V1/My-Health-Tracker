@@ -29,7 +29,12 @@ export default class Dashboard extends Component {
   getUserData(){
     axios.get(`/api/days/user/${this.props.user._id}/day/${this.state.day}`)
       .then(res=>{
-        this.setState({
+        if(res.data===null){
+          this.setState({
+            isDayEmpty: true
+          })
+        }else{
+          this.setState({
           isDayEmpty: false,
           energy: res.data.energy,
           foods: res.data.foods,
@@ -37,7 +42,7 @@ export default class Dashboard extends Component {
           exercises: res.data.exercises,
           sleep: res.data.sleep,
           symptoms: res.data.symptoms
-        })
+        })}
       })
       .catch(err=>console.log(err))
   }
