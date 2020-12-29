@@ -18,14 +18,12 @@ export default class Dashboard extends Component {
     sleep: [],
     symptoms: []
   }
-
   setDate = async (date) => {
     await this.setState({
       day: date
     })
     await this.getUserData()   
 }
-
   getUserData(){
     axios.get(`/api/days/user/${this.props.user._id}/day/${this.state.day}`)
       .then(res=>{
@@ -42,7 +40,6 @@ export default class Dashboard extends Component {
       })
       .catch(err=>console.log(err))
   }
-
   componentDidMount(){
     this.setDate();
     this.getUserData();
