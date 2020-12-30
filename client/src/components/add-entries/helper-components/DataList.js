@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class RecipeDb extends Component {
+export default class DataList extends Component {
 
   render() {
 

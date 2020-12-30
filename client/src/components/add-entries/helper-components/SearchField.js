@@ -12,7 +12,7 @@ export default class SearchField extends Component {
                 id="input-style"
                 type="search"
                 name="query"
-                placeholder="Ingredients in your dish..."
+                placeholder={this.props.placeholder}
                 value={this.props.query}
                 onChange={this.props.handleSearch}
               />

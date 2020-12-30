@@ -402,12 +402,12 @@ export default class FoodEntry extends Component {
             {this.state.handleShowSingle ? (
               <SearchField handleSearch={this.handleSearch} 
               handleQuery={this.handleQuery}
-              query={this.state.query}
+              query={this.state.query} placeholder="Ingredients in your dish..."
               />
             ) : (
               <SearchField handleSearch={this.handleSearch} 
                handleQuery={this.handleRecipeQuery}
-               query={this.state.query}
+               query={this.state.query} placeholder="Find your recipe..."
               />
             )}
             <div>{dataComponent}</div>

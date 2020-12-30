@@ -15,13 +15,14 @@ export default class AddDrinks extends Component {
     startTime: this.props.location.state?.element.startTime || 
           new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     name: this.props.location.state?.element.ingredients[0].name,
-    brand: this.props.location.state?.element.ingredients[0].brand,
+    // brand: this.props.location.state?.element.ingredients[0].brand,
     category: this.props.location.state?.element.ingredients[0].category,
     servingAmount: this.props.location.state?.element.ingredients[0].servingAmount,
     servingSize: this.props.location.state?.element.ingredients[0].servingSize,
     // id:this.props.location.state?.drinks._id,
     // editing:this.props.location.state?.editing,
-    drinks:[]
+    drinks:[],
+    query: ''
   }
   
   // API
@@ -48,31 +49,35 @@ export default class AddDrinks extends Component {
       query: query
     })
   }
-  handleSearch = event => {
-    const filteredIngredients = this.state.ingredients.filter(ingredient => 
-      ingredient.name.toLowerCase().includes(event.target.value.toLowerCase())
-    );
-    this.setState({
-      query: event.target.value,
-      ingredients: filteredIngredients
+
+  handleQuery = (event) => {
+    event?.preventDefault();
+    console.log(this.state.query)
+    axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${this.state.query}`)
+    .then(res => {
+      console.log(res.data);
+      this.setState({
+        query: event.target.value,
+        drinks: res.data.drinks
+      })   
+    })
+    .catch(err => {
+      console.log(err.response)
     })
   }
-// Function for fill out the ingredient form
+ 
   handleClick = event => {
+    event.preventDefault();
     const key = event.target.getAttribute('data-key')
     console.log(key);
-    console.log('this.state.ingredients is:', this.state.ingredients)
-    const clickedIngredient = this.state.ingredients.filter(ingredient => {
-      return ingredient._id === key;
-    });
-    console.log(clickedIngredient[0])
+    console.log('this.state.drinks is:', this.state.drinks)
+    const clickedDrink = this.state.drinks.find(drink => drink.idDrink === key);
+    console.log(clickedDrink)
     this.setState ({
-      name: clickedIngredient[0].name,
-      brand: clickedIngredient[0].brand,
-      category: clickedIngredient[0].category
+      name: clickedDrink.strDrink,
     })
   }
-// Functions for submit form
+
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
@@ -119,7 +124,7 @@ export default class AddDrinks extends Component {
     axios.put( `/api/ingredients/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/edit`)
   }
   render() {
-    // if (!this.state.ingredients) return <h1>Loading...</h1>
+    if (!this.state.drinks) return <h3>Ooops, something went wrong, please refresh the page</h3>
     console.log('this is the user in foodentry', this.state.user)
     console.log(this.props.location)
     return (
@@ -128,13 +133,13 @@ export default class AddDrinks extends Component {
         <div className="pt3 pb6">
           <DateTimeInput date={this.state.date} 
                         startTime={this.state.startTime} 
-                        handleChange={this.state.handleChange}/>
-          <SearchField {...this.state} 
-                      query={this.state.query} 
-                      setQuery={this.setQuery} />
+                        handleChange={this.handleChange}/>
+          <SearchField {...this.state} handleSearch={this.handleChange}
+                      query={this.state.query} handleQuery={this.handleQuery}
+                      placeholder="Margarita..." />
           <DataList data={this.state.drinks} img="strDrinkThumb" heading="strDrink" 
-                    key="idDrink"
-                    handleClickRecipe={this.handleClickRecipe} 
+                    key="idDrink" dataKey="idDrink"
+                    handleClick={this.handleClick} 
                     />
           
           <DrinkIngrForm {...this.state} handleChange={this.handleChange} 
