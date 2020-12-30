@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import DateTimeInput from '../helper-components/DateTimeInput';
-import SingleDb from './SingleDb';
-import RecipeDb from './RecipeDb';
+import DataList from '../helper-components/DataList';
 import SearchField from './SearchField';
 import IngrForm from './IngrForm';
 import RepForm from './RepForm';
@@ -44,7 +43,7 @@ export default class FoodEntry extends Component {
      .then(res => {
        console.log(res.data);
        this.setState({
-         ingredients: res.data.hints
+         ingredients: res.data.hints.map(hint => hint.food)
        })   
      })
      .catch(err => {
@@ -57,7 +56,7 @@ export default class FoodEntry extends Component {
      .then(res => {
        console.log(res.data);
        this.setState({
-         recipes: res.data.hits
+         recipes: res.data.hits.map(hit => hit.recipe)
        })
      })
      .catch(err => {
@@ -134,7 +133,7 @@ export default class FoodEntry extends Component {
       console.log(res.data);
       this.setState({
         query: event.target.value,
-        ingredients: res.data.hints
+        ingredients: res.data.hints.map(hint => hint.food)
       })   
     })
     .catch(err => {
@@ -149,7 +148,7 @@ export default class FoodEntry extends Component {
       console.log(res.data);
       this.setState({
         recipeQuery: event.target.value,
-        recipes: res.data.hits
+        recipes: res.data.hits.map(hit => hit.recipe)
       })   
     })
     .catch(err => {
@@ -362,19 +361,21 @@ export default class FoodEntry extends Component {
     let dataComponent;
     let formComponent;
     if (this.state.handleShowSingle) {     
-      dataComponent = <SingleDb {...this.state} handleClick={this.handleClick} 
-                        setQuery={this.setQuery} 
-                        handleSearch={this.handleSearch}
-                        handleQuery={this.handleQuery}/>;
+      dataComponent = <DataList 
+                        data={this.state.ingredients} img="image" heading="label" 
+                        subtitle="category" key="foodId"
+                        handleClickRecipe={this.handleClickRecipe} 
+                      />
       formComponent = <IngrForm {...this.state} handleChange={this.handleChange} 
                         handleSubmit={this.handleSingleSubmit} 
                         handleDelete={this.handleDelete} 
                         handleEditing={this.handleEditing}/>;
     } else {      
-      dataComponent = <RecipeDb {...this.state} handleClickRecipe={this.handleClickRecipe} 
-                        setRecipeQuery={this.setRecipeQuery} 
-                        handleSearch={this.handleSearch}
-                        handleRecipeQuery={this.handleRecipeQuery}/>; 
+      dataComponent = <DataList 
+                        data={this.state.recipes} img="image" heading="label" 
+                        subtitle="healthLabels" key="uri"
+                        handleClickRecipe={this.handleClickRecipe} 
+                      />; 
       formComponent = <RepForm {...this.state} handleChange={this.handleChange} 
                         handleSubmit={this.handleRecipeSubmit} 
                         handleDelete={this.handleDelete} 
@@ -384,7 +385,7 @@ export default class FoodEntry extends Component {
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
-        <div className="pt4 pb5">
+        <div className="pt3 pb6">
           <DateTimeInput startTime={this.state.tempStartTime} 
                           date={this.state.date}
                           handleChange={this.handleChange} 

@@ -3,14 +3,6 @@ import './FoodEntry.css'
 
 export default class SearchField extends Component {
 
-  handleQuery = event => {
-    this.props.setQuery(event.target.value)
-  }
-
-  handleRecipeQuery = event => {
-    this.props.setRecipeQuery(event.target.value)
-  }
-
   render() {
     return (
         <div className="search-bar"> 
