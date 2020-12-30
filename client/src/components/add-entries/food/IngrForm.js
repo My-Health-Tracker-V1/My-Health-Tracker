@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import FormRow from '../helper-components/FormRow'
 
 export default class IngrForm extends Component {
 
@@ -11,63 +12,22 @@ export default class IngrForm extends Component {
                 <form onSubmit={this.props.editing? 
                       this.props.handleEdit : this.props.handleSubmit}>
                   <div className="custom-ingredient">
-                      <div>
-                        <label htmlFor='name'  className="f6 w3 dib" >Name: </label>
-                        <input className="f6 pa1 mr3 ml1 w4 mv1"
-                          type='text'
-                          id='name'
-                          placeholder="e.g. Apple"
-                          name='name' 
-                          value={this.props.tempIngredient.name}
-                          onChange={this.props.handleChange}
-                        />
-                      </div>
-                      <div style={{"display": "flex", "flexDirection": "row", "justifyContent": "center", "alignItems": "center"}}>
-                        <label htmlFor='brand' className="f6 w3 dib">Brand: </label>
-                        <input className="f6 pa1 mr3 ml1 w4 mv1"
-                          type='text'
-                          id='brand'
-                          name='brand'
-                          placeholder="e.g. Edeka"
-                          value={this.props.tempIngredient.brand}
-                          onChange={this.props.handleChange}
-                        />
-                      </div>
-                      <div style={{"display": "flex", "flexDirection": "row", "justifyContent": "center", "alignItems": "center"}}>
-                        <label htmlFor='category' className="f6 w3 dib">Category: </label>
-                          <input className="f6 pa1 mr3 ml1 w4 mv1"
-                            type='text'
-                            id='category'
-                            name='category'
-                            placeholder="e.g. Foods"
-                            value={this.props.tempIngredient.category}
-                            onChange={this.props.handleChange}
-                          /> 
-                      </div>
-                  </div>
-                  
-                  <div >
-                    <label htmlFor='servingAmount' className="f6 w3 dib">QT: </label>
-                    <input className="f6 pa1 mr3 ml1 w4 mv1"
-                      type='number'
-                      id='servingAmount'
-                      name='servingAmount'
-                      placeholder="e.g. 3"
-                      min='0'
-                      value={this.props.tempIngredient.servingAmount}
-                      onChange={this.props.handleChange}
-                    />
-                  </div>
-                  <div>
-                      <label htmlFor='servingSize'  className="f6 w3 dib">Unit: </label>
-                      <input className="f6 pa1 mr3 ml1 w4 mv1"
-                        type='text'
-                        id='servingSize'
-                        name='servingSize'
-                        placeholder="e.g. piece"
-                        value={this.props.tempIngredient.servingSize}
-                        onChange={this.props.handleChange}
-                      />
+                    <FormRow value={this.props.tempIngredient.name} title="Name: "
+                             type="text" id="name" placeholder="e.g. Apple" name="name" 
+                             handleChange={this.props.handleChange}/>
+                    <FormRow value={this.props.tempIngredient.brand} title="Brand: "
+                             type="text" id="category" placeholder="e.g. Edeka" name="brand"
+                             handleChange={this.props.handleChange}/>
+                    <FormRow value={this.props.tempIngredient.category} title="Category: "
+                             type="text" id="category" placeholder="e.g. Foods" name="category"
+                             handleChange={this.props.handleChange}/>
+                    <FormRow value={this.props.tempIngredient.servingAmount} title="QT: "
+                             type="number" id="servingAmount" placeholder="e.g. 3" name="servingAmount"
+                             min="0"
+                             handleChange={this.props.handleChange}/>
+                    <FormRow value={this.props.tempIngredient.servingSize} title="Unit: "
+                             type='text' id='servingSize' placeholder="e.g. piece" name='servingSize' 
+                             handleChange={this.props.handleChange}/>
                   </div>
                   </form>
                   {
