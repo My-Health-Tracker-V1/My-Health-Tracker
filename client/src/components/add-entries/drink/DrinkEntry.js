@@ -5,6 +5,7 @@ import BottomNavbar from '../../shared/BottomNavbar';
 import SearchField from '../helper-components/SearchField';
 import DrinkIngrForm from './DrinkIngrForm';
 import DateTimeInput from '../helper-components/DateTimeInput';
+import DataList from '../helper-components/DataList'
 
 export default class AddDrinks extends Component {
   state = {
@@ -20,8 +21,27 @@ export default class AddDrinks extends Component {
     servingSize: this.props.location.state?.element.ingredients[0].servingSize,
     // id:this.props.location.state?.drinks._id,
     // editing:this.props.location.state?.editing,
+    drinks:[]
   }
   
+  // API
+  getDrinksFromApi = (alcoholic) => {
+    axios.get(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcoholic}`)
+    .then(res => {
+      console.log(res.data);
+      this.setState({
+        drinks: res.data.drinks
+      })   
+    })
+    .catch(err => {
+       console.log(err.response)
+    })
+  }
+
+  componentDidMount = () => {
+    this.getDrinksFromApi("Alcoholic")
+  }
+
   // Functions for search bar
   setQuery = query => {
     this.setState({
@@ -112,6 +132,10 @@ export default class AddDrinks extends Component {
           <SearchField {...this.state} 
                       query={this.state.query} 
                       setQuery={this.setQuery} />
+          <DataList data={this.state.drinks} img="strDrinkThumb" heading="strDrink" 
+                    key="idDrink"
+                    handleClickRecipe={this.handleClickRecipe} 
+                    />
           
           <DrinkIngrForm {...this.state} handleChange={this.handleChange} 
                                           handleSubmit={this.handleSubmit} 
