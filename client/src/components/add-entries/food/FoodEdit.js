@@ -30,72 +30,6 @@ export default class FoodEdit extends Component {
     query: ''
   }
 
-  // Get initial ingredients data
-  // getAllIngredients = () => {
-  //   axios.get('/api/ingredients')
-  //    .then(response => {
-  //      console.log(response.data);
-  //      this.setState({
-  //         ingredients: response.data
-  //      })
-  //    })
-  //    .catch(err => {
-  //      console.log(err.response)
-  //    })
-  // }
-
-  // componentDidMount = () => {
-  //   this.getAllIngredients();
-  // }
-
-  // // Functions for search bar
-  // setQuery = query => {
-  //   this.setState({
-  //     query: query
-  //   })
-  // }
-  // handleSearch = event => {
-  //   const filteredIngredients = this.state.ingredients.filter(ingredient => 
-  //     ingredient.name.toLowerCase().includes(event.target.value.toLowerCase())
-  //   );
-  //   this.setState({
-  //     query: event.target.value,
-  //     ingredients: filteredIngredients
-  //   })
-  // }
-
-  // Function for fill out the ingredient form
-//   handleClick = event => {
-//     const key = event.target.getAttribute('data-key')
-//     console.log(key);
-//     console.log('this.state.ingredients is:', this.state.ingredients)
-//     const clickedIngredient = this.state.ingredients.filter(ingredient => {
-//       return ingredient._id === key;
-//     });
-//     const newTempIngredient = this.state.tempIngredient;
-//     newTempIngredient.name = clickedIngredient[0].name;
-//     newTempIngredient.brand = clickedIngredient[0].brand;
-//     newTempIngredient.category = clickedIngredient[0].category;
-//     this.setState ({
-//       tempIngredient: newTempIngredient
-//     })
-//     console.log(this.state.tempIngredient);
-//   }
-
-// // Functions for toggle Recipe
-//   toggleRecipe = () => {
-//     this.setState({
-//       handleShowSingle: false,
-//       ingredientCount: 0
-//     })
-//   }
-//   toggleSingle = () => {
-//     this.setState({
-//       handleShowSingle: true,
-//       ingredientCount: 0
-//     })
-//   }
-
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
@@ -233,7 +167,7 @@ export default class FoodEdit extends Component {
       })
       .catch(err=>console.log(err))
     }
-// toggle
+
     toggleAddIngr = event => {
       event?.preventDefault();
       const tempIng = {
@@ -261,43 +195,13 @@ export default class FoodEdit extends Component {
     }
   
     render() {
-      // let editInterface;
-      // if(this.state.edit === true){
-      //   editInterface = (
-      //     <div>
-      //       <IngrForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSingleSubmit}/>    
-      //     </div>
-      //   )
-      // } else {
-      //   editInterface = (
-      //     <div>
-            
-      //     </div>
-      //   )
-      // }
-      // let addInterface;
-      // if(this.state.add === true){
-      //   addInterface = (
-      //     <div>
-      //       <IngrForm {...this.state} handleChange={this.handleChange} 
-      //       handleSubmit={this.handleAddSubmit}
-      //       handleEdit={this.handleEdit}
-      //       /> 
-      //     </div>
-      //   )
-      // } else {
-      //   addInterface = (
-      //     <div>
-            
-      //     </div>
-      //   )
-      // }
+      
       return (
         <div>
         <TopBar icon="Foods" title="Your Foods"/>
         <div className="pb5">
-          <DateTimeInput {...this.state} handleChange={this.handleChange} 
-          editRecipeSubmit={this.editRecipeSubmit}/>
+          <DateTimeInput startTime={this.state.tempStartTime} date={this.state.date}
+                         handleChange={this.handleChange} />
           <div className="mw6 center" >
           
           <RepForm {...this.state} handleChange={this.handleChange} 
@@ -310,8 +214,6 @@ export default class FoodEdit extends Component {
                           editIngrSave={this.editIngrSave}
                           addNewIngrSave={this.addNewIngrSave}
                           />
-            {/* {editInterface}
-            {addInterface} */}
           </div>
         </div>
         <BottomNavbar />

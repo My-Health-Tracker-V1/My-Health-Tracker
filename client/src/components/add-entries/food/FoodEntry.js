@@ -24,7 +24,7 @@ export default class FoodEntry extends Component {
       servingSize: ''
     },
     food: {
-      startTime: '',
+      startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
       name: '',
       portion: '',
       eatenPortion: '',
@@ -389,7 +389,7 @@ export default class FoodEntry extends Component {
           <DateTimeInput startTime={this.state.tempStartTime} 
                           date={this.state.date}
                           handleChange={this.handleChange} 
-                          handleSubmit={this.handleRecipeSubmit}/>
+                        />
         
           <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
           onClick={this.toggleSingle} > + Add a single food </button>
