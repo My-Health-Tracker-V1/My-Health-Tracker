@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
-import SearchField from '../food/SearchField';
+import SearchField from '../helper-components/SearchField';
 import DrinkIngrForm from './DrinkIngrForm';
 import DateTimeInput from '../helper-components/DateTimeInput';
 

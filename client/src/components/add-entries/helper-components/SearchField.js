@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './FoodEntry.css'
+import '../food/FoodEntry.css'
 
 export default class SearchField extends Component {
 
