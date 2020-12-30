@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import FormRow from '../helper-components/FormRow'
+import { FormRow }from '../helper-components/Rows'
 
 export default class IngrForm extends Component {
 

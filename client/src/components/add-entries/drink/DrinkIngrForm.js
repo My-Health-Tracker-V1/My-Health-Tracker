@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import FormRow from '../helper-components/FormRow'
-import SelectRow from '../helper-components/SelectRow'
+import { FormRow, SelectRow } from '../helper-components/Rows'
 
 export default class DrinkIngrForm extends Component {
   render() {
