@@ -20,7 +20,7 @@ export default class RecipeDb extends Component {
                 <div className="dtc v-mid">
                   <form className="w-100 tr">
                     <button className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60" 
-                    onClick={this.props.handleClickRecipe} key={item[this.props.key]} data-key={item[this.props.key]}>+ Add</button>
+                    onClick={this.props.handleClick} key={item[this.props.key]} data-key={item[this.props.dataKey]}>+ Add</button>
                   </form>
                 </div>
               </article>

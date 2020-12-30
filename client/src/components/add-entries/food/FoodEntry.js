@@ -74,11 +74,11 @@ export default class FoodEntry extends Component {
     const key = event.target.getAttribute('data-key')
     console.log(key);
     console.log('this.state.ingredients is:', this.state.ingredients)
-    const clickedIngr = this.state.ingredients.find(ingredient => ingredient.food.foodId === key);
+    const clickedIngr = this.state.ingredients.find(ingredient => ingredient.foodId === key);
     const newTempIngredient = this.state.tempIngredient;
-    newTempIngredient.name = clickedIngr.food.label;
-    newTempIngredient.brand = clickedIngr.food.brand;
-    newTempIngredient.category = clickedIngr.food.category;
+    newTempIngredient.name = clickedIngr.label;
+    newTempIngredient.brand = clickedIngr.brand;
+    newTempIngredient.category = clickedIngr.category;
     this.setState ({
       tempIngredient: newTempIngredient
     })
@@ -98,12 +98,12 @@ export default class FoodEntry extends Component {
     const key = event.target.getAttribute('data-key')
     console.log(key);
     console.log('this.state.recipes is:', this.state.recipes)
-    const clickedRecipe = this.state.recipes.find(recipe => recipe.recipe.uri === key);
+    const clickedRecipe = this.state.recipes.find(recipe => recipe.uri === key);
     const newFood = this.state.food;
-    newFood.name = clickedRecipe.recipe.label;
-    newFood.portion = clickedRecipe.recipe.yield;
-    newFood.category = clickedRecipe.recipe.healthLabels;
-    newFood.ingredients = clickedRecipe.recipe.ingredients.map(this.apiFormat);
+    newFood.name = clickedRecipe.label;
+    newFood.portion = clickedRecipe.yield;
+    newFood.category = clickedRecipe.healthLabels;
+    newFood.ingredients = clickedRecipe.ingredients.map(this.apiFormat);
     this.setState ({
       food: newFood
     })
@@ -363,8 +363,8 @@ export default class FoodEntry extends Component {
     if (this.state.handleShowSingle) {     
       dataComponent = <DataList 
                         data={this.state.ingredients} img="image" heading="label" 
-                        subtitle="category" key="foodId"
-                        handleClickRecipe={this.handleClickRecipe} 
+                        subtitle="category" key="foodId" dataKey="foodId"
+                        handleClick={this.handleClick} 
                       />
       formComponent = <IngrForm {...this.state} handleChange={this.handleChange} 
                         handleSubmit={this.handleSingleSubmit} 
@@ -373,8 +373,8 @@ export default class FoodEntry extends Component {
     } else {      
       dataComponent = <DataList 
                         data={this.state.recipes} img="image" heading="label" 
-                        subtitle="healthLabels" key="uri"
-                        handleClickRecipe={this.handleClickRecipe} 
+                        subtitle="healthLabels" key="uri" dataKey="uri"
+                        handleClick={this.handleClickRecipe} 
                       />; 
       formComponent = <RepForm {...this.state} handleChange={this.handleChange} 
                         handleSubmit={this.handleRecipeSubmit} 
