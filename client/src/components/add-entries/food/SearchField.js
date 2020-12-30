@@ -13,8 +13,6 @@ export default class SearchField extends Component {
 
   render() {
     return (
-      <div>
-      { this.props.handleShowSingle ? (
         <div className="search-bar"> 
           <form onSubmit={this.props.handleQuery}>
             <label id="search-label">
@@ -28,24 +26,6 @@ export default class SearchField extends Component {
               />
             </label>
           </form>
-        </div>) : (
-        <div className="search-bar"> 
-          <form onSubmit={this.props.handleRecipeQuery}>
-            <label id="search-label">
-              <input className="f6 pa1 mr3 ml1 w4 mv1"
-                id="input-style"
-                type="search"
-                name="recipeQuery"
-                placeholder="Search a recipe..."
-                value={this.props.recipeQuery}
-                onChange={this.props.handleSearch}
-              />
-            </label>
-          </form>
-        </div>
-        )
-      }
-      </div>
-    )
+        </div>)
   }
 }

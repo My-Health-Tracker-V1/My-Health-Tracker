@@ -104,23 +104,22 @@ export default class AddDrinks extends Component {
     console.log(this.props.location)
     return (
       <div>
-      
-      <TopBar title='Drinks' icon='Drinks'/>
-      <div className="pt3 pb6">
-        <DateTimeInput date={this.state.date} 
-                       startTime={this.state.startTime} 
-                       handleChange={this.state.handleChange}/>
-        <SearchField {...this.state} 
-                    query={this.state.query} 
-                    setQuery={this.setQuery} />
-        
-        <DrinkIngrForm {...this.state} handleChange={this.handleChange} 
-                                        handleSubmit={this.handleSubmit} 
-                                        handleClick={this.handleClick} 
-                                        handleEditing={this.handleEditing} 
-                                        handleDelete={this.handleDelete}/>
-      </div>
-      <BottomNavbar />
+        <TopBar title='Drinks' icon='Drinks'/>
+        <div className="pt3 pb6">
+          <DateTimeInput date={this.state.date} 
+                        startTime={this.state.startTime} 
+                        handleChange={this.state.handleChange}/>
+          <SearchField {...this.state} 
+                      query={this.state.query} 
+                      setQuery={this.setQuery} />
+          
+          <DrinkIngrForm {...this.state} handleChange={this.handleChange} 
+                                          handleSubmit={this.handleSubmit} 
+                                          handleClick={this.handleClick} 
+                                          handleEditing={this.handleEditing} 
+                                          handleDelete={this.handleDelete}/>
+        </div>
+          <BottomNavbar />
       </div>
     )
   }

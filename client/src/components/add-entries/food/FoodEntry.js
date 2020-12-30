@@ -35,7 +35,6 @@ export default class FoodEntry extends Component {
     handleShowSingle: true,
     ingredientCount: 0,
     query: '',
-    recipeQuery: '',
     editing: false
   }
 
@@ -115,11 +114,6 @@ export default class FoodEntry extends Component {
   setQuery = query => {
     this.setState({
       query: query,
-    })
-  }
-  setRecipeQuery = recipeQuery => {
-    this.setState({
-      recipeQuery: recipeQuery,
     })
   }
 
@@ -404,10 +398,17 @@ export default class FoodEntry extends Component {
           <div className="food-container">
             {this.state.handleShowSingle ? (<h4>Suggested Foods</h4>) 
             : <h4>Suggested Recipes</h4>}
-            <SearchField {...this.state} handleSearch={this.handleSearch} 
-            handleQuery={this.handleQuery}
-            handleRecipeQuery={this.handleRecipeQuery}
-            />
+            {this.state.handleShowSingle ? (
+              <SearchField handleSearch={this.handleSearch} 
+              handleQuery={this.handleQuery}
+              query={this.state.query}
+              />
+            ) : (
+              <SearchField handleSearch={this.handleSearch} 
+               handleQuery={this.handleRecipeQuery}
+               query={this.state.query}
+              />
+            )}
             <div>{dataComponent}</div>
             <div>{formComponent}</div>
           </div>
