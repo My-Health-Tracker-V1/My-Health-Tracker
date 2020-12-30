@@ -8,7 +8,7 @@ export default class AddSleep extends Component {
 
   state={
     startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
-    startTime: this.props.location.state?.element.startTime,
+    startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     duration:this.props.location.state?.element.duration,
     notes:this.props.location.state?.element.notes,
     id:this.props.location.state?.element._id,
@@ -33,7 +33,6 @@ export default class AddSleep extends Component {
 
     axios.post(`/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,sleepEntry)
       .then(res=>{
-        console.log(res);
         this.props.history.push("/dashboard")
       })
       .catch(err=>console.log(err))
@@ -48,7 +47,6 @@ export default class AddSleep extends Component {
 
     axios.delete(`/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,{data:sleepToDelete})
       .then(res=>{
-        console.log(res);
         this.props.history.push("/dashboard")
       })
       .catch(err=>console.log(err))
@@ -62,7 +60,6 @@ export default class AddSleep extends Component {
 
     axios.put(`/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,{data:[this.state.id,updatedSleep]})
     .then(res=>{
-      console.log(res);
       this.props.history.push("/dashboard")
     })
     .catch(err=>console.log(err))

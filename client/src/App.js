@@ -18,7 +18,8 @@ import FoodEdit from './components/add-entries/food/FoodEdit';
 //Components for the BottomNavBar Links
 import Analysis from './components/nav-bar-options/Analysis'
 import AddFrequent from './components/nav-bar-options/AddFrequent'
-import More from './components/nav-bar-options/More'
+import Settings from './components/nav-bar-options/Settings'
+// import More from './components/nav-bar-options/More'
 import AddItem from './components/nav-bar-options/AddItem'
 
 //Components for adding entries
@@ -79,7 +80,9 @@ class App extends React.Component {
       <Route exact path='/add-item' component={AddItem}/>
       <Route exact path='/analysis' render={(props) => <Analysis user={this.state.user} {...props}/>}/>
       <Route exact path='/add-frequent' component={AddFrequent}/>
-      <Route exact path='/more' render={(props) => <More setUser={this.setUser} {...props}/>}/>
+      {/* <Route exact path='/more' render={(props) => <More setUser={this.setUser} {...props}/>}/> */}
+      <Route exact path='/settings' render={(props) => <Settings user={this.state.user} setUser={this.setUser} {...props}/>}/>
+
       
       {/* Routes to add entries */}
       <Route exact path='/add/Energy' 
