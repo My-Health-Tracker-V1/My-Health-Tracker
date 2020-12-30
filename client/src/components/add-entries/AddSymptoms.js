@@ -5,9 +5,10 @@ import TopBar from '../shared/TopBar'
 import BottomNavbar from '../shared/BottomNavbar'
 
 export default class AddSymptoms extends Component {
+
   state={
-    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    startTime: this.props.location.state?.element.startTime,//this should bte the present time in the string format:"hh:mm"
+    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     name:this.props.location.state?.element.name,
     intensity:this.props.location.state?.element.intensity,
     notes:this.props.location.state?.element.notes,
@@ -33,7 +34,6 @@ export default class AddSymptoms extends Component {
 
     axios.post(`/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,symptomEntry)
       .then(res=>{
-        console.log(res);
         this.props.history.push("/dashboard")
       })
       .catch(err=>console.log(err))
@@ -48,7 +48,6 @@ export default class AddSymptoms extends Component {
 
     axios.delete(`/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,{data:symptomToDelete})
       .then(res=>{
-        console.log(res);
         this.props.history.push("/dashboard")
       })
       .catch(err=>console.log(err))
@@ -62,7 +61,6 @@ export default class AddSymptoms extends Component {
 
     axios.put(`/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,{data:[this.state.id,updatedSymptom]})
     .then(res=>{
-      console.log(res);
       this.props.history.push("/dashboard")
     })
     .catch(err=>console.log(err))

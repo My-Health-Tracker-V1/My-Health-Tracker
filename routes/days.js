@@ -25,7 +25,6 @@ router.get('/user/:id',(req,res,next)=>{
     .catch(err => console.log(err))
 })
 
-//View all the entries of a specific day of a user
 router.get('/user/:id/day/:date/',(req,res,next)=>{
 
   Day.findOne({$and:[{owner: req.params.id},{date: req.params.date}]})

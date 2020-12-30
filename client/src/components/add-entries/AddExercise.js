@@ -6,13 +6,13 @@ import axios from 'axios'
 export default class AddExercise extends Component {
 
   state={
-    startDate: this.props.location.state?.day ||new Date().toISOString().split('T')[0],//this should be the present day in the string format: "yyyy-mm-dd"
-    startTime: this.props.location.state?.element.startTime,//this should bte the present time in the string format:"hh:mm"
+    startDate: this.props.location.state?.day || new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     name:this.props.location.state?.element.name,
     intensityLevel:this.props.location.state?.element.intensityLevel,
     duration:this.props.location.state?.element.duration,
-    id:this.props.location.state?.element._id,//normally undefined. Just defined when this component is used in the dashboard
-    editing:this.props.location.state?.editing //true when this component is used in the dashboard
+    id:this.props.location.state?.element._id,
+    editing:this.props.location.state?.editing
 
   }
 
@@ -34,7 +34,6 @@ export default class AddExercise extends Component {
 
     axios.post(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,exerciseEntry)
       .then(res=>{
-        console.log(res);
         this.props.history.push("/dashboard")
       })
       .catch(err=>console.log(err))
@@ -54,7 +53,6 @@ export default class AddExercise extends Component {
 
     axios.delete(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:exerciseToDelete})
       .then(res=>{
-        console.log(res);
         this.props.history.push("/dashboard")
         })
       .catch(err=>console.log(err))
@@ -69,14 +67,13 @@ export default class AddExercise extends Component {
 
     axios.put(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:[this.state.id,updatedExercise]})
     .then(res=>{
-      // console.log('handling editing');
       this.props.history.push("/dashboard")
       })
     .catch(err=>console.log(err))
   }
 
   render() {
-    console.log(this.props)
+
     const nameOptions=['Choose an option','Aerobics','Baseball','Boxing','Climbing','Cycling','Dancing','Diving','Football',
                                 'Golf','Hiking','Hockey','Martial Arts','Rowing','Rugby','Running','Skiing','Softball',
                                 'Swimming', 'Tennis','Volleyball','Walking','Weights','Yoga','Other'];
@@ -111,11 +108,6 @@ export default class AddExercise extends Component {
               <label htmlFor="duration" className="f6 mt3">Duration: </label>
               <input onChange={this.handleChange} value={this.state.duration} type="number" id="duration" name="duration" min="0" max="24" className="mb2 w3"/><span> hrs</span>
             </div>
-
-            {/* <div className="f6 mt2">
-              <input onChange={this.handleChange} value={this.state.saveToFrequent} type="checkbox" id="saveToFrequent" name="saveToFrequent" className="mb2"/>
-              <label htmlFor="saveToFrequent" className="f6 mt3"> Save to frequent entries</label>
-            </div> */}
 
             <button type="submit" className="f6 w4 dim ph3 pv2 mt3 dib white bg-dark-blue br-pill b--dark-blue">Save</button>
 

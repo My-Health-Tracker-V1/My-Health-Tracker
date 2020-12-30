@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose =require('mongoose');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
-const Day = require('../models/Day')
 
-// get all the Users
+
 router.get('/', (req, res, next) => {
   User.find()
     .populate('days')
@@ -26,8 +26,6 @@ router.get('/', (req, res, next) => {
 
 });
 
-// get a specfic User
-// to check if id is a valid mongo object id: mongoose.Types.ObjectId.isValid(_id)
 router.get('/:id', (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });
@@ -57,24 +55,45 @@ router.get('/:id', (req, res, next) => {
     })
 });
 
-
-// update a User Profile, allow to change username and password
 router.put('/:id', (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
   }
+  
+  const newEmail = req.body.data[0];
+  const newPassword = req.body.data[1];
 
-  const { username, password } = req.body;
-  User.findByIdAndUpdate(
-    req.params.id, { username, password },
-    // this ensures that we are getting the updated document as a return 
-    { new: true }
-  )
+  let update;
+
+  if(newPassword){
+
+    const salt = bcrypt.genSaltSync();
+    const hash = bcrypt.hashSync(newPassword, salt)
+
+    if(!newEmail){
+      update={ password:hash }
+    }else{
+      update={ email:newEmail, password:hash}
+    }
+
+  }else{
+
+    if(newEmail){
+      update={ email:newEmail}
+    }
+    else{
+      return
+    }
+  }
+  
+
+  User.findByIdAndUpdate(req.params.id,update,{ new: true })
     .then(() => {
-      res.json({ message: `Userprofile with ${req.params.id} is updated successfully.` });
+      res.json({ message: `User profile with ${req.params.id} was successfully updated.` });
     })
     .catch(err => {
+      res.json(err);
     })
 });
 
@@ -92,8 +111,5 @@ router.delete('/:id', (req, res, next) => {
       res.json(err);
     })
 });
-
-
-
 
 module.exports = router;
