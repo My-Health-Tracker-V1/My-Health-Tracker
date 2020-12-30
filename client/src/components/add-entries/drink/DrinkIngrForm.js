@@ -27,6 +27,9 @@ export default class DrinkIngrForm extends Component {
                              type='text' id='servingSize' placeholder="e.g. ml" name='servingSize' 
                              handleChange={this.props.handleChange}/>
                   </div>
+                  <button type='submit' 
+                  className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Drinks
+                  </button>
                   </form>
             </div>
       </div>

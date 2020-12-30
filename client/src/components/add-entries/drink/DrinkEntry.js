@@ -4,42 +4,24 @@ import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import SearchField from '../food/SearchField';
 import DrinkIngrForm from './DrinkIngrForm';
+import DateTimeInput from '../helper-components/DateTimeInput';
 
 export default class AddDrinks extends Component {
   state = {
     user: this.props.user,
-    days: [],
-    ingredients: [],
-    ingredientsOfDay: [],
+    date: this.props.location.state?.day || 
+          new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state?.element.startTime || 
+          new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     name: this.props.location.state?.element.ingredients[0].name,
     brand: this.props.location.state?.element.ingredients[0].brand,
     category: this.props.location.state?.element.ingredients[0].category,
-    date: this.props.location.state?.day || new Date().toISOString().split('T')[0],
-    startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     servingAmount: this.props.location.state?.element.ingredients[0].servingAmount,
     servingSize: this.props.location.state?.element.ingredients[0].servingSize,
-    selectedIngredient: false,
-    ingredientCount: 0,
-    query: '',
-    id:this.props.location.state?.drinks._id,
-    editing:this.props.location.state?.editing,
+    // id:this.props.location.state?.drinks._id,
+    // editing:this.props.location.state?.editing,
   }
-  // Get initial ingredients data
-  getAllIngredients = () => {
-    axios.get('/api/ingredients')
-     .then(response => {
-       console.log(response.data);
-       this.setState({
-          ingredients: response.data
-       })
-     })
-     .catch(err => {
-       console.log(err.response)
-     })
-  }
-  componentDidMount = () => {
-    this.getAllIngredients()
-  }
+  
   // Functions for search bar
   setQuery = query => {
     this.setState({
@@ -74,18 +56,19 @@ export default class AddDrinks extends Component {
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
+    console.log(name, value)
     this.setState({
       [name]: value
     });
   };
+
   handleSubmit = event => {
     event.preventDefault();
     const payload = this.state;
     console.log(payload);
     console.log(this.state.date)
-    axios.post(`/api/ingredients/drinks/user/${this.props.user._id}/day/${this.state.date}`, payload)
+    axios.post(`/api/drinks/user/${this.props.user._id}/day/${this.state.date}`, payload)
       .then(() => {
-        // set the form to it's initial state (empty input fields)
         this.setState({
           date: '',
           startTime: '',
@@ -94,14 +77,12 @@ export default class AddDrinks extends Component {
           name : '',
           brand: '',
           category: '',
-          ingredientCount: ++this.state.ingredientCount
         })
         this.props.history.push("/dashboard")
-        // update the parent components state (in Projects) by calling getData()
-        // this.props.getData();
       })
       .catch(err => console.log(err))
   }
+
   handleDelete = event => {
     event?.preventDefault();
     // const date = event.target.name;
@@ -118,33 +99,26 @@ export default class AddDrinks extends Component {
     axios.put( `/api/ingredients/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/edit`)
   }
   render() {
-    if (!this.state.ingredients) return <h1>Loading...</h1>
+    // if (!this.state.ingredients) return <h1>Loading...</h1>
     console.log('this is the user in foodentry', this.state.user)
     console.log(this.props.location)
     return (
       <div>
-      {/* Top Navbar */}
+      
       <TopBar title='Drinks' icon='Drinks'/>
       <div className="pt3 pb6">
-        <form onSubmit={this.handleSubmit}>
-          <div className="mv3 flex justify-center items-center">
-                <label htmlFor="date" className="f6">Date:</label>
-                <input type="date" id="date"
-                      name="date" value={this.state.date}
-                  onChange={this.handleChange}
-                  className="f6 pa1 mr3 ml1 w4"
-                />
-                <label htmlFor="startTime" className="f6">Time:</label>
-                <input type="time" id="startTime"
-                    name="startTime" value={this.state.startTime}
-                  onChange={this.handleChange}
-                  className="f6 pa1 mr3 ml1"
-                />
-              </div>
-          </form>
-      <SearchField {...this.state} query={this.state.query} setQuery={this.setQuery} />
-      {/* <IngredientList {...this.state} query={this.state.query} setQuery={this.setQuery} handleClick={this.handleClick}/> */}
-      <DrinkIngrForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleClick={this.handleClick} handleEditing={this.handleEditing} handleDelete={this.handleDelete}/>
+        <DateTimeInput date={this.state.date} 
+                       startTime={this.state.startTime} 
+                       handleChange={this.state.handleChange}/>
+        <SearchField {...this.state} 
+                    query={this.state.query} 
+                    setQuery={this.setQuery} />
+        
+        <DrinkIngrForm {...this.state} handleChange={this.handleChange} 
+                                        handleSubmit={this.handleSubmit} 
+                                        handleClick={this.handleClick} 
+                                        handleEditing={this.handleEditing} 
+                                        handleDelete={this.handleDelete}/>
       </div>
       <BottomNavbar />
       </div>

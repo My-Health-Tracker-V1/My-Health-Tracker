@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
-import DateTimeInput from './DateTimeInput';
+import DateTimeInput from '../helper-components/DateTimeInput';
 import SingleDb from './SingleDb';
 import RecipeDb from './RecipeDb';
 import SearchField from './SearchField';
@@ -391,9 +391,11 @@ export default class FoodEntry extends Component {
       <div>
         <TopBar title="Foods" icon="Foods" /> 
         <div className="pt4 pb5">
-          <DateTimeInput {...this.state} handleChange={this.handleChange} 
-          handleSubmit={this.handleRecipeSubmit}/>
-          
+          <DateTimeInput startTime={this.state.tempStartTime} 
+                          date={this.state.date}
+                          handleChange={this.handleChange} 
+                          handleSubmit={this.handleRecipeSubmit}/>
+        
           <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
           onClick={this.toggleSingle} > + Add a single food </button>
           <button className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue" 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import IngrForm from './IngrForm';
-import DateTimeInput from './DateTimeInput'
+import DateTimeInput from '../helper-components/DateTimeInput'
 import RepForm from './RepForm';
 
 export default class FoodEdit extends Component {
