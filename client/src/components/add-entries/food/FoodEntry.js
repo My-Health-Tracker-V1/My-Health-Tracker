@@ -16,7 +16,7 @@ export default class FoodEntry extends Component {
     date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
     ingredients: [],
     recipes: [],
-    tempStartTime: '',
+    tempStartTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     tempIngredient: {
       name: '',
       brand: '',
