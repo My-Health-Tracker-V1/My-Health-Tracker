@@ -15,13 +15,11 @@ router.post('/signup', (req, res, next) => {
     return res.status(400).json({ message: 'Your email cannot be empty' });
   }
   
-  // check if email exists in database -> show message
   User.findOne({ email: email })
     .then(found => {
       if (found !== null) {
         return res.status(400).json({ message: 'Your email is already taken' });
       } else {
-        // hash the password, create the user and send the user to the client
         const salt = bcrypt.genSaltSync();
         const hash = bcrypt.hashSync(password, salt);
 
@@ -30,12 +28,10 @@ router.post('/signup', (req, res, next) => {
           password: hash,
         })
           .then(dbUser => {
-            // login with passport:
             req.login(dbUser, err => {
               if (err) {
                 return res.status(500).json({ message: 'Error while attempting to login' })
               }
-              // we don't redirect to an html page anymore, we just send the user obj to the client
               return res.status(200).json(dbUser);
             });
           })
@@ -69,10 +65,7 @@ router.delete('/logout', (req, res) => {
 })
 
 router.get('/loggedin', (req, res) => {
-  console.log(req.user)
-  console.log('Message coming from server /loggedin')
   res.json(req.user);
 })
-
 
 module.exports = router;

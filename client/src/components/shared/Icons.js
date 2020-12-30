@@ -1,7 +1,9 @@
 import React from 'react'
 
 export default function Icons(props) {
+
   switch(props.icon) {
+
     case 'diary':
       return (
         <div>
@@ -21,6 +23,7 @@ export default function Icons(props) {
               </g>
               </svg>
         </div>)
+
     case 'analysis':
       return (
         <div>
@@ -45,6 +48,7 @@ export default function Icons(props) {
               </g>
               </svg>
         </div>)
+
     case 'add':
       return (
         <div>
@@ -60,8 +64,45 @@ export default function Icons(props) {
               <g>
               <path  d="m256 0c-141.164062 0-256 114.835938-256 256s114.835938 256 256 256 256-114.835938 256-256-114.835938-256-256-256zm112 277.332031h-90.667969v90.667969c0 11.777344-9.554687 21.332031-21.332031 21.332031s-21.332031-9.554687-21.332031-21.332031v-90.667969h-90.667969c-11.777344 0-21.332031-9.554687-21.332031-21.332031s9.554687-21.332031 21.332031-21.332031h90.667969v-90.667969c0-11.777344 9.554687-21.332031 21.332031-21.332031s21.332031 9.554687 21.332031 21.332031v90.667969h90.667969c11.777344 0 21.332031 9.554687 21.332031 21.332031s-9.554687 21.332031-21.332031 21.332031zm0 0"/>
               </g>
-              </svg>
+          </svg>
         </div>)
+
+    case 'settings':
+        return (
+          <div>
+            <svg
+            className="dib h2 w2"
+            fill="currentColor" 
+            id="Layer_1" 
+            enableBackground="new 0 0 24 24" 
+            height="512" 
+            viewBox="0 0 24 24" 
+            width="512" >
+            <g>
+              <path d="m13.12 24h-2.24c-.757 0-1.396-.567-1.486-1.32l-.239-1.876c-.477-.155-.937-.346-1.374-.569l-1.494 1.161c-.606.469-1.459.415-1.985-.126l-1.575-1.575c-.537-.521-.591-1.374-.122-1.979l1.161-1.495c-.224-.437-.415-.897-.569-1.374l-1.88-.239c-.75-.092-1.317-.731-1.317-1.488v-2.24c0-.757.567-1.396 1.32-1.486l1.876-.239c.155-.477.346-.937.569-1.374l-1.16-1.494c-.47-.606-.415-1.46.127-1.986l1.575-1.575c.521-.537 1.375-.59 1.979-.122l1.494 1.162c.437-.223.897-.414 1.375-.569l.239-1.88c.09-.75.729-1.317 1.486-1.317h2.24c.757 0 1.396.567 1.486 1.32l.239 1.876c.478.155.938.346 1.375.569l1.494-1.161c.607-.469 1.459-.415 1.985.127l1.575 1.575c.537.521.591 1.374.122 1.979l-1.161 1.495c.224.437.415.897.569 1.374l1.88.239c.749.091 1.316.73 1.316 1.487v2.24c0 .757-.567 1.396-1.32 1.486l-1.876.239c-.155.477-.346.937-.569 1.374l1.161 1.494c.47.606.415 1.459-.127 1.985l-1.575 1.575c-.521.537-1.375.592-1.979.122l-1.495-1.161c-.437.224-.897.415-1.374.569l-.239 1.88c-.091.75-.73 1.317-1.487 1.317zm-5.39-4.86c.083 0 .168.021.244.063.551.308 1.148.556 1.774.736.192.055.333.219.358.417l.28 2.2c.03.251.247.444.494.444h2.24c.247 0 .464-.193.493-.439l.281-2.204c.025-.198.166-.362.358-.417.626-.18 1.223-.428 1.774-.736.175-.098.393-.081.55.042l1.75 1.36c.201.156.483.143.655-.034l1.585-1.585c.181-.176.195-.458.039-.66l-1.36-1.75c-.123-.158-.14-.375-.042-.55.308-.551.556-1.148.736-1.774.055-.192.219-.333.417-.358l2.2-.28c.251-.031.444-.248.444-.495v-2.24c0-.247-.193-.464-.439-.493l-2.204-.281c-.198-.025-.362-.166-.417-.358-.18-.626-.428-1.223-.736-1.774-.098-.175-.082-.392.042-.55l1.36-1.75c.157-.202.143-.484-.033-.654l-1.585-1.585c-.175-.182-.458-.196-.66-.039l-1.75 1.36c-.159.123-.376.14-.551.042-.549-.308-1.146-.555-1.774-.736-.192-.055-.333-.219-.358-.417l-.28-2.2c-.031-.252-.248-.445-.495-.445h-2.24c-.247 0-.464.193-.493.439l-.281 2.204c-.025.198-.166.362-.358.418-.628.18-1.225.428-1.774.735-.175.099-.392.081-.551-.041l-1.75-1.36c-.202-.157-.483-.143-.654.033l-1.585 1.586c-.181.176-.195.458-.039.66l1.36 1.75c.123.158.14.375.042.55-.309.551-.556 1.148-.736 1.774-.055.192-.219.333-.417.358l-2.2.28c-.251.03-.444.247-.444.494v2.24c0 .247.193.464.439.493l2.204.281c.198.025.362.166.417.358.18.626.428 1.223.736 1.774.098.175.082.392-.042.55l-1.36 1.75c-.157.202-.143.484.033.654l1.585 1.585c.175.181.456.195.66.039l1.75-1.36c.091-.068.199-.104.308-.104z"/>
+            </g>
+            <g>
+              <path d="m12 17c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm0-9c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4z"/>
+            </g>
+            </svg>
+          </div>
+        )
+
+    case 'recipes':
+      return (
+        <div>
+          <svg
+          className="dib h2 w2"
+          fill="currentColor" 
+          id="Layer_3" 
+          enableBackground="new 0 0 64 64" 
+          height="512" 
+          viewBox="0 0 64 64" 
+          width="512" >
+          <path d="m50 1h-36c-4.411 0-8 3.589-8 8v47c0 3.86 3.141 7 7 7h44c.553 0 1-.448 1-1v-53c0-4.411-3.589-8-8-8zm-42 8c0-3.309 2.691-6 6-6h36c3.309 0 6 2.691 6 6v40h-43c-1.957 0-3.729.807-5 2.105zm5 52c-2.757 0-5-2.243-5-5s2.243-5 5-5h43v2h-43c-1.654 0-3 1.346-3 3s1.346 3 3 3h43v2zm43-6v2h-43c-.552 0-1-.449-1-1s.448-1 1-1z"/><path d="m21 26.945v13.055c0 .552.447 1 1 1h20c.553 0 1-.448 1-1v-13.055c4.494-.499 8-4.32 8-8.945 0-4.962-4.037-9-9-9-.795 0-1.574.11-2.331.313-1.584-2.581-4.424-4.313-7.669-4.313s-6.085 1.732-7.669 4.313c-.757-.203-1.536-.313-2.331-.313-4.963 0-9 4.038-9 9 0 4.625 3.506 8.446 8 8.945zm2 12.055v-2h18v2zm-1-28c.498 0 .988.056 1.467.159-.299.894-.467 1.847-.467 2.841h2c0-3.86 3.141-7 7-7s7 3.14 7 7h2c0-.994-.168-1.947-.467-2.841.479-.103.969-.159 1.467-.159 3.859 0 7 3.14 7 7s-3.141 7-7 7c-.553 0-1 .448-1 1v9h-18v-9c0-.552-.447-1-1-1-3.859 0-7-3.14-7-7s3.141-7 7-7z"/><path d="m47 18h-2c0 1.654-1.346 3-3 3v2c2.757 0 5-2.243 5-5z"/><path d="m19 43h26v2h-26z"/></svg>
+        </div>
+      )
+
     case 'frequent':
       return (
         <div>
@@ -79,6 +120,7 @@ export default function Icons(props) {
               </g>
               </svg>
         </div>)
+
     case 'more':
         return (
         <div>
@@ -114,6 +156,7 @@ export default function Icons(props) {
 </g>
               </svg>
         </div>)
+
     case 'Foods':
       return (
         <div>
@@ -136,6 +179,7 @@ export default function Icons(props) {
               </g>
               </svg>
         </div>)
+
     case 'Foods3':
       return (
         <div>
@@ -158,6 +202,7 @@ export default function Icons(props) {
               </g>
               </svg>
         </div>)
+
     case 'Drinks':
       return (
         <div>
@@ -175,6 +220,7 @@ export default function Icons(props) {
               </g>
               </svg>
         </div>)
+
     case 'Sleep':
       return (
         <div>
@@ -229,6 +275,7 @@ export default function Icons(props) {
           </g>
         </svg>
         </div>)
+
     case 'Sleep3':
       return (
         <div>
@@ -466,7 +513,7 @@ export default function Icons(props) {
           </div>
           )  
 
-      case 'Energy':
+    case 'Energy':
         return (
          <div>
             <svg className="dib h2 w2" 
@@ -484,7 +531,7 @@ export default function Icons(props) {
               </svg>
         </div>)
 
-      case 'Energy3':
+    case 'Energy3':
         return (
           <div>
             <svg className="dib h3 w3" 
@@ -502,7 +549,7 @@ export default function Icons(props) {
               </svg>
         </div>)
 
-      case 'Edit' :
+    case 'Edit' :
        return (
         <div>
           <svg className="dib h2 w2" 
@@ -520,7 +567,7 @@ export default function Icons(props) {
             </svg>
         </div>)
 
-      case 'FoodsDetails':
+    case 'FoodsDetails':
         return (
           <div>
             <svg className="dib h2 w2" 
@@ -536,7 +583,7 @@ export default function Icons(props) {
           </div>
         )
 
-      case 'AddButton': 
+    case 'AddButton': 
       return (
         <div>
         <svg className="dib h2 w2" 
@@ -564,7 +611,7 @@ export default function Icons(props) {
         </div>
       )
 
-      case 'AddButton-database':
+    case 'AddButton-database':
         return(
           <div>
           <svg className="dib h2 w2" 
@@ -584,7 +631,7 @@ export default function Icons(props) {
         </div>
         )
 
-      case 'health-icon':
+    case 'health-icon':
         return(
           <div>
           <svg className="dib h2 w2" 
@@ -599,7 +646,7 @@ export default function Icons(props) {
           </div>
         )
 
-      case 'logout':
+    case 'logout':
         return (
           <div>
             <svg className="dib h3 w3" 
@@ -614,7 +661,7 @@ export default function Icons(props) {
           </div>
         )
 
-        case 'AddButton-simple': 
+    case 'AddButton-simple': 
           return (
             <div>
             <svg
@@ -631,7 +678,7 @@ export default function Icons(props) {
             </div>
           )
 
-          case 'Drinks3':
+    case 'Drinks3':
           return (
             <div>
               <svg 
@@ -650,7 +697,7 @@ export default function Icons(props) {
                   </svg>
             </div>)
 
-      case 'search':
+    case 'search':
         return (
           <div>
             <svg className="dib h2 w2" 
@@ -671,7 +718,7 @@ export default function Icons(props) {
           </div>
         )
 
-      case 'time-picker':
+    case 'time-picker':
         return (
           <div>
             <svg className="dib h2 w2" 
@@ -697,7 +744,7 @@ export default function Icons(props) {
           </div>
         )
 
-      case 'date-picker':
+    case 'date-picker':
         return (
           <div>
             <svg className="dib h2 w2" 
@@ -720,12 +767,14 @@ export default function Icons(props) {
           </svg>
           </div>
         )
-      case 'fast-food':
+
+    case 'fast-food':
         return (
           <div>
             
           </div>
         )
+    
     default:
       // code block
   }
