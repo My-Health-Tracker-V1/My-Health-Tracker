@@ -5,7 +5,8 @@ import BottomNavbar from '../../shared/BottomNavbar';
 import SearchField from '../helper-components/SearchField';
 import DrinkIngrForm from './DrinkIngrForm';
 import DateTimeInput from '../helper-components/DateTimeInput';
-import DataList from '../helper-components/DataList'
+import DataList from '../helper-components/DataList';
+import { SelectRow } from '../helper-components/Rows'
 
 export default class AddDrinks extends Component {
   state = {
@@ -14,15 +15,16 @@ export default class AddDrinks extends Component {
           new Date().toISOString().split('T')[0],
     startTime: this.props.location.state?.element.startTime || 
           new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
-    name: this.props.location.state?.element.ingredients[0].name,
+    name: this.props.location.state?.element.drinks[0].name,
     // brand: this.props.location.state?.element.ingredients[0].brand,
-    category: this.props.location.state?.element.ingredients[0].category,
-    servingAmount: this.props.location.state?.element.ingredients[0].servingAmount,
-    servingSize: this.props.location.state?.element.ingredients[0].servingSize,
+    category: this.props.location.state?.element.drinks[0].category,
+    servingAmount: this.props.location.state?.element.drinks[0].servingAmount,
+    servingSize: this.props.location.state?.element.drinks[0].servingSize,
     // id:this.props.location.state?.drinks._id,
     // editing:this.props.location.state?.editing,
     drinks:[],
-    query: ''
+    query: '',
+    apiCategory: ''
   }
   
   // API
@@ -79,13 +81,33 @@ export default class AddDrinks extends Component {
   }
 
   handleChange = event => {
-    const name = event.target.name;
-    const value = event.target.value;
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
     console.log(name, value)
     this.setState({
       [name]: value
     });
   };
+
+  handleSelectCategory = (event) => {
+    event?.preventDefault();
+    let prefix;
+    const apiCategory = event.target.value;
+    if((apiCategory === "Alcoholic") || (apiCategory === "Non_Alcoholic")) prefix="a";
+    if((apiCategory === "Ordinary_Drink") || (apiCategory === "Cocktail")) prefix="c";
+    axios.get(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?${prefix}=${apiCategory}`)
+    .then(res => {
+      // console.log(res.data);
+      this.setState({
+        apiCategory: apiCategory,
+        drinks: res.data.drinks
+      })   
+    })
+    .catch(err => {
+      console.log(err.response)
+    })
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -127,6 +149,7 @@ export default class AddDrinks extends Component {
     if (!this.state.drinks) return <h3>Ooops, something went wrong, please refresh the page</h3>
     console.log('this is the user in foodentry', this.state.user)
     console.log(this.props.location)
+    const options = ["Alcoholic", "Non_Alcoholic", "Ordinary_Drink", "Cocktail"]
     return (
       <div>
         <TopBar title='Drinks' icon='Drinks'/>
@@ -134,6 +157,9 @@ export default class AddDrinks extends Component {
           <DateTimeInput date={this.state.date} 
                         startTime={this.state.startTime} 
                         handleChange={this.handleChange}/>
+          <SelectRow options={options} title="Category: "
+                     id="apiCategory" name="apiCategory" value={this.state.apiCategory}
+                     handleSelectCategory={this.handleSelectCategory}/>
           <SearchField {...this.state} handleSearch={this.handleChange}
                       query={this.state.query} handleQuery={this.handleQuery}
                       placeholder="Margarita..." />
