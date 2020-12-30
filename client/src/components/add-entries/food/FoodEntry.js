@@ -4,7 +4,7 @@ import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import DateTimeInput from '../helper-components/DateTimeInput';
 import DataList from '../helper-components/DataList';
-import SearchField from './SearchField';
+import SearchField from '../helper-components/SearchField';
 import IngrForm from './IngrForm';
 import RepForm from './RepForm';
 import './FoodEntry.css'
