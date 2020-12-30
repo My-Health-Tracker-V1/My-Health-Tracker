@@ -11,7 +11,7 @@ import Dashboard from './components/nav-bar-options/Dashboard'
 
 // Food Entry
 import FoodEntry from './components/add-entries/food/FoodEntry';
-import DrinkEntry from './components/add-entries/food/DrinkEntry';
+import DrinkEntry from './components/add-entries/drink/DrinkEntry';
 import FoodEdit from './components/add-entries/food/FoodEdit';
 // import RecipeDb from './components/add-entries/food/RecipeDb';
 

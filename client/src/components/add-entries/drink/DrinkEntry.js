@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
-import Icons from '../../shared/Icons';
-import { Link } from 'react-router-dom';
-import SearchField from './SearchField';
-import AddIngDrink from './AddIngDrink';
+import SearchField from '../food/SearchField';
+import DrinkIngrForm from './DrinkIngrForm';
 
 export default class AddDrinks extends Component {
   state = {
-    // this is the loggedin user from App.js
     user: this.props.user,
     days: [],
     ingredients: [],
@@ -17,8 +14,8 @@ export default class AddDrinks extends Component {
     name: this.props.location.state?.element.ingredients[0].name,
     brand: this.props.location.state?.element.ingredients[0].brand,
     category: this.props.location.state?.element.ingredients[0].category,
-    date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
-    startTime: this.props.location.state?.element.ingredients[0].startTime ||new Date().toISOString().split('T')[1].slice(0,5),
+    date: this.props.location.state?.day || new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     servingAmount: this.props.location.state?.element.ingredients[0].servingAmount,
     servingSize: this.props.location.state?.element.ingredients[0].servingSize,
     selectedIngredient: false,
@@ -147,13 +144,7 @@ export default class AddDrinks extends Component {
           </form>
       <SearchField {...this.state} query={this.state.query} setQuery={this.setQuery} />
       {/* <IngredientList {...this.state} query={this.state.query} setQuery={this.setQuery} handleClick={this.handleClick}/> */}
-      <AddIngDrink {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleClick={this.handleClick} handleEditing={this.handleEditing} handleDelete={this.handleDelete}/>
-      <Link className="link blue hover-silver dib mh3 tc" style={{
-        "display": "flex", "flexDirection":"row", "justifyContent": "center", "alignItems":"center"}}>
-      <Icons icon="FoodsDetails"/>
-      <span className="f6 db" style={{"marginLeft": "10px"}}>{this.state.ingredientCount} drinks added</span>
-      </Link>
-      {/* Bottom navbar */}
+      <DrinkIngrForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSubmit} handleClick={this.handleClick} handleEditing={this.handleEditing} handleDelete={this.handleDelete}/>
       </div>
       <BottomNavbar />
       </div>
