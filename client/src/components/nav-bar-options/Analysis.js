@@ -10,10 +10,12 @@ export default class Analysis extends Component {
 
   state={
     userOutcomes:[],
-    userEvents:[],
     selectedOutcome:'',
+    userEvents:[],
     selectedEvent:'',
-    selectedData:[],
+    userSpecificEvents:[],
+    selectedSpecificEvent:'',
+    selectedData:[]
   }
   
   handleChange=event=>{
@@ -24,7 +26,7 @@ export default class Analysis extends Component {
     [name]:value
     })
 
-    this.getSelectedData();
+    this.getUserOptions();
 
   }
 
@@ -32,27 +34,54 @@ export default class Analysis extends Component {
     
     axios.get(`/api/analysis/user/${this.props.user._id}/options`)
       .then(res=>{
+
         this.setState({
-          userOutcomes:[...res.data]
+          userOutcomes:[...res.data.userOutcomes],
+          userEvents:[...res.data.userEvents]
         })
+
+        if(this.state.selectedEvent && this.state.selectedEvent!=='Sleep'){
+           this.setState({
+             userSpecificEvents:[...res.data[this.state.selectedEvent]]
+           })
+        }
+
+        this.getSelectedData();
+
       })
       .catch(err=>console.log(err))
   }
 
   getSelectedData=()=>{
     //request selected data from API and save it in selectedData state
-    axios.get(`/api/analysis/user/${this.props.user._id}/selected-data`)
-      .then(res=>console.log(res))
-      .catch(err=>console.log(err))
+     axios.get(`/api/analysis/user/${this.props.user._id}/selected-data/${this.state.selectedOutcome}/${this.state.selectedEvent}/${this.state.selectedSpecificEvent}`)
+       .then(res=>console.log(res))
+       .catch(err=>console.log(err))
   }
 
   componentDidMount=()=>{
     this.getUserOptions();
   }
 
-  render() {
+  componentDidUpdate=()=>{
+ 
+  }
 
-    //this.getUserOptions();
+  render() {
+    let specificEventType='';
+
+    switch(this.state.selectedEvent){
+      case('Foods'):
+        specificEventType='food';
+        break;
+      case('Drinks'):
+        specificEventType='drink';
+        break;
+      case('Exercise'):
+        specificEventType='exercise';
+        break;
+      default:
+    }
 
     return (
       <div>
@@ -61,8 +90,8 @@ export default class Analysis extends Component {
         <div className='flex flex-column items-center pv3'>
 
           <div className="flex">
-            <label className="f6 mt3 gray" htmlFor="">Outcome:</label>
-            <select name="name" id="name" onChange={this.handleChange} value={this.state.selectedOutcome} className="f6 mt1" >
+            <label className="f6 mt3 gray" htmlFor="selectedOutcome">Outcome:</label>
+            <select name="selectedOutcome" id="selectedOutcome" onChange={this.handleChange} value={this.state.selectedOutcome} className="f6 mt1" >
               {this.state.userOutcomes.map(option=>{
                 return(
                   <option value={option} className="f6">{option}</option>
@@ -72,8 +101,8 @@ export default class Analysis extends Component {
           </div>
           
           <div className="flex">
-            <label className="f6 mt3 gray" htmlFor="">Event:</label>
-            <select name="name" id="name" onChange={this.handleChange} value={this.state.selectedEvent} className="f6 mt1" >
+            <label className="f6 mt3 gray" htmlFor="selectedEvent">Event:</label>
+            <select name="selectedEvent" id="selectedEvent" onChange={this.handleChange} value={this.state.selectedEvent} className="f6 mt1" >
               {this.state.userEvents.map(option=>{
                 return(
                   <option value={option} className="f6">{option}</option>
@@ -81,6 +110,19 @@ export default class Analysis extends Component {
               })}
             </select>
           </div>
+
+          {this.state.selectedEvent==='Sleep'||!this.state.selectedEvent?<></>:(
+            <div className="flex">
+              <label className="f6 mt3 gray" htmlFor="selectedSpecificEvent">Select {specificEventType}:</label>
+              <select name="selectedSpecificEvent" id="selectedSpecificEvent" onChange={this.handleChange} value={this.state.selectedSpecificEvent} className="f6 mt1" >
+                {this.state.userSpecificEvents.map(option=>{
+                  return(
+                    <option value={option} className="f6">{option}</option>
+                  )
+                })}
+              </select>
+            </div>
+          )}
 
           {this.state.selectedData.length===0? <></> :(
             <div>
