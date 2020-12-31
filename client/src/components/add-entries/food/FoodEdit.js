@@ -122,7 +122,7 @@ export default class FoodEdit extends Component {
     console.log(this.state.food);
   }
 
-    editRecipeSubmit = event => {
+  editRecipeSubmit = event => {
       event.preventDefault();
       const payload = {
         user: this.state.user,
@@ -137,18 +137,18 @@ export default class FoodEdit extends Component {
         .catch(err => console.log(err))
     }
 
-    getAllDaysFromUser = () => {
-      axios.get(`/api/days/user/${this.state.user._id}`)
-      .then(response => {
-          console.log(response.data)
-          this.setState({
-            days: response.data
-          })
-      })
-    }
+  getAllDaysFromUser = () => {
+    axios.get(`/api/days/user/${this.state.user._id}`)
+    .then(response => {
+        console.log(response.data)
+        this.setState({
+          days: response.data
+        })
+    })
+  }
 
 // delete
-    handleDeleteIngredient = event => {
+  handleDeleteIngredient = event => {
       event?.preventDefault();
       const ingIdx = event.target.getAttribute('data-key');
       const newFood = this.state.food;
@@ -156,69 +156,69 @@ export default class FoodEdit extends Component {
       this.setState({
         food: newFood
       });
-    }
-    handleDeleteFood = event => {
-      event?.preventDefault();
-      const foodId = event.target.getAttribute('data-key');
-      axios.put(`/api/ingredients/user/${this.state.user._id}/day/${this.state.date}/${foodId}/delete`)
-      .then(res => {
-        console.log(res);
-        this.props.history.push("/dashboard")
-      })
-      .catch(err=>console.log(err))
-    }
+  }
+  handleDeleteFood = event => {
+    event?.preventDefault();
+    const foodId = event.target.getAttribute('data-key');
+    axios.put(`/api/ingredients/user/${this.state.user._id}/day/${this.state.date}/${foodId}/delete`)
+    .then(res => {
+      console.log(res);
+      this.props.history.push("/dashboard")
+    })
+    .catch(err=>console.log(err))
+  }
 
-    toggleAddIngr = event => {
-      event?.preventDefault();
-      const tempIng = {
-        name: "",
-        brand: "",
-        category: "",
-        servingAmount: "",
-        servingSize: ""
-      };
-      this.setState({
-        add: true,
-        tempIngredient: tempIng
-      });
-    }
-    toggleEditIngr = event => {
-      event?.preventDefault();
-      const ingIdx = event.target.getAttribute('data-key');
-      console.log(ingIdx);
-      const tempIng = Object.assign( {}, this.state.food.ingredients[ingIdx]);
-      this.setState({
-        edit: true,
-        tempIngredient: tempIng,
-        tempIngIdx: ingIdx
-      })
-    }
+  toggleAddIngr = event => {
+    event?.preventDefault();
+    const tempIng = {
+      name: "",
+      brand: "",
+      category: "",
+      servingAmount: "",
+      servingSize: ""
+    };
+    this.setState({
+      add: true,
+      tempIngredient: tempIng
+    });
+  }
+  toggleEditIngr = event => {
+    event?.preventDefault();
+    const ingIdx = event.target.getAttribute('data-key');
+    console.log(ingIdx);
+    const tempIng = Object.assign( {}, this.state.food.ingredients[ingIdx]);
+    this.setState({
+      edit: true,
+      tempIngredient: tempIng,
+      tempIngIdx: ingIdx
+    })
+  }
   
-    render() {
-      
-      return (
-        <div>
-        <TopBar icon="Foods" title="Your Foods"/>
-        <div className="pb5">
-          <DateTimeInput startTime={this.state.tempStartTime} date={this.state.date}
-                         handleChange={this.handleChange} />
-          <div className="mw6 center" >
-          
-          <RepForm {...this.state} handleChange={this.handleChange} 
-                          saveIngr2Rep={this.saveIngr2Rep}
-                          editRecipeSubmit={this.editRecipeSubmit}
-                          handleDeleteIngredient={this.handleDeleteIngredient}
-                          handleDeleteFood={this.handleDeleteFood} 
-                          toggleAddIngr={this.toggleAddIngr}
-                          toggleEditIngr={this.toggleEditIngr}
-                          editIngrSave={this.editIngrSave}
-                          addNewIngrSave={this.addNewIngrSave}
-                          />
-          </div>
+  render() {
+    
+    return (
+      <div>
+      <TopBar icon="Foods" title="Your Foods"/>
+      <div className="pb5">
+        <DateTimeInput startTime={this.state.tempStartTime} date={this.state.date}
+                        handleChange={this.handleChange} />
+        <div className="mw6 center" >
+        
+        <RepForm {...this.state} handleChange={this.handleChange} 
+                        saveIngr2Rep={this.saveIngr2Rep}
+                        editRecipeSubmit={this.editRecipeSubmit}
+                        handleDeleteIngredient={this.handleDeleteIngredient}
+                        handleDeleteFood={this.handleDeleteFood} 
+                        toggleAddIngr={this.toggleAddIngr}
+                        toggleEditIngr={this.toggleEditIngr}
+                        editIngrSave={this.editIngrSave}
+                        addNewIngrSave={this.addNewIngrSave}
+                        />
         </div>
-        <BottomNavbar />
-        </div>
-      )
-    }
+      </div>
+      <BottomNavbar />
+      </div>
+    )
+  }
 }
 
