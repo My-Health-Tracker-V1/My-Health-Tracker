@@ -23,7 +23,8 @@ export default class AddDrinks extends Component {
     // editing:this.props.location.state?.editing,
     drinks:[],
     query: '',
-    apiCategory: ''
+    apiCategory: '',
+    editing: false
   }
   
   // API
@@ -120,7 +121,6 @@ export default class AddDrinks extends Component {
           servingAmount: '',
           servingSize: '',
           name : '',
-          brand: '',
           category: '',
         })
         this.props.history.push("/dashboard")

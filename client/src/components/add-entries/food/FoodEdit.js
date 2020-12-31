@@ -74,7 +74,6 @@ export default class FoodEdit extends Component {
     event.preventDefault();
     const newFood = this.state.food;
     newFood.ingredients[this.state.tempIngIdx] = this.state.tempIngredient;
-    console.log('hallo')
     this.setState({
       food: newFood,
       edit: false,

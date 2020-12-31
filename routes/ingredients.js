@@ -307,7 +307,7 @@ router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
       Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
         .then(dbday => {
           const newFoods = dbday.foods;
-          const changedIdx = newFoods.findIndex(food => food._id == req.params.foodId);
+          const changedIdx = newFoods.findIndex(food => food.id == req.params.foodId);
           newFoods[changedIdx].ingredients = dbIngredients.map(ing => ing._id);
           newFoods[changedIdx].name = food.name;
           newFoods[changedIdx].portion = food.portion;

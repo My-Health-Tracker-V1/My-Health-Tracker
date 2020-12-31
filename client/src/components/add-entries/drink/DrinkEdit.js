@@ -13,7 +13,7 @@ export default class DrinkEdit extends Component {
     startTime: this.props.location.state?.element.startTime || 
           new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     drink: this.props.location.state.element,
-    // drinkId: this.props.location.state.element._id,
+    drinkId: this.props.location.state.element._id,
     name: this.props.location.state.element.name,
     category: this.props.location.state.element.category,
     servingAmount: this.props.location.state.element.servingAmount,
@@ -35,10 +35,41 @@ export default class DrinkEdit extends Component {
     .catch(err=>console.log(err))
   }
 
-  handleEditing = event => {
-    event?.preventDefault();
-    axios.put( `/api/ingredients/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/edit`)
+  handleChange = event => {
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log(name, value);
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleEditDrink = event => {
+    event.preventDefault();
+    const newDrink = this.state.drink;
+    newDrink.name = this.state.name;
+    newDrink.category = this.state.category;
+    newDrink.servingAmount = this.state.servingAmount;
+    newDrink.servingSize = this.state.servingSize;
+    newDrink.startTime = this.state.startTime;
+    this.setState({
+      drink: newDrink
+    });
+    const payload = {
+      user: this.state.user,
+      date: this.state.date,
+      drink: this.state.drink
+    };
+    
+    console.log(payload);
+    axios.put(`/api/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.drinkId}/edit`,
+     payload)
+      .then(() => {
+        this.props.history.push("/dashboard")
+      })
+      .catch(err => console.log(err))
   }
+
   render() {
     return (
       <div>
@@ -52,8 +83,8 @@ export default class DrinkEdit extends Component {
             <h3 className="f6 db">What did you drink?</h3>
             <DrinkIngrForm {...this.state} 
                             handleChange={this.handleChange} 
-                            handleSubmit={this.handleSubmit} 
-                            handleDeleteDrink={this.handleDeleteDrink} />
+                            handleDeleteDrink={this.handleDeleteDrink}
+                            handleEditDrink={this.handleEditDrink} />
           </div>
         </div>
         <BottomNavbar />
