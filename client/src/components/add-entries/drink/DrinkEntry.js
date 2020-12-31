@@ -16,7 +16,6 @@ export default class AddDrinks extends Component {
     startTime: this.props.location.state?.element.startTime || 
           new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     name: this.props.location.state?.element.drinks[0].name,
-    // brand: this.props.location.state?.element.ingredients[0].brand,
     category: this.props.location.state?.element.drinks[0].category,
     servingAmount: this.props.location.state?.element.drinks[0].servingAmount,
     servingSize: this.props.location.state?.element.drinks[0].servingSize,
@@ -98,7 +97,6 @@ export default class AddDrinks extends Component {
     if((apiCategory === "Ordinary_Drink") || (apiCategory === "Cocktail")) prefix="c";
     axios.get(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?${prefix}=${apiCategory}`)
     .then(res => {
-      // console.log(res.data);
       this.setState({
         apiCategory: apiCategory,
         drinks: res.data.drinks
@@ -130,21 +128,7 @@ export default class AddDrinks extends Component {
       .catch(err => console.log(err))
   }
 
-  handleDelete = event => {
-    event?.preventDefault();
-    // const date = event.target.name;
-    // const foodId = event.target.value;
-    axios.put(`/api/ingredients/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/delete`)
-    .then(res => {
-      console.log(res);
-      this.props.history.push("/dashboard")
-    })
-    .catch(err=>console.log(err))
-  }
-  handleEditing = event => {
-    event?.preventDefault();
-    axios.put( `/api/ingredients/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.id}/edit`)
-  }
+  
   render() {
     if (!this.state.drinks) return <h3>Ooops, something went wrong, please refresh the page</h3>
     console.log('this is the user in foodentry', this.state.user)
@@ -155,26 +139,32 @@ export default class AddDrinks extends Component {
         <TopBar title='Drinks' icon='Drinks'/>
         <div className="pt3 pb6">
           <DateTimeInput date={this.state.date} 
-                        startTime={this.state.startTime} 
-                        handleChange={this.handleChange}/>
+                         startTime={this.state.startTime} 
+                         handleChange={this.handleChange}
+                         />
           <SelectRow options={options} title="Category: "
-                     id="apiCategory" name="apiCategory" value={this.state.apiCategory}
-                     handleSelectCategory={this.handleSelectCategory}/>
-          <SearchField {...this.state} handleSearch={this.handleChange}
-                      query={this.state.query} handleQuery={this.handleQuery}
-                      placeholder="Margarita..." />
-          <DataList data={this.state.drinks} img="strDrinkThumb" heading="strDrink" 
+                     id="apiCategory" name="apiCategory" 
+                     value={this.state.apiCategory}
+                     handleSelectCategory={this.handleSelectCategory}
+                     />
+          <SearchField query={this.state.query}
+                       handleSearch={this.handleChange}
+                       handleQuery={this.handleQuery}
+                       placeholder="Margarita..." 
+                       />
+          <DataList data={this.state.drinks} img="strDrinkThumb" 
+                    heading="strDrink" 
                     key="idDrink" dataKey="idDrink"
                     handleClick={this.handleClick} 
                     />
-          
-          <DrinkIngrForm {...this.state} handleChange={this.handleChange} 
-                                          handleSubmit={this.handleSubmit} 
-                                          handleClick={this.handleClick} 
-                                          handleEditing={this.handleEditing} 
-                                          handleDelete={this.handleDelete}/>
+          <h3 className="f6 db">Add a drink</h3>
+          <DrinkIngrForm {...this.state} 
+                          handleChange={this.handleChange} 
+                          handleSubmit={this.handleSubmit} 
+                          handleClick={this.handleClick} 
+                         />
         </div>
-          <BottomNavbar />
+        <BottomNavbar />
       </div>
     )
   }

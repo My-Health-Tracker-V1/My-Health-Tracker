@@ -66,7 +66,7 @@ export default class RepForm extends Component {
             <div>
               {this.props.editing && <a onClick={this.props.handleDeleteFood} 
               data-key={this.props.food._id} className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue">
-              Delete Recipe</a>}
+              ✖️ Delete Food</a>}
             </div>
             <form onSubmit={this.props.editing? 
                           this.props.editRecipeSubmit : this.props.handleSubmit}>

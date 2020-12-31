@@ -46,4 +46,24 @@ router.post('/user/:id/day/:date', (req, res) => {
     })
 })
 
+// delete drink
+
+router.put('/user/:userId/day/:date/:drinkId/delete', (req, res, next) => {
+  console.log("delete params");
+  console.log(req.params);
+  Day.findOne({$and: [{owner: req.params.userId}, 
+                      {date: req.params.date}]})
+  .then(dbDay => {
+    const newDrinks = dbDay.drinks.filter(drink => 
+      drink.id !== req.params.drinkId);
+    console.log(newDrinks);
+    Day.findOneAndUpdate({$and: [{owner: req.params.userId}, 
+                                 {date: req.params.date}]},
+                        {drinks: newDrinks})
+      .then(() => {
+        res.status(200).json({ message: 'ok' })
+      }).catch(err => res.json(err));
+  }).catch(err => res.json(err))
+})
+
 module.exports = router;

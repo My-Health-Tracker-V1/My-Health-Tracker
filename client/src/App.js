@@ -13,7 +13,7 @@ import Dashboard from './components/nav-bar-options/Dashboard'
 import FoodEntry from './components/add-entries/food/FoodEntry';
 import DrinkEntry from './components/add-entries/drink/DrinkEntry';
 import FoodEdit from './components/add-entries/food/FoodEdit';
-// import RecipeDb from './components/add-entries/food/RecipeDb';
+import DrinkEdit from './components/add-entries/drink/DrinkEdit';
 
 //Components for the BottomNavBar Links
 import Analysis from './components/nav-bar-options/Analysis'
@@ -100,16 +100,14 @@ class App extends React.Component {
       <Route exact path='/add/Foods' 
       render={(props) => <FoodEntry user={this.state.user} {...props}/>}
       />
-      {/* <Route exact path='/add/Recipe' 
-      render={(props) => <RecipeDb user={this.state.user} {...props}/>}
-      /> */}
       <Route exact path='/add/Drinks' 
       render={(props) => <DrinkEntry user={this.state.user} {...props}/>}
       />
-
-      {/* Routes to edit food */}
       <Route exact path='/edit/Foods' 
       render={(props) => <FoodEdit user={this.state.user} {...props}/>}
+      />
+      <Route exact path='/edit/Drinks' 
+      render={(props) => <DrinkEdit user={this.state.user} {...props}/>}
       />
       </div>
 )

@@ -267,9 +267,11 @@ router.put('/user/:userId/day/:date/:foodId/delete', (req, res, next) => {
   console.log(req.params);
   Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
   .then(dbDay => {
-    const newFoods = dbDay.foods.filter(food => 
+    const newFoods = dbDay.foods.filter(food => {
+      // typeof food.id is: string
+      // typeof food._id is: object
       food.id !== req.params.foodId
-    )
+    })
     console.log("this is the new foods array");
     console.log(newFoods);
     Day.findOneAndUpdate({$and: [{owner: req.params.userId}, {date: req.params.date}]},
@@ -283,28 +285,7 @@ router.put('/user/:userId/day/:date/:foodId/delete', (req, res, next) => {
   })
 })
 
-// delete drink
 
-router.put('/drinks/user/:userId/day/:date/:foodId/delete', (req, res, next) => {
-  console.log("delete params");
-  console.log(req.params);
-  Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
-  .then(dbDay => {
-    const newDrinks = dbDay.drinks.filter(drink => 
-      drink.id !== req.params.drinkId
-    )
-    console.log("this is the new foods array");
-    console.log(newFoods);
-    Day.findOneAndUpdate({$and: [{owner: req.params.userId}, {date: req.params.date}]},
-      {drinks: newDrinks})
-      .then(() => {
-        res.status(200).json({ message: 'ok' })
-      })
-      .catch(err => {
-        res.json(err);
-      })
-  })
-})
 
 
 // edit a food 

@@ -98,7 +98,6 @@ export default class FoodEdit extends Component {
       add: false
     })
   }
-  
 
   saveIngr2Rep = () => {
     const addedIngredients = this.state.food.ingredients;
@@ -136,16 +135,6 @@ export default class FoodEdit extends Component {
         })
         .catch(err => console.log(err))
     }
-
-  getAllDaysFromUser = () => {
-    axios.get(`/api/days/user/${this.state.user._id}`)
-    .then(response => {
-        console.log(response.data)
-        this.setState({
-          days: response.data
-        })
-    })
-  }
 
 // delete
   handleDeleteIngredient = event => {
@@ -203,17 +192,16 @@ export default class FoodEdit extends Component {
         <DateTimeInput startTime={this.state.tempStartTime} date={this.state.date}
                         handleChange={this.handleChange} />
         <div className="mw6 center" >
-        
-        <RepForm {...this.state} handleChange={this.handleChange} 
-                        saveIngr2Rep={this.saveIngr2Rep}
-                        editRecipeSubmit={this.editRecipeSubmit}
-                        handleDeleteIngredient={this.handleDeleteIngredient}
-                        handleDeleteFood={this.handleDeleteFood} 
-                        toggleAddIngr={this.toggleAddIngr}
-                        toggleEditIngr={this.toggleEditIngr}
-                        editIngrSave={this.editIngrSave}
-                        addNewIngrSave={this.addNewIngrSave}
-                        />
+          <RepForm {...this.state} handleChange={this.handleChange} 
+                          saveIngr2Rep={this.saveIngr2Rep}
+                          editRecipeSubmit={this.editRecipeSubmit}
+                          handleDeleteIngredient={this.handleDeleteIngredient}
+                          handleDeleteFood={this.handleDeleteFood} 
+                          toggleAddIngr={this.toggleAddIngr}
+                          toggleEditIngr={this.toggleEditIngr}
+                          editIngrSave={this.editIngrSave}
+                          addNewIngrSave={this.addNewIngrSave}
+                          />
         </div>
       </div>
       <BottomNavbar />

@@ -32,7 +32,6 @@ export default class FoodEntry extends Component {
     },
     selectedIngredient: false,
     handleShowSingle: true,
-    ingredientCount: 0,
     query: '',
     editing: false
   }
@@ -159,13 +158,11 @@ export default class FoodEntry extends Component {
   toggleRecipe = () => {
     this.setState({
       handleShowSingle: false,
-      ingredientCount: 0
     })
   }
   toggleSingle = () => {
     this.setState({
       handleShowSingle: true,
-      ingredientCount: 0
     })
   }
 
