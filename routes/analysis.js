@@ -145,7 +145,7 @@ router.get('/user/:id/options',(req,res,next)=>{
  router.get('/user/:id/selected-data/:outcome/:event/:specificEvent',(req,res,next)=>{
   console.log('getting selected data heeeeeeeere!!!!', req.params)
   if(req.params.outcome==='Energy'){
-    Day.find({$and:[{owner: req.params.id},{energy: {energyLevel:req.params.outcome}}]})
+    Day.find({$and:[{owner: req.params.id},{energy: {energyLevel:{$exists:true}}}]})
     .then(days=>{
       console.log(days)
     })
