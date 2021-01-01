@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import BottomNavbar from '../shared/BottomNavbar'
-import EntryList from '../shared/EntryList'
-import TopBar from '../shared/TopBar'
+import TopBar from '../shared/TopBar';
 
 export default class AddFrequent extends Component {
   render() {
@@ -9,10 +8,11 @@ export default class AddFrequent extends Component {
 
     return (
       <div className='flex flex-column justify-center items-center'>
-        <TopBar className='ba pa3 w-100' title='Frequent Entries' icon='frequent'/>
-        <div className='flex justify-center pv5'>
+        <TopBar className='ba pa3 w-100' title='Recipes' icon='recipes'/>
+        {/* <div className='flex justify-center pv5'>
           <EntryList title="" entries={frequentArr}/>
-        </div>
+        </div> */}
+        
         <BottomNavbar/>
       </div>
     )

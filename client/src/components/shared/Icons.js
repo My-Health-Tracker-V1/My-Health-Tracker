@@ -767,13 +767,6 @@ export default function Icons(props) {
           </svg>
           </div>
         )
-
-    case 'fast-food':
-        return (
-          <div>
-            
-          </div>
-        )
     
     default:
       // code block
