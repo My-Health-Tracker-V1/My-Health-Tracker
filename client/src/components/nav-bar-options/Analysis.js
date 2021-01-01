@@ -54,8 +54,12 @@ export default class Analysis extends Component {
 
   getSelectedData=()=>{
     //request selected data from API and save it in selectedData state
-     axios.get(`/api/analysis/user/${this.props.user._id}/selected-data/${this.state.selectedOutcome}/${this.state.selectedEvent}/${this.state.selectedSpecificEvent}`)
-       .then(res=>console.log(res))
+     axios.get(`/api/analysis/user/${this.props.user._id}/selected-data/${this.state.selectedOutcome}/${this.state.selectedEvent}/${this.state.selectedEvent==="Sleep"? "Sleep":this.state.selectedSpecificEvent}`)
+       .then(res=>{
+         this.setState({
+           selectedData:[...res.data]
+         })
+         console.log(res)})
        .catch(err=>console.log(err))
   }
 
@@ -87,7 +91,7 @@ export default class Analysis extends Component {
       <div>
         <TopBar icon='analysis' title='Analysis'/>
 
-        <div className='flex flex-column items-center pv3'>
+        <div className='flex flex-column items-center pt3 pb5'>
 
           <div className="flex">
             <label className="f6 mt3 gray" htmlFor="selectedOutcome">Outcome:</label>

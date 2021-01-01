@@ -34,14 +34,14 @@ const daySchema = new Schema({
   
   exercises: [{
     name: String,
-    startTime: String, // need to check it 
-    duration: Number, // minutes or hours
+    startTime: String,
+    duration: Number,
     intensityLevel: Number
   }],
 
   sleep: [{
-    startTime: String, // need to check it 
-    duration: Number, // minutes or hours
+    startTime: String,
+    duration: Number,
     notes: String
   }],
   

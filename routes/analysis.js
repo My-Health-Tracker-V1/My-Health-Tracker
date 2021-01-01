@@ -22,6 +22,62 @@ const userOptions = (input,days) =>{
   return userOptions;
 }
 
+const getDataFromDay=(day,event,specificEvent)=>{
+  
+  switch(event){
+
+    case "Sleep":
+        return day.sleep[0].duration+''
+
+    case "Exercise":
+        let totalDuration=0;
+        if(day.exercises.length>0){
+          if(specificEvent.substring(0,3)==="All"){
+            day.exercises.forEach(exercise=>totalDuration+=exercise.duration);
+          }else{
+            day.exercises.forEach(exercise=>{
+              console.log(day.date,exercise.name,exercise.duration)
+              if (exercise.name===specificEvent)
+              totalDuration+=exercise.duration} );
+          }
+        }else
+          totalDuration=''
+        return totalDuration+'';
+
+    case "Foods":
+      let totalFoodConsumption=0;
+      if(day.foods.length>0){
+        if(specificEvent.substring(0,3)==="All"){
+          day.foods.forEach(food=>totalFoodConsumption+=food.eatenPortions);
+        }else{
+          day.foods.forEach(food=>{
+            if (food.name===specificEvent)
+            totalFoodConsumption+=food.eatenPortions} );
+        }
+      }else
+        totalFoodConsumption='';
+      return totalFoodConsumption+'';
+
+    case "Drinks":
+      let totalDrinkConsumption=0;
+      if(day.drinks.length>0){
+        if(specificEvent.substring(0,3)==="All"){
+          day.drinks.forEach(drink=>totalDrinkConsumption+=drink.servingAmount);
+        }else{
+          day.drinks.forEach(drink=>{
+            if (drink.name===specificEvent)
+            totalDrinkConsumption+=drink.servingAmount} );
+        }
+      }else
+        totalDrinkConsumption=''
+      return totalDrinkConsumption+'';
+
+    default:
+
+  }
+
+}
+
 router.get('/user/:id/options',(req,res,next)=>{
   Day.find({owner: req.params.id})
     .then(days=>{
@@ -64,7 +120,7 @@ router.get('/user/:id/options',(req,res,next)=>{
               userExercises.push(exercise.name)
             }));
         
-        userExercises.sort().unshift("Choose an option");
+        userExercises.sort().unshift("Choose an option","All exercises");
       }
       
 
@@ -99,7 +155,7 @@ router.get('/user/:id/options',(req,res,next)=>{
            )
          )
       
-        userFoods.sort().unshift("Choose an option");   
+        userFoods.sort().unshift("Choose an option","All Foods");   
         
       }
 
@@ -125,7 +181,7 @@ router.get('/user/:id/options',(req,res,next)=>{
              }
            )
          )
-      userDrinks.sort().unshift("Choose an option");   
+      userDrinks.sort().unshift("Choose an option","All Drinks");   
     }
 
     userEvents.sort().unshift("Choose an option");   
@@ -143,13 +199,22 @@ router.get('/user/:id/options',(req,res,next)=>{
   })
 
  router.get('/user/:id/selected-data/:outcome/:event/:specificEvent',(req,res,next)=>{
-  console.log('getting selected data heeeeeeeere!!!!', req.params)
+  
   if(req.params.outcome==='Energy'){
-    Day.find({$and:[{owner: req.params.id},{energy: {energyLevel:{$exists:true}}}]})
+    
+    Day.find({$and:[{owner: req.params.id},{energy:{$exists:true}}]})
     .then(days=>{
-      console.log(days)
+      const dataArr=[{"name":"Energy","data":{}},{"name":req.params.specificEvent, "data":{}}];
+      days.forEach(day=>{
+        dataArr[0]["data"][day.date]=day.energy.energyLevel+'';
+        //console.log(day.date,getDataFromDay(day,req.params.event,req.params.specificEvent))
+        if(getDataFromDay(day,req.params.event,req.params.specificEvent))
+          dataArr[1]["data"][day.date]=getDataFromDay(day,req.params.event,req.params.specificEvent);
+      });
+      res.json(dataArr)
     })
     .catch(err=>res.json(err))
+
   }else{
     Day.find({$and:[{owner: req.params.id},{symptoms: {name:req.params.outcome}}]})
     .then(days=>{
