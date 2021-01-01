@@ -1,20 +1,9 @@
-import React, { Component } from 'react'
-import BottomNavbar from '../shared/BottomNavbar'
-import TopBar from '../shared/TopBar';
+import React from 'react'
 
-export default class AddFrequent extends Component {
-  render() {
-    const frequentArr=['Symptoms','Foods','Exercise', 'Sleep', 'Energy']
-
-    return (
-      <div className='flex flex-column justify-center items-center'>
-        <TopBar className='ba pa3 w-100' title='Recipes' icon='recipes'/>
-        {/* <div className='flex justify-center pv5'>
-          <EntryList title="" entries={frequentArr}/>
-        </div> */}
-        
-        <BottomNavbar/>
-      </div>
-    )
-  }
+export default function AddFrequent() {
+  return (
+    <div>
+      
+    </div>
+  )
 }

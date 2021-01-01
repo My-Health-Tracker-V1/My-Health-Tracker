@@ -81,13 +81,14 @@ router.put('/user/:id/day/:date',(req,res,next)=>{
 })
 
 router.delete('/user/:id/day/:date',(req,res,next)=>{
-
+  console.log('deleting',req.params)
   Day.findOne({$and:[{owner: req.params.id},{date: req.params.date}]})
     .then(day=>{
-      
+      console('heeeeere', day)
       Day.findByIdAndUpdate(day._id,{$pull:
         {exercises:
           { 
+            // _id : req.body.data[0]
             name: req.body.name, 
             startTime: req.body.startTime,
             intensityLevel:req.body.intensityLevel,

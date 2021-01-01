@@ -116,6 +116,9 @@ app.use('/api/sleep', sleep)
 const symptoms = require('./routes/symptoms');
 app.use('/api/symptoms', symptoms)
 
+const analysis = require('./routes/analysis');
+app.use('/api/analysis',analysis)
+
 app.use((req, res) => {  
   // If no routes match, send them the React HTML.  
   res.sendFile(__dirname + "/client/build/index.html");
