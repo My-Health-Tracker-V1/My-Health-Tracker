@@ -22,11 +22,13 @@ const daySchema = new Schema({
     startTime: String,
     name: String,
     imgUrl: String,
-    brand: String,
-    category: String,
+    category: {
+      type: String,
+      enum: ["Alcoholic", "Non-alcoholic", "Ordinary drink", "Cocktail"]
+    },
     servingAmount: Number,
     servingSize: String,
-    ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
+    // ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
   }],
 
   

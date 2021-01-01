@@ -135,85 +135,7 @@ console.log('this is req.params.id', req.params)
   })
 })
 
-  // LoggedIn user want to create a drink Ingredient
-router.post('/drinks/user/:id/day/:date', (req, res) => {
-  const { date, startTime, name, brand, category, servingAmount, servingSize, portion, eatenPortion } = req.body;
-  // const owner = req.user._id;
-  // Check if the user already has a day
-console.log('this is req.params.id', req.params)
- Day.findOne({$and: [{owner: req.params.id}, {date: req.params.date}]})
-  .then (day => {
-    console.log('this is the day', day)
-    if(day !== null) {
-      Ingredient.create({
-        name,
-        brand,
-        category,
-        servingAmount,
-        servingSize,
-        owner: req.params.id
-      })
-      .then(dbIngredient => {
-        console.log('this is the dbingredient', dbIngredient)
-        Day.findByIdAndUpdate(day._id,
-          { $push: {"drinks": 
-            {startTime,
-            name,
-            brand,
-            category,
-            imgUrl: "",
-            ingredients: dbIngredient
-        }}}, {new: true}).then(dbIngredient => {
-          res.status(201).json(dbIngredient);
-        })
-        .catch(err => {
-          res.json(err);
-        })
-      })
-    } else {
-      Ingredient.create({
-        name,
-        brand,
-        category,
-        servingAmount,
-        servingSize,
-        owner: req.params.id
-      })
-        .then((dbIngredient) => {
-          Day.create({
-            date: date,
-            owner: req.params.id,
-            drinks: [{
-              startTime: startTime,
-              imgUrl: "",
-              name,
-              brand,
-                // ingredients are obejcts
-              ingredients: [dbIngredient]
-            }],
-            foods:[],
-            supplements: [],
-            medications: [],
-            exercises: [],
-            sleep:[],
-            symptoms: [],
-            energy: ""
-          })
-          .then((dbDay) => {
-            User.findByIdAndUpdate(req.params.id, {
-              $push: { days: dbDay._id },
-            })
-          })
-        })
-        .then(dbIngredient => {
-          res.status(201).json(dbIngredient);
-        })
-        .catch(err => {
-          res.json(err);
-        })
-    }
-  })
-})
+ 
 
 // add a recipe
 router.post('/recipe/user/:id/day/:date', (req, res) => {
@@ -345,9 +267,11 @@ router.put('/user/:userId/day/:date/:foodId/delete', (req, res, next) => {
   console.log(req.params);
   Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
   .then(dbDay => {
-    const newFoods = dbDay.foods.filter(food => 
+    const newFoods = dbDay.foods.filter(food => {
+      // typeof food.id is: string
+      // typeof food._id is: object
       food.id !== req.params.foodId
-    )
+    })
     console.log("this is the new foods array");
     console.log(newFoods);
     Day.findOneAndUpdate({$and: [{owner: req.params.userId}, {date: req.params.date}]},
@@ -361,35 +285,13 @@ router.put('/user/:userId/day/:date/:foodId/delete', (req, res, next) => {
   })
 })
 
-// delete drink
 
-router.put('/drinks/user/:userId/day/:date/:foodId/delete', (req, res, next) => {
-  console.log("delete params");
-  console.log(req.params);
-  Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
-  .then(dbDay => {
-    const newDrinks = dbDay.drinks.filter(drink => 
-      drink.id !== req.params.drinkId
-    )
-    console.log("this is the new foods array");
-    console.log(newFoods);
-    Day.findOneAndUpdate({$and: [{owner: req.params.userId}, {date: req.params.date}]},
-      {drinks: newDrinks})
-      .then(() => {
-        res.status(200).json({ message: 'ok' })
-      })
-      .catch(err => {
-        res.json(err);
-      })
-  })
-})
 
 
 // edit a food 
 
 router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
   const food = req.body.food;
- 
   const ingredients = req.body.food.ingredients.map(ing => {
     return {
       name: ing.name,
@@ -402,16 +304,14 @@ router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
   });
   Ingredient.create(ingredients)
     .then(dbIngredients => {
-      console.log('these are the ingredients', dbIngredients)
       Day.findOne({$and: [{owner: req.params.userId}, {date: req.params.date}]})
         .then(dbday => {
-          console.log("db index", dbday.foods.map(f => f._id));
-          
           const newFoods = dbday.foods;
-          console.log("food id", req.params.foodId);
-          const changedIdx = newFoods.findIndex(food => food._id == req.params.foodId);
-          console.log("gefundener Index", changedIdx);
+          const changedIdx = newFoods.findIndex(food => food.id == req.params.foodId);
           newFoods[changedIdx].ingredients = dbIngredients.map(ing => ing._id);
+          newFoods[changedIdx].name = food.name;
+          newFoods[changedIdx].portion = food.portion;
+          newFoods[changedIdx].eatenPortion = food.eatenPortion;
           Day.findByIdAndUpdate(dbday._id, {foods: newFoods}, {new: true})
           .then(dbIngredients => {
           res.status(201).json(dbIngredients);
@@ -422,7 +322,6 @@ router.put('/user/:userId/day/:date/:foodId/edit', (req, res) => {
           })
         })
         })
-      
-  })
+})
 
 module.exports = router;

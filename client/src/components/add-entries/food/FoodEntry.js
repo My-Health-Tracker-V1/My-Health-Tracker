@@ -2,10 +2,9 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
-import DateTimeInput from './DateTimeInput';
-import SingleDb from './SingleDb';
-import RecipeDb from './RecipeDb';
-import SearchField from './SearchField';
+import DateTimeInput from '../helper-components/DateTimeInput';
+import DataList from '../helper-components/DataList';
+import SearchField from '../helper-components/SearchField';
 import IngrForm from './IngrForm';
 import RepForm from './RepForm';
 import './FoodEntry.css'
@@ -16,7 +15,7 @@ export default class FoodEntry extends Component {
     date: this.props.location.state?.day ||new Date().toISOString().split('T')[0],
     ingredients: [],
     recipes: [],
-    tempStartTime: '',
+    tempStartTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
     tempIngredient: {
       name: '',
       brand: '',
@@ -25,7 +24,7 @@ export default class FoodEntry extends Component {
       servingSize: ''
     },
     food: {
-      startTime: '',
+      startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
       name: '',
       portion: '',
       eatenPortion: '',
@@ -33,9 +32,7 @@ export default class FoodEntry extends Component {
     },
     selectedIngredient: false,
     handleShowSingle: true,
-    ingredientCount: 0,
     query: '',
-    recipeQuery: '',
     editing: false
   }
 
@@ -45,7 +42,7 @@ export default class FoodEntry extends Component {
      .then(res => {
        console.log(res.data);
        this.setState({
-         ingredients: res.data.hints
+         ingredients: res.data.hints.map(hint => hint.food)
        })   
      })
      .catch(err => {
@@ -58,7 +55,7 @@ export default class FoodEntry extends Component {
      .then(res => {
        console.log(res.data);
        this.setState({
-         recipes: res.data.hits
+         recipes: res.data.hits.map(hit => hit.recipe)
        })
      })
      .catch(err => {
@@ -76,11 +73,11 @@ export default class FoodEntry extends Component {
     const key = event.target.getAttribute('data-key')
     console.log(key);
     console.log('this.state.ingredients is:', this.state.ingredients)
-    const clickedIngr = this.state.ingredients.find(ingredient => ingredient.food.foodId === key);
+    const clickedIngr = this.state.ingredients.find(ingredient => ingredient.foodId === key);
     const newTempIngredient = this.state.tempIngredient;
-    newTempIngredient.name = clickedIngr.food.label;
-    newTempIngredient.brand = clickedIngr.food.brand;
-    newTempIngredient.category = clickedIngr.food.category;
+    newTempIngredient.name = clickedIngr.label;
+    newTempIngredient.brand = clickedIngr.brand;
+    newTempIngredient.category = clickedIngr.category;
     this.setState ({
       tempIngredient: newTempIngredient
     })
@@ -100,12 +97,12 @@ export default class FoodEntry extends Component {
     const key = event.target.getAttribute('data-key')
     console.log(key);
     console.log('this.state.recipes is:', this.state.recipes)
-    const clickedRecipe = this.state.recipes.find(recipe => recipe.recipe.uri === key);
+    const clickedRecipe = this.state.recipes.find(recipe => recipe.uri === key);
     const newFood = this.state.food;
-    newFood.name = clickedRecipe.recipe.label;
-    newFood.portion = clickedRecipe.recipe.yield;
-    newFood.category = clickedRecipe.recipe.healthLabels;
-    newFood.ingredients = clickedRecipe.recipe.ingredients.map(this.apiFormat);
+    newFood.name = clickedRecipe.label;
+    newFood.portion = clickedRecipe.yield;
+    newFood.category = clickedRecipe.healthLabels;
+    newFood.ingredients = clickedRecipe.ingredients.map(this.apiFormat);
     this.setState ({
       food: newFood
     })
@@ -115,11 +112,6 @@ export default class FoodEntry extends Component {
   setQuery = query => {
     this.setState({
       query: query,
-    })
-  }
-  setRecipeQuery = recipeQuery => {
-    this.setState({
-      recipeQuery: recipeQuery,
     })
   }
 
@@ -140,7 +132,7 @@ export default class FoodEntry extends Component {
       console.log(res.data);
       this.setState({
         query: event.target.value,
-        ingredients: res.data.hints
+        ingredients: res.data.hints.map(hint => hint.food)
       })   
     })
     .catch(err => {
@@ -155,7 +147,7 @@ export default class FoodEntry extends Component {
       console.log(res.data);
       this.setState({
         recipeQuery: event.target.value,
-        recipes: res.data.hits
+        recipes: res.data.hits.map(hit => hit.recipe)
       })   
     })
     .catch(err => {
@@ -166,13 +158,11 @@ export default class FoodEntry extends Component {
   toggleRecipe = () => {
     this.setState({
       handleShowSingle: false,
-      ingredientCount: 0
     })
   }
   toggleSingle = () => {
     this.setState({
       handleShowSingle: true,
-      ingredientCount: 0
     })
   }
 
@@ -368,19 +358,21 @@ export default class FoodEntry extends Component {
     let dataComponent;
     let formComponent;
     if (this.state.handleShowSingle) {     
-      dataComponent = <SingleDb {...this.state} handleClick={this.handleClick} 
-                        setQuery={this.setQuery} 
-                        handleSearch={this.handleSearch}
-                        handleQuery={this.handleQuery}/>;
+      dataComponent = <DataList 
+                        data={this.state.ingredients} img="image" heading="label" 
+                        subtitle="category" key="foodId" dataKey="foodId"
+                        handleClick={this.handleClick} 
+                      />
       formComponent = <IngrForm {...this.state} handleChange={this.handleChange} 
                         handleSubmit={this.handleSingleSubmit} 
                         handleDelete={this.handleDelete} 
                         handleEditing={this.handleEditing}/>;
     } else {      
-      dataComponent = <RecipeDb {...this.state} handleClickRecipe={this.handleClickRecipe} 
-                        setRecipeQuery={this.setRecipeQuery} 
-                        handleSearch={this.handleSearch}
-                        handleRecipeQuery={this.handleRecipeQuery}/>; 
+      dataComponent = <DataList 
+                        data={this.state.recipes} img="image" heading="label" 
+                        subtitle="healthLabels" key="uri" dataKey="uri"
+                        handleClick={this.handleClickRecipe} 
+                      />; 
       formComponent = <RepForm {...this.state} handleChange={this.handleChange} 
                         handleSubmit={this.handleRecipeSubmit} 
                         handleDelete={this.handleDelete} 
@@ -390,10 +382,12 @@ export default class FoodEntry extends Component {
     return (
       <div>
         <TopBar title="Foods" icon="Foods" /> 
-        <div className="pt4 pb5">
-          <DateTimeInput {...this.state} handleChange={this.handleChange} 
-          handleSubmit={this.handleRecipeSubmit}/>
-          
+        <div className="pt3 pb6">
+          <DateTimeInput startTime={this.state.tempStartTime} 
+                          date={this.state.date}
+                          handleChange={this.handleChange} 
+                        />
+        
           <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
           onClick={this.toggleSingle} > + Add a single food </button>
           <button className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue" 
@@ -402,10 +396,17 @@ export default class FoodEntry extends Component {
           <div className="food-container">
             {this.state.handleShowSingle ? (<h4>Suggested Foods</h4>) 
             : <h4>Suggested Recipes</h4>}
-            <SearchField {...this.state} handleSearch={this.handleSearch} 
-            handleQuery={this.handleQuery}
-            handleRecipeQuery={this.handleRecipeQuery}
-            />
+            {this.state.handleShowSingle ? (
+              <SearchField handleSearch={this.handleSearch} 
+              handleQuery={this.handleQuery}
+              query={this.state.query} placeholder="Ingredients in your dish..."
+              />
+            ) : (
+              <SearchField handleSearch={this.handleSearch} 
+               handleQuery={this.handleRecipeQuery}
+               query={this.state.query} placeholder="Find your recipe..."
+              />
+            )}
             <div>{dataComponent}</div>
             <div>{formComponent}</div>
           </div>
