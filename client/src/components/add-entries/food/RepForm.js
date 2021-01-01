@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import IngrForm from './IngrForm'
+import IngrForm from './IngrForm';
+import { FormRow } from '../helper-components/Rows'
 
 export default class RepForm extends Component {
 
@@ -8,7 +9,9 @@ export default class RepForm extends Component {
     if(this.props.edit === true) {
       editInterface = <IngrForm {...this.props} 
                       handleChange={this.props.handleChange} 
-                      handleSubmit={this.props.handleSingleSubmit}/>    
+                      handleSubmit={this.props.handleSingleSubmit}
+                      saveIngr2Rep={this.props.saveIngr2Rep}
+                      />    
     } else {
       editInterface = <></>
     }
@@ -17,77 +20,57 @@ export default class RepForm extends Component {
       addInterface = <IngrForm {...this.props} 
                     handleChange={this.props.handleChange} 
                     handleSubmit={this.props.handleAddSubmit}
-                    handleEdit={this.props.handleEdit} />
+                    handleEdit={this.props.handleEdit} 
+                    saveIngr2Rep={this.props.saveIngr2Rep}
+                    addNewIngr={this.props.addNewIngr}
+                    />
     } else {
       addInterface = <></>
     }
 
     return (
       <div>
-        {this.props.editing ? (<h3 className="f5 db">Edit a Recipe:</h3>) 
+        {this.props.editing ? (<h3 className="f5 db">What did you eat? </h3>) 
         : (<h3 className="f5 db">Add a Recipe:</h3>)}
         
         <form onSubmit={this.props.editing? 
-                        this.props.handleEdit : this.props.handleSubmit}>
-            <div>
-              <label htmlFor='name' className="f6 w3 dib" >Recipe Name: </label>
-              <input className="f6 pa1 mr3 ml1 w6 mv1"
-                type='text'
-                id='recipeName'
-                name='recipeName'
-                value={this.props.food.name} 
-                onChange={this.props.handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor='portion' className="f6 w3 dib">Yield: </label>
-              <input className="f6 pa1 mr3 ml1 w6 mv1"
-                type='number'
-                id='portion'
-                name='portion'
-                min='0'
-                value={this.props.food.portion}
-                onChange={this.props.handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor='eatenPortion' className="f6 w3 dib">Your Portion: </label>
-              <input className="f6 pa1 mr3 ml1 w6 mv1"
-                type='number'
-                id='eatenPortion'
-                name='eatenPortion'
-                min='0'
-                value={this.props.food.eatenPortion}
-                onChange={this.props.handleChange}
-              />
-            </div>
-          </form>
-          {/* <button onClick={this.props.handleAddButton} className="f6 link dim br-pill ba ph3 pv2 mb2 dib dark-blue">Add ingredient to the recipe</button> */}
-          <div style={{padding: "20px 0 5px 0"}}>
-            { this.props.food.ingredients.map((ingr, index) => {
-              return (
-                <div>
-                  <a onClick={this.props.handleEdit} value={index} 
-                  className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green">{ingr.name}</a>
-                  {this.props.editing && <a onClick={this.props.handleDeleteIngredient} value={index}  
-                  className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"> ✖️ </a>}
-                </div>)
-            })}
-          </div>
+                        this.props.editRecipeSubmit : this.props.handleSubmit}>
+          <FormRow value={this.props.food.name} title={this.props.editing ? ("Food Name: "): ("Recipe Name: ")}
+                   type="text" id="recipeName" name="recipeName"
+                   handleChange={this.props.handleChange}/>
+          <FormRow value={this.props.food.portion} title="Yield"
+                   type="number" id="portion" name="portion" min="0"
+                   handleChange={this.props.handleChange}/>
+          <FormRow value={this.props.food.eatenPortion} title="Your Portion"
+                   type="number" id="eatenPortion" name="eatenPortion" min="0"
+                   handleChange={this.props.handleChange}/>
+        </form>
+        
+        <div style={{padding: "20px 0 5px 0"}}>
+          { this.props.food.ingredients.map((ingr, index) => {
+            return (
+              <div>
+                <a onClick={this.props.editing? this.props.toggleEditIngr : ()=>{}} data-key={index} 
+                className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green">{ingr.name}</a>
+                {this.props.editing && <a onClick={this.props.handleDeleteIngredient} data-key={index}  
+                className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"> ✖️ </a>}
+              </div>)
+          })}
+        </div>
 
-          {this.props.editing && <a onClick={this.props.handleAdd} 
+          {this.props.editing && <a onClick={this.props.toggleAddIngr} 
           className="f7 link dim br4 ba ph2 pv1 mb3 dib dark-green"> ➕ Add a new ingredient</a>}
           {editInterface}
           {addInterface}
           <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
             <div>
               {this.props.editing && <a onClick={this.props.handleDeleteFood} 
-              value={this.props.food._id} className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue">
-              Delete Recipe</a>}
+              data-key={this.props.food._id} className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue">
+              ✖️ Delete Food</a>}
             </div>
             <form onSubmit={this.props.editing? 
-                          this.props.handleEdit : this.props.handleSubmit}>
-              <button type='submit' 
+                          this.props.editRecipeSubmit : this.props.handleSubmit}>
+              <button
               className="f6 link dim br-pill ph4 pv2 mb2 dib white bg-dark-blue">Save all</button>
             </form>
           </div>

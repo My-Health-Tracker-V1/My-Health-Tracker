@@ -1,0 +1,90 @@
+const express = require('express');
+const mongoose = require('mongoose')
+const router = express.Router();
+const Day = require('../models/Day');
+const User = require('../models/User');
+
+ 
+router.post('/user/:id/day/:date', (req, res) => {
+  const { date, startTime, name, category, servingAmount, servingSize } = req.body;
+  console.log('this is req.params.id', req.params)
+  Day.findOne({$and: [{owner: req.params.id}, {date: req.params.date}]})
+    .then (day => {
+      console.log('this is the day', day)
+      if(day !== null) {
+        Day.findByIdAndUpdate(day._id,
+          { $push: {"drinks": 
+          {startTime, name, category, imgUrl: "", servingAmount, servingSize}}
+          }, {new: true})
+          .then(dbDay => {
+            res.status(201).json(dbDay);
+          })
+          .catch(err => {res.json(err);
+          })
+      } else {
+        Day.create({
+          date: date,
+          owner: req.params.id,
+          drinks: [{
+            startTime: startTime,
+            name,
+            imgUrl: "",
+            category,
+            servingAmount,
+            servingSize}]
+        })
+        .then((dbDay) => {
+          User.findByIdAndUpdate(req.params.id, {
+            $push: { days: dbDay._id },
+          }).then(dbUser => {
+            res.status(201).json(dbUser);
+          })
+          .catch(err => {res.json(err);
+          })
+        })
+      }
+    })
+})
+
+// delete drink
+
+router.put('/user/:userId/day/:date/:drinkId/delete', (req, res, next) => {
+  Day.findOne({$and: [{owner: req.params.userId}, 
+                      {date: req.params.date}]})
+  .then(dbDay => {
+    const newDrinks = dbDay.drinks.filter(drink => 
+      drink.id !== req.params.drinkId);
+    console.log(newDrinks);
+    Day.findOneAndUpdate({$and: [{owner: req.params.userId}, 
+                                 {date: req.params.date}]},
+                        {drinks: newDrinks}, {new: true})
+      .then(() => {
+        res.status(200).json({ message: 'ok' })
+      }).catch(err => res.json(err));
+  }).catch(err => res.json(err))
+})
+
+// edit drink
+router.put('/user/:userId/day/:date/:drinkId/edit', (req, res, next) => {
+  const drink = req.body.drink;
+  Day.findOne({$and: [{owner: req.params.userId}, 
+    {date: req.params.date}]})
+    .then(dbDay => {
+      console.log(dbDay);
+      const newDrinks = dbDay.drinks;
+      const changedIdx = newDrinks.findIndex(drink => drink.id == req.params.drinkId);
+      newDrinks[changedIdx].startTime = drink.startTime;
+      newDrinks[changedIdx].name = drink.name;
+      newDrinks[changedIdx].category = drink.category;
+      newDrinks[changedIdx].servingAmount = drink.servingAmount;
+      newDrinks[changedIdx].servingSize = drink.servingSize
+    Day.findOneAndUpdate({$and: [{owner: req.params.userId}, 
+                                {date: req.params.date}]},
+      {drinks: newDrinks}, {new: true})
+    .then(() => {
+    res.status(200).json({ message: 'ok' })
+    }).catch(err => res.json(err));
+    })
+})
+
+module.exports = router;

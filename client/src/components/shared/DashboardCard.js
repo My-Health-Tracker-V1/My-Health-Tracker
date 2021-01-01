@@ -40,10 +40,10 @@ export default function DashboardCard(props) {
       return props.sleep.map(sleep=>returnCard(sleep,"Sleep3","Sleep","Duration",sleep.duration,'/add/Sleep'))
 
     case 'food':
-      return props.foods.map(food=>returnCard(food,"Foods3","Foods","Portions",null,'/edit/Foods',food.name))
+      return props.foods.map(food=>returnCard(food,"Foods3","Foods","Portions",food.eatenPortion,'/edit/Foods',food.name))
 
     case 'drink':
-      return props.drinks.map(drink=>returnCard(drink,"Drinks3","Drinks","Portions",null,'/add/Drinks',drink.name))
+      return props.drinks.map(drink=>returnCard(drink,"Drinks3","Drinks","Portions",drink.servingAmount,'/edit/Drinks',drink.name))
 
   }
 

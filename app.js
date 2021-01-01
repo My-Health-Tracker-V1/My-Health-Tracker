@@ -101,6 +101,9 @@ app.use('/api/days', days)
 const ingredients = require('./routes/ingredients');
 app.use('/api/ingredients', ingredients)
 
+const drinks = require('./routes/drinks');
+app.use('/api/drinks', drinks)
+
 const energy = require('./routes/energy');
 app.use('/api/energy', energy)
 
