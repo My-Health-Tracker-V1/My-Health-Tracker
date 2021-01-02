@@ -78,7 +78,7 @@ class App extends React.Component {
       {/* Routes in BottomNavBar  */}
       <Route exact path='/add-item' component={AddItem}/>
       <Route exact path='/analysis' render={(props) => <Analysis user={this.state.user} {...props}/>}/>
-      <Route exact path='/add-recipes' component={Recipes}/>
+      <Route exact path='/add-recipes' render={(props) => <Recipes user={this.state.user} {...props}/>}/>
       <Route exact path='/settings' render={(props) => <Settings user={this.state.user} setUser={this.setUser} {...props}/>}/>
 
       

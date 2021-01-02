@@ -31,7 +31,6 @@ export default class AddDrinks extends Component {
   getDrinksFromApi = (alcoholic) => {
     axios.get(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=${alcoholic}`)
     .then(res => {
-      console.log(res.data);
       this.setState({
         drinks: res.data.drinks
       })   
@@ -54,10 +53,8 @@ export default class AddDrinks extends Component {
 
   handleQuery = (event) => {
     event?.preventDefault();
-    console.log(this.state.query)
     axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${this.state.query}`)
     .then(res => {
-      console.log(res.data);
       this.setState({
         query: event.target.value,
         drinks: res.data.drinks
@@ -71,8 +68,6 @@ export default class AddDrinks extends Component {
   handleClick = event => {
     event.preventDefault();
     const key = event.target.getAttribute('data-key')
-    console.log(key);
-    console.log('this.state.drinks is:', this.state.drinks)
     const clickedDrink = this.state.drinks.find(drink => drink.idDrink === key);
     console.log(clickedDrink)
     this.setState ({
@@ -84,7 +79,6 @@ export default class AddDrinks extends Component {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-    console.log(name, value)
     this.setState({
       [name]: value
     });
@@ -111,8 +105,6 @@ export default class AddDrinks extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const payload = this.state;
-    console.log(payload);
-    console.log(this.state.date)
     axios.post(`/api/drinks/user/${this.props.user._id}/day/${this.state.date}`, payload)
       .then(() => {
         this.setState({
@@ -130,9 +122,6 @@ export default class AddDrinks extends Component {
 
   
   render() {
-    if (!this.state.drinks) return <h3>Ooops, something went wrong, please refresh the page</h3>
-    console.log('this is the user in foodentry', this.state.user)
-    console.log(this.props.location)
     const options = ["Alcoholic", "Non_Alcoholic", "Ordinary_Drink", "Cocktail"]
     return (
       <div>

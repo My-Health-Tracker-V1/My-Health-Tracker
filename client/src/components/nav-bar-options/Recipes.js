@@ -1,67 +1,109 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import BottomNavbar from '../shared/BottomNavbar';
 import TopBar from '../shared/TopBar';
-import { FormRow, SelectRow } from '../add-entries/helper-components/Rows'
-import IngrForm from '../add-entries/food/IngrForm';
+import DataList from '../add-entries/helper-components/DataList'
+import DateTimeInput from '../add-entries/helper-components/DateTimeInput';
 
 export default class Recipes extends Component {
+  state ={
+    date: this.props.location.state?.day || new Date().toISOString().split('T')[0],
+    startTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
+    user: this.props.user._id,
+    foods: [],
+    isDayEmpty: ""
+  }
 
-  state = {
-    user: this.props.user,
-    tempIngredient: {
-      name: '',
-      brand: '',
-      category: '',
-      servingAmount: '',
-      servingSize: ''
-    },
-    recipes: {
-      recipeName: '',
-      servings: '',
-      ingredients: []
-    },
+  getUserData(){
+    axios.get(`/api/days/user/${this.props.user._id}`)
+      .then(res=>{
+        if(res.data===null){
+          this.setState({
+            isDayEmpty: true
+          })
+        }else{
+          this.setState({
+          foods: this.flattenDays(res.data)
+        })}
+      })
+      .catch(err=>console.log(err))
   }
   
+  flattenDays = (days) => {
+    let foods = []
+    const foodsArr = days.map(day => day.foods);
+    for (let i=0; i< foodsArr.length; i++){
+      foods = foods.concat(foodsArr[i]);
+    }
+    const foodCounts = {};
+    for (let i=0; i< foods.length; i++){
+      if (foodCounts.hasOwnProperty(foods[i].name)) {
+        foodCounts[foods[i].name].count += 1;
+      } else {
+        foodCounts[foods[i].name] = {...foods[i], count: 1};
+      }
+    }
+    return Object.values(foodCounts);
+  }
+
+  componentDidMount(){
+    this.getUserData();
+  }
+
+  handleChange = event => {
+    const name = event.target.name;
+    const value = event.target.value;
+    if(name==='date') {
+      this.setState({
+        date: value
+      })} else if(name==='startTime') {
+      this.setState({
+        tempStartTime: value
+      })
+    }
+  }
+
+  handleClick = (event) => {
+    event.preventDefault();
+    const key = event.target.getAttribute('data-key');
+    const clickedRecipe = this.state.foods.find(food => food._id === key);
+    const payload = {
+      user: this.state.user,
+      date: this.state.date,
+      food: {...clickedRecipe,
+            startTime: this.state.startTime}
+    };
+    axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
+      .then(() => {
+        this.props.history.push("/dashboard")
+      })
+      .catch(err => console.log(err))
+   
+  }
+
   render() {
+    
     return (
       <div>
-        <TopBar title="Your Recipes" icon="recipes"/>
-        <div className="pt2 pb5">
-          <h3>Write your first recipe</h3>
-          <FormRow value={this.state.recipes.recipeName} title="Recipe Name"
-                   type="text" id="recipeName" name="recipeName"
-                   handleChange={this.handleChange}
-                   />
-          <FormRow value={this.state.recipes.servings} title="Servings"
-                   type="number" id="servings" name="servings"
-                   handleChange={this.handleChange}
-                   />
-          <h3>Add a Ingredient</h3>
+        {this.state.isDayEmpty && (
+          <div>
+            <TopBar title="Your Recipes" icon="recipes"/>
+            <h3>You haven't added any recipes yet 🙃 </h3>
+            <BottomNavbar />
+          </div>
+        )}
 
-          { this.state.recipes.ingredients.map((ingr, index) => {
-            return (
-              <div>
-                <a data-key={index} 
-                className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green">{ingr.name}</a>
-                {<a data-key={index}  
-                className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"> ✖️ </a>}
-              </div>)
-          })}
-          <FormRow value={this.state.tempIngredient.name} title="Name: "
-                    type="text" id="name" placeholder="Chicken breast  " name="name" 
-                    handleChange={this.handleChange}
-                    />
-          <FormRow value={this.state.tempIngredient.servingAmount} title="QT: "
-                    type="number" id="servingAmount" placeholder="500" name="servingAmount"
-                    min="0"
-                    handleChange={this.handleChange}
-                    />
-          <FormRow value={this.state.tempIngredient.servingSize} title="Unit: "
-                    type='text' id='servingSize' placeholder="g" name='servingSize' 
-                    handleChange={this.handleChange}
-                    />
-          
-          
+        <TopBar title="Your Recipes" icon="recipes"/>
+        <div className="pt3 pb5">
+        <h3>These are your existing recipes</h3>
+        <h4>Click the Add button to add the recipe to a Day's diary!</h4>
+        <DateTimeInput date={this.state.date} startTime={this.state.startTime}
+                       handleChange={this.handleChange}
+                       />
+        <DataList data={this.state.foods.map(food =>  {return {...food, count: `You ate this recipe ${food.count} times`}})} img="imgUrl" heading="name" 
+                  subtitle="count" key="_id" dataKey="_id"
+                  handleClick={this.handleClick} 
+                  />
         </div>
         <BottomNavbar />
       </div>

@@ -10,7 +10,6 @@ export default class RepForm extends Component {
       editInterface = <IngrForm {...this.props} 
                       handleChange={this.props.handleChange} 
                       handleSubmit={this.props.handleSingleSubmit}
-                      saveIngr2Rep={this.props.saveIngr2Rep}
                       />    
     } else {
       editInterface = <></>
@@ -21,7 +20,6 @@ export default class RepForm extends Component {
                     handleChange={this.props.handleChange} 
                     handleSubmit={this.props.handleAddSubmit}
                     handleEdit={this.props.handleEdit} 
-                    saveIngr2Rep={this.props.saveIngr2Rep}
                     addNewIngr={this.props.addNewIngr}
                     />
     } else {

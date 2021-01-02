@@ -1,10 +1,4 @@
-import axios from 'axios';
 import React, { Component } from 'react';
-import TopBar from '../../shared/TopBar';
-import BottomNavbar from '../../shared/BottomNavbar';
-import IngrForm from './IngrForm';
-import DateTimeInput from '../helper-components/DateTimeInput'
-import RepForm from './RepForm';
 
 export default class FoodBase extends Component {
   constructor(props) {
@@ -12,7 +6,8 @@ export default class FoodBase extends Component {
     this.state = {
       user: props.user,
       date: props.location.state?.day || new Date().toISOString().split('T')[0],
-      tempStartTime: props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
+      tempStartTime: props.location.state?.element.startTime || 
+                     new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
       tempIngredient: {
         name: "",
         brand: "",
@@ -33,7 +28,6 @@ export default class FoodBase extends Component {
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(name, value);
     if(name==='date') {
       this.setState({
         date: value
@@ -69,5 +63,4 @@ export default class FoodBase extends Component {
       });
     };
   }
-
 }

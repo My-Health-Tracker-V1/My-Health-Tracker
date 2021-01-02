@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { Component } from 'react';
+import React from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import DateTimeInput from '../helper-components/DateTimeInput';
@@ -123,7 +123,7 @@ export default class FoodEntry extends FoodBase {
     .then(res => {
       this.setState({
         recipeQuery: event.target.value,
-        recipes: res.data.hits.map(hit => hit.recipe)
+        recipes: res.data.hits.map(hit => {return {...hit.recipe, healthLabels: hit.recipe.healthLabels[0]}})
       })   
     })
     .catch(err => {

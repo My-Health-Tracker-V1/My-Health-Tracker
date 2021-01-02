@@ -12,11 +12,6 @@ const userSchema = new Schema({
     required: true
   },
   days: [{ type: Schema.Types.ObjectId, ref: 'Day'}],
-  recipes: [{
-    recipeName: String,
-    portion: Number,
-    ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
-  }]
 },
 
 {
