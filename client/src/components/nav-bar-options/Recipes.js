@@ -4,6 +4,7 @@ import BottomNavbar from '../shared/BottomNavbar';
 import TopBar from '../shared/TopBar';
 import DataList from '../add-entries/helper-components/DataList'
 import DateTimeInput from '../add-entries/helper-components/DateTimeInput';
+import Icons from '../shared/Icons';
 
 export default class Recipes extends Component {
   state ={
@@ -94,9 +95,9 @@ export default class Recipes extends Component {
         )}
 
         <TopBar title="Your Recipes" icon="recipes"/>
-        <div className="pt3 pb5">
-        <h3>These are your existing recipes</h3>
-        <h4>Click the Add button to add the recipe to a Day's diary!</h4>
+        <div className="pt3 pb6">
+        <h3><Icons icon="frequent"/>Recipes from the last days...</h3>
+        <p>Add me to your diary agian!</p>
         <DateTimeInput date={this.state.date} startTime={this.state.startTime}
                        handleChange={this.handleChange}
                        />
