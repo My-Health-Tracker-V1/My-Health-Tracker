@@ -30,8 +30,8 @@ export default class RepForm extends Component {
 
     return (
       <div>
-        {this.props.editing ? (<h3 className="f5 db">What did you eat? </h3>) 
-        : (<h3 className="f5 db">Add a Recipe:</h3>)}
+      {this.props.editing ? (<h3 className="f5 db">What did you eat? </h3>)
+       : (<h3 className="f5 db"> Add a recipe </h3>)}
         
         <form onSubmit={this.props.editing? 
                         this.props.editRecipeSubmit : this.props.handleSubmit}>

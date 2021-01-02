@@ -5,69 +5,13 @@ import BottomNavbar from '../../shared/BottomNavbar';
 import IngrForm from './IngrForm';
 import DateTimeInput from '../helper-components/DateTimeInput'
 import RepForm from './RepForm';
+import FoodBase from './FoodBase';
 
-export default class FoodEdit extends Component {
-  state = {
-    user: this.props.user,
-    date: this.props.location.state?.day || new Date().toISOString().split('T')[0],
-    ingredients: [],
-    tempStartTime: this.props.location.state?.element.startTime || new Date().toLocaleTimeString('en-US', { hour12: false }).substring(0,5),
-    tempIngredient: {
-      name: "",
-      brand: "",
-      category: "",
-      servingAmount: "",
-      servingSize: ""
-    },
-    food: this.props.location.state.element,
-    editing: true,
-    add: false,
-    edit: false,
-    tempIngId: '',
-    selectedIngredient: false,
-    handleShowSingle: true,
-    ingredientCount: 0,
-    query: ''
-  }
-
-  handleChange = event => {
-    const name = event.target.name;
-    const value = event.target.value;
-    console.log(name, value);
-    if(name==='date') {
-      this.setState({
-        date: value
-      })} else if(name==='startTime') {
-      this.setState({
-        tempStartTime: value
-      })
-    } else if(name==='recipeName') {
-      const newFood = this.state.food;
-      newFood.name = value;
-      this.setState({
-        food: newFood
-      })
-      console.log(this.state.food);
-    } else if(name==='eatenPortion') {
-      const newFood = this.state.food;
-      newFood.eatenPortion = value;
-      this.setState({
-        food: newFood
-      })
-    } else if(name==='portion') {
-      const newFood = this.state.food;
-      newFood.portion = value;
-      this.setState({
-        food: newFood
-      })
-    } else {
-      const newIngredient = this.state.tempIngredient;
-      newIngredient[name] = value;
-      
-      this.setState({
-        tempIngredient: newIngredient
-      });
-    };
+export default class FoodEdit extends FoodBase {
+  constructor(props) {
+    super(props);
+    this.state.food = props.location.state.element;
+    this.state.editing = true;
   }
 
   editIngrSave = event => {
