@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { FormRow, SelectRow } from '../helper-components/Rows'
 
 export default class DrinkIngrForm extends Component {
+  
   render() {
     const options = ["Alcoholic", "Non-Alcoholic", "Ordinary drink", "Cocktail"]
     return (

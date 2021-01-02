@@ -19,8 +19,6 @@ export default class AddDrinks extends Component {
     category: this.props.location.state?.element.drinks[0].category,
     servingAmount: this.props.location.state?.element.drinks[0].servingAmount,
     servingSize: this.props.location.state?.element.drinks[0].servingSize,
-    // id:this.props.location.state?.drinks._id,
-    // editing:this.props.location.state?.editing,
     drinks:[],
     query: '',
     apiCategory: '',
@@ -44,13 +42,6 @@ export default class AddDrinks extends Component {
     this.getDrinksFromApi("Alcoholic")
   }
 
-  // Functions for search bar
-  setQuery = query => {
-    this.setState({
-      query: query
-    })
-  }
-
   handleQuery = (event) => {
     event?.preventDefault();
     axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${this.state.query}`)
@@ -69,7 +60,6 @@ export default class AddDrinks extends Component {
     event.preventDefault();
     const key = event.target.getAttribute('data-key')
     const clickedDrink = this.state.drinks.find(drink => drink.idDrink === key);
-    console.log(clickedDrink)
     this.setState ({
       name: clickedDrink.strDrink,
     })
