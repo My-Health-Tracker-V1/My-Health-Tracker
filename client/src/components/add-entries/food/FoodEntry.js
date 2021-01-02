@@ -53,7 +53,7 @@ export default class FoodEntry extends FoodBase {
      })
   }
 
-  apiFormat = (apiObj) => {
+  apiFormat = apiObj => {
     return {
       name: apiObj.text,
       servingAmount: apiObj.weight,
@@ -70,7 +70,7 @@ export default class FoodEntry extends FoodBase {
   handleClick = event => {
     event.preventDefault();
     const key = event.target.getAttribute('data-key');
-    this.setState ((state) => {
+    this.setState (state => {
       const clickedIngr = state.ingredients.find(ingredient => ingredient.foodId === key);
       return {tempIngredient: {...state.tempIngredient, 
         name: clickedIngr.label,
@@ -83,7 +83,7 @@ export default class FoodEntry extends FoodBase {
   handleClickRecipe = event => {
     event.preventDefault();
     const key = event.target.getAttribute('data-key')
-    this.setState ((state) => {
+    this.setState (state => {
       const clickedRecipe = state.recipes.find(recipe => recipe.uri === key);
       return {food: {...state.food,
         name: clickedRecipe.label,
@@ -103,12 +103,10 @@ export default class FoodEntry extends FoodBase {
   }
 
 // Handle query
-  handleQuery = (event) => {
+  handleQuery = event => {
     event?.preventDefault();
-    console.log(this.state.query)
     axios.get(`https://api.edamam.com/api/food-database/v2/parser?ingr=${this.state.query}&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`)
     .then(res => {
-      console.log(res.data);
       this.setState({
         query: event.target.value,
         ingredients: res.data.hints.map(hint => hint.food)
@@ -119,12 +117,10 @@ export default class FoodEntry extends FoodBase {
     })
   }
 
-  handleRecipeQuery = (event) => {
+  handleRecipeQuery = event => {
     event?.preventDefault();
-    console.log(this.state.recipeQuery)
     axios.get(`https://api.edamam.com/search?q=${this.state.recipeQuery}&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf`)
     .then(res => {
-      console.log(res.data);
       this.setState({
         recipeQuery: event.target.value,
         recipes: res.data.hits.map(hit => hit.recipe)
@@ -227,9 +223,9 @@ export default class FoodEntry extends FoodBase {
         <TopBar title="Foods" icon="Foods" /> 
         <div className="pt3 pb6">
           <DateTimeInput startTime={this.state.tempStartTime} 
-                          date={this.state.date}
-                          handleChange={this.handleChange} 
-                        />
+                         date={this.state.date}
+                         handleChange={this.handleChange} 
+                         />
         
           <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
                   onClick={this.toggleSingle} > + Add a single food 
@@ -244,7 +240,7 @@ export default class FoodEntry extends FoodBase {
             { formComponent }
           </div>
         </div>
-        <BottomNavbar {...this.state} />
+        <BottomNavbar />
       </div>
     )
   }
