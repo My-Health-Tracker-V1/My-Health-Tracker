@@ -150,40 +150,43 @@ export default class FoodEntry extends FoodBase {
     this.setState(state => {
       return {food: {...state.food,
                       ingredients: [state.tempIngredient],
-                      name: state.tempIngredient.name,
+                      name: this.capitalizeFirstLetter(state.tempIngredient.name),
                       portion: 1,
                       eatenPortion: 1,
                       startTime: state.tempStartTime}
               }
-    })
-    const payload = {
-      user: this.state.user,
-      date: this.state.date,
-      food: this.state.food
-    };
-    axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
-      .then(() => {
-        this.props.history.push("/dashboard")
-      })
-      .catch(err => console.log(err))
+    }, () => {
+      const payload = {
+        user: this.state.user,
+        date: this.state.date,
+        food: this.state.food
+      };
+      axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
+        .then(() => {
+          this.props.history.push("/dashboard")
+        })
+        .catch(err => console.log(err))})
   }
 
 // Submit Recipe form
   handleRecipeSubmit = event => {
     event.preventDefault();
     this.setState(state => {
-      return {food: {...state.food, startTime: state.tempStartTime}}
+      return {food: {...state.food,
+              name: this.capitalizeFirstLetter(state.food.name),
+              startTime: state.tempStartTime}}
+    }, () => {
+      const payload = {
+        user: this.state.user,
+        date: this.state.date,
+        food: this.state.food
+      };
+      axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
+        .then(() => {
+          this.props.history.push("/dashboard")
+        })
+        .catch(err => console.log(err))
     });
-    const payload = {
-      user: this.state.user,
-      date: this.state.date,
-      food: this.state.food
-    };
-    axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
-      .then(() => {
-        this.props.history.push("/dashboard")
-      })
-      .catch(err => console.log(err))
   }
   
   render() {
@@ -226,7 +229,6 @@ export default class FoodEntry extends FoodBase {
                          date={this.state.date}
                          handleChange={this.handleChange} 
                          />
-        
           <button className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
                   onClick={this.toggleSingle} > + Add a single food 
                   </button>

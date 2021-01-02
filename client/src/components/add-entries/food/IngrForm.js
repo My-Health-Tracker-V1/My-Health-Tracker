@@ -3,6 +3,14 @@ import { FormRow }from '../helper-components/Rows'
 
 export default class IngrForm extends Component {
 
+  capitalizeFirstLetter = string => {
+    const splitStr = string.toLowerCase().split(' ');
+    for(let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    return splitStr.join(' ')
+  }
+
   render() {
     
     return (
@@ -11,7 +19,7 @@ export default class IngrForm extends Component {
             <div>
                 <form>
                   <div className="custom-ingredient">
-                    <FormRow value={this.props.tempIngredient.name} title="Name: "
+                    <FormRow value={this.capitalizeFirstLetter(this.props.tempIngredient.name)} title="Name: "
                              type="text" id="name" placeholder="e.g. Apple" name="name" 
                              handleChange={this.props.handleChange}/>
                     <FormRow value={this.props.tempIngredient.brand} title="Brand: "

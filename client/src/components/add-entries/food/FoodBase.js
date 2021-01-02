@@ -25,9 +25,18 @@ export default class FoodBase extends Component {
     }
   }
 
+  capitalizeFirstLetter = string => {
+    const splitStr = string.toLowerCase().split(' ');
+    for(let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    return splitStr.join(' ')
+  }
+
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
+    console.log(name, value);
     if(name==='date') {
       this.setState({
         date: value
@@ -41,7 +50,7 @@ export default class FoodBase extends Component {
       this.setState({
         food: newFood
       })
-      console.log(this.state.food);
+      
     } else if(name==='eatenPortion') {
       const newFood = this.state.food;
       newFood.eatenPortion = value;
@@ -57,7 +66,6 @@ export default class FoodBase extends Component {
     } else {
       const newIngredient = this.state.tempIngredient;
       newIngredient[name] = value;
-      
       this.setState({
         tempIngredient: newIngredient
       });

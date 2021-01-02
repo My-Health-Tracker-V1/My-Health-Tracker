@@ -4,6 +4,14 @@ import { FormRow } from '../helper-components/Rows'
 
 export default class RepForm extends Component {
 
+  capitalizeFirstLetter = string => {
+    const splitStr = string.toLowerCase().split(' ');
+    for(let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    return splitStr.join(' ')
+  }
+
   render() {
     let editInterface;
     if(this.props.edit === true) {
@@ -33,7 +41,7 @@ export default class RepForm extends Component {
         
         <form onSubmit={this.props.editing? 
                         this.props.editRecipeSubmit : this.props.handleSubmit}>
-          <FormRow value={this.props.food.name} title={this.props.editing ? ("Food Name: "): ("Recipe Name: ")}
+          <FormRow value={this.capitalizeFirstLetter(this.props.food.name)} title={this.props.editing ? ("Food Name: "): ("Recipe Name: ")}
                    type="text" id="recipeName" name="recipeName"
                    handleChange={this.props.handleChange}/>
           <FormRow value={this.props.food.portion} title="Yield"

@@ -97,7 +97,7 @@ export default class Recipes extends Component {
         <TopBar title="Your Recipes" icon="recipes"/>
         <div className="pt3 pb6">
         <h3><Icons icon="frequent"/>Recipes from the last days...</h3>
-        <p>Add me to your diary agian!</p>
+        <p>👇 Add me to your diary agian!  </p>
         <DateTimeInput date={this.state.date} startTime={this.state.startTime}
                        handleChange={this.handleChange}
                        />
