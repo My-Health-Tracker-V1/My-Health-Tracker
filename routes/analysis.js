@@ -4,193 +4,135 @@ const router = express.Router();
 const Day = require('../models/Day');
 
 
-const userOptions = (input,days) =>{
+const getOutcomeData = async (owner,event) => {
 
-  const userOptions=[];
+  try {
 
-  const daysWithInput = days.filter(day=>day[input].length>0);
+    let outcomeData={"name":"","data":{}};
 
-  if(daysWithInput.length>0){
+    if(event==="Energy"){
+      outcomeData["name"]="Energy";
+      const daysWithEnergy= await Day.find({$and:[{owner: owner},{energy:{$exists:true}}]});
+      daysWithEnergy.forEach(day=>{
+        outcomeData["data"][day.date]=day.energy.energyLevel+'';
+      });
+    }else{
+      outcomeData["name"]=event;
+      const daysWithSymptom= await Day.find({$and:[{owner: owner},{"symptoms.name":event}]});
+      daysWithSymptom.forEach(day=>{
+        const symptom= day.symptoms.find(symptom=>symptom.name===event);
+        outcomeData["data"][day.date]=symptom.intensity+'';
+      });
+    }
+    return outcomeData;
 
-    daysWithInput.forEach(day=>
-      day[input].forEach(
-        inputElement=>{
-          if(!userOptions.includes(inputElement.name))
-          userOptions.push(inputElement.name)}))
+  }
+  catch(err){
+
+    return err;
+
   }
 
-  return userOptions;
 }
 
-const getDataFromDay=(day,event,specificEvent)=>{
-  
-  switch(event){
+const getEventData = async (owner,event,specificEvent) => {
 
-    case "Sleep":
-        return day.sleep[0].duration+''
+  try{
 
-    case "Exercise":
-        let totalDuration=0;
-        if(day.exercises.length>0){
-          if(specificEvent.substring(0,3)==="All"){
-            day.exercises.forEach(exercise=>totalDuration+=exercise.duration);
-          }else{
+    let eventData={"name":event,"data":{}};
+
+    switch(event){
+
+      case ("Sleep") :
+        const daysWithSleep= await Day.find({$and:[{owner: owner},{"sleep.duration":{$exists:true}}]})
+        daysWithSleep.forEach(day=>{
+          eventData["data"][day.date]=day.sleep[0].duration+"";
+        })
+        break;
+
+      case ("Foods") :
+        if(specificEvent.substring(0,3)==="All"){
+
+          const daysWithAnyFood = await Day.find({$and:[{owner: owner},{"foods.name":{$exists:true}}]})
+          daysWithAnyFood.forEach(day=>{
+            day.foods.forEach(food=>{
+              !eventData["data"][day.date] ? eventData["data"][day.date]=food.eatenPortion : eventData["data"][day.date]+=food.eatenPortion
+            })
+            eventData["data"][day.date]+=""
+          })
+
+        }else{
+          eventData["name"]=specificEvent;
+          const daysWithFood = await Day.find({$and:[{owner: owner},{"foods.name":specificEvent}]});
+          daysWithFood.forEach(day=>{
+            const food=day.foods.find(food=>food.name===specificEvent)
+            eventData["data"][day.date]=food.eatenPortion+"";
+          })
+
+        }
+        break;
+
+      case ("Drinks") :
+        if(specificEvent.substring(0,3)==="All"){
+
+          const daysWithAnyDrink = await Day.find({$and:[{owner: owner},{"drinks.name":{$exists:true}}]})
+          daysWithAnyDrink.forEach(day=>{
+            day.drinks.forEach(drink=>{
+              !eventData["data"][day.date] ? eventData["data"][day.date]=drink.servingAmount : eventData["data"][day.date]+=drink.servingAmount
+            })
+            eventData["data"][day.date]+=""
+          })
+
+        }else{
+          eventData["name"]=specificEvent;
+          const daysWithDrink = await Day.find({$and:[{owner: owner},{"drinks.name":specificEvent}]});
+          daysWithDrink.forEach(day=>{
+            const drink=day.drinks.find(drink=>drink.name===specificEvent)
+            eventData["data"][day.date]=drink.servingAmount+"";
+          })
+
+        }
+        break;
+      
+      case ("Exercise") :
+        if(specificEvent.substring(0,3)==="All"){
+
+          const daysWithAnyExercise = await Day.find({$and:[{owner: owner},{"exercises.name":{$exists:true}}]})
+          daysWithAnyExercise.forEach(day=>{
             day.exercises.forEach(exercise=>{
-              console.log(day.date,exercise.name,exercise.duration)
-              if (exercise.name===specificEvent)
-              totalDuration+=exercise.duration} );
-          }
-        }else
-          totalDuration=''
-        return totalDuration+'';
+              !eventData["data"][day.date] ? eventData["data"][day.date]=exercise.duration : eventData["data"][day.date]+=exercise.duration
+            })
+            eventData["data"][day.date]+=""
+          })
 
-    case "Foods":
-      let totalFoodConsumption=0;
-      if(day.foods.length>0){
-        if(specificEvent.substring(0,3)==="All"){
-          day.foods.forEach(food=>totalFoodConsumption+=food.eatenPortion);
         }else{
-          day.foods.forEach(food=>{
-            if (food.name===specificEvent)
-            totalFoodConsumption+=food.eatenPortion} );
+          eventData["name"]=specificEvent;
+          const daysWithExercise = await Day.find({$and:[{owner: owner},{"exercises.name":specificEvent}]});
+          daysWithExercise.forEach(day=>{
+            const exercise=day.exercises.find(exercise=>exercise.name===specificEvent)
+            eventData["data"][day.date]=exercise.duration+"";
+          })
+
         }
-      }else
-        totalFoodConsumption='';
-      return totalFoodConsumption+'';
+        break;
+      
+      default:
+    }
 
-    case "Drinks":
-      let totalDrinkConsumption=0;
-      if(day.drinks.length>0){
-        if(specificEvent.substring(0,3)==="All"){
-          day.drinks.forEach(drink=>totalDrinkConsumption+=drink.servingAmount);
-        }else{
-          day.drinks.forEach(drink=>{
-            if (drink.name===specificEvent)
-            totalDrinkConsumption+=drink.servingAmount} );
-        }
-      }else
-        totalDrinkConsumption=''
-      return totalDrinkConsumption+'';
+    return eventData;
 
-    default:
+  }
+  catch(err){
+
+    return err;
 
   }
 
 }
 
-const getOutcomeData= async (owner,event)=>{
-
-  let outcomeData={"name":"","data":{}};
-
-  if(event==="Energy"){
-    outcomeData["name"]="Energy";
-    const daysWithEnergy= await Day.find({$and:[{owner: owner},{energy:{$exists:true}}]});
-    daysWithEnergy.forEach(day=>{
-      outcomeData["data"][day.date]=day.energy.energyLevel+'';
-    });
-  }else{
-    outcomeData["name"]=event;
-    const daysWithSymptom= await Day.find({$and:[{owner: owner},{"symptoms.name":event}]});
-    daysWithSymptom.forEach(day=>{
-      const symptom= day.symptoms.find(symptom=>symptom.name===event);
-      outcomeData["data"][day.date]=symptom.intensity+'';
-    });
-  }
-  return outcomeData;
-
-}
-
-const getEventData= async (owner,event,specificEvent)=>{
-
-  let eventData={"name":event,"data":{}};
-
-  switch(event){
-
-    case ("Sleep") :
-      const daysWithSleep= await Day.find({$and:[{owner: owner},{"sleep.duration":{$exists:true}}]})
-      daysWithSleep.forEach(day=>{
-        eventData["data"][day.date]=day.sleep[0].duration+"";
-      })
-      break;
-
-    case ("Foods") :
-      if(specificEvent.substring(0,3)==="All"){
-
-        const daysWithAnyFood = await Day.find({$and:[{owner: owner},{"foods.name":{$exists:true}}]})
-        daysWithAnyFood.forEach(day=>{
-          day.foods.forEach(food=>{
-            !eventData["data"][day.date] ? eventData["data"][day.date]=food.eatenPortion : eventData["data"][day.date]+=food.eatenPortion
-          })
-          eventData["data"][day.date]+=""
-        })
-
-      }else{
-        eventData["name"]=specificEvent;
-        const daysWithFood = await Day.find({$and:[{owner: owner},{"foods.name":specificEvent}]});
-        daysWithFood.forEach(day=>{
-          const food=day.foods.find(food=>food.name===specificEvent)
-          eventData["data"][day.date]=food.eatenPortion+"";
-        })
-
-      }
-      break;
-
-    case ("Drinks") :
-      if(specificEvent.substring(0,3)==="All"){
-
-        const daysWithAnyDrink = await Day.find({$and:[{owner: owner},{"drinks.name":{$exists:true}}]})
-        daysWithAnyDrink.forEach(day=>{
-          day.drinks.forEach(drink=>{
-            !eventData["data"][day.date] ? eventData["data"][day.date]=drink.servingAmount : eventData["data"][day.date]+=drink.servingAmount
-          })
-          eventData["data"][day.date]+=""
-        })
-
-      }else{
-        eventData["name"]=specificEvent;
-        const daysWithDrink = await Day.find({$and:[{owner: owner},{"drinks.name":specificEvent}]});
-        daysWithDrink.forEach(day=>{
-          const drink=day.drinks.find(drink=>drink.name===specificEvent)
-          eventData["data"][day.date]=drink.servingAmount+"";
-        })
-
-      }
-      break;
-    
-    case ("Exercise") :
-      if(specificEvent.substring(0,3)==="All"){
-
-        const daysWithAnyExercise = await Day.find({$and:[{owner: owner},{"exercises.name":{$exists:true}}]})
-        daysWithAnyExercise.forEach(day=>{
-          day.exercises.forEach(exercise=>{
-            !eventData["data"][day.date] ? eventData["data"][day.date]=exercise.duration : eventData["data"][day.date]+=exercise.duration
-          })
-          eventData["data"][day.date]+=""
-        })
-
-      }else{
-        eventData["name"]=specificEvent;
-        const daysWithExercise = await Day.find({$and:[{owner: owner},{"drinks.name":specificEvent}]});
-        daysWithExercise.forEach(day=>{
-          const exercise=day.exercises.find(exercise=>exercise.name===specificEvent)
-          eventData["data"][day.date]=exercise.duration+"";
-        })
-
-      }
-      break;
-    
-    default:
-  }
-
-  return eventData;
-
-}
-
-router.get('/user/:id/options',(req,res,next)=>{
+router.get('/user/:id/options',(req,res,next) => {
   Day.find({owner: req.params.id})
     .then(days=>{
-    
-      //const userOutcomes=[...userOptions('symptoms',days)];
 
       const userOutcomes=[];
     
@@ -205,7 +147,7 @@ router.get('/user/:id/options',(req,res,next)=>{
               userOutcomes.push(symptom.name)}))
       }
 
-      userOutcomes.sort().unshift("Choose an option");
+      userOutcomes.sort().unshift("Select");
 
       const daysWithEnergy = days.filter(day=>typeof day.energy.energyLevel==='number');
 
@@ -228,7 +170,7 @@ router.get('/user/:id/options',(req,res,next)=>{
               userExercises.push(exercise.name)
             }));
         
-        userExercises.sort().unshift("Choose an option","All exercises");
+        userExercises.sort().unshift("Select","All exercises");
       }
       
 
@@ -263,7 +205,7 @@ router.get('/user/:id/options',(req,res,next)=>{
            )
          )
       
-        userFoods.sort().unshift("Choose an option","All Foods");   
+        userFoods.sort().unshift("Select","All Foods");   
         
       }
 
@@ -289,10 +231,10 @@ router.get('/user/:id/options',(req,res,next)=>{
              }
            )
          )
-      userDrinks.sort().unshift("Choose an option","All Drinks");   
+      userDrinks.sort().unshift("Select","All Drinks");   
     }
 
-    userEvents.sort().unshift("Choose an option");   
+    userEvents.sort().unshift("Select");   
 
     res.json({
       userOutcomes:userOutcomes,
@@ -306,7 +248,7 @@ router.get('/user/:id/options',(req,res,next)=>{
     .catch(err => res.json(err))
   })
 
-router.get('/user/:id/selected-data/:outcome/:event/:specificEvent', async(req,res,next)=>{
+router.get('/user/:id/selected-data/:outcome/:event/:specificEvent', async (req,res,next) => {
 
   const dataArr=[];
   try{
@@ -317,32 +259,6 @@ router.get('/user/:id/selected-data/:outcome/:event/:specificEvent', async(req,r
   catch (err){
     res.json(err);
   }
-  
- 
-  //  if(req.params.outcome==='Energy'){
-     
-  //    Day.find({$and:[{owner: req.params.id},{energy:{$exists:true}}]})
-  //    .then(async days=>{
-  //      const dataArr=[{"name":"Energy","data":{}},{"name":"","data":{}}];
-  //     days.forEach(day=>{
-  //       dataArr[0]["data"][day.date]=day.energy.energyLevel+'';
-  //     });
-  //      dataArr[1]= await getEventData(req.params.id,req.params.event,req.params.specificEvent);
-  //     console.log('in router',dataArr)
-  //     res.json(dataArr)
-      
-  //   })
-  //   .catch(err=>res.json(err))
-    
-  // }else{
-  //   Day.find({$and:[{owner: req.params.id},{symptoms: {name:req.params.outcome}}]})
-  //   .then(days=>{
-  //     console.log(days)
-  //   })
-  //   .catch(err=>res.json(err))
-  // }
-
-  
  })
 
 
