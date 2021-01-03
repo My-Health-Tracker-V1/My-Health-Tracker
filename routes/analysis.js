@@ -136,6 +136,26 @@ const getEventData= async (owner,event,specificEvent)=>{
       break;
 
     case ("Drinks") :
+      if(specificEvent.substring(0,3)==="All"){
+
+        const daysWithAnyDrink = await Day.find({$and:[{owner: owner},{"drinks.name":{$exists:true}}]})
+        daysWithAnyDrink.forEach(day=>{
+          day.drinks.forEach(drink=>{
+            !eventData["data"][day.date] ? eventData["data"][day.date]=drink.servingAmount : eventData["data"][day.date]+=drink.servingAmount
+          })
+          eventData["data"][day.date]+=""
+        })
+
+      }else{
+
+        const daysWithDrink = await Day.find({$and:[{owner: owner},{"drinks.name":specificEvent}]});
+        daysWithDrink.forEach(day=>{
+          const drink=day.drinks.find(drink=>drink.name===specificEvent)
+          eventData["data"][day.date]=drink.servingAmount+"";
+        })
+
+      }
+      break;
     
     case ("Exercise") :
       
