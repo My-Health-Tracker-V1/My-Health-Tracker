@@ -125,7 +125,7 @@ const getEventData= async (owner,event,specificEvent)=>{
         })
 
       }else{
-
+        eventData["name"]=specificEvent;
         const daysWithFood = await Day.find({$and:[{owner: owner},{"foods.name":specificEvent}]});
         daysWithFood.forEach(day=>{
           const food=day.foods.find(food=>food.name===specificEvent)
@@ -147,7 +147,7 @@ const getEventData= async (owner,event,specificEvent)=>{
         })
 
       }else{
-
+        eventData["name"]=specificEvent;
         const daysWithDrink = await Day.find({$and:[{owner: owner},{"drinks.name":specificEvent}]});
         daysWithDrink.forEach(day=>{
           const drink=day.drinks.find(drink=>drink.name===specificEvent)
@@ -158,12 +158,32 @@ const getEventData= async (owner,event,specificEvent)=>{
       break;
     
     case ("Exercise") :
-      
+      if(specificEvent.substring(0,3)==="All"){
+
+        const daysWithAnyExercise = await Day.find({$and:[{owner: owner},{"exercises.name":{$exists:true}}]})
+        daysWithAnyExercise.forEach(day=>{
+          day.exercises.forEach(exercise=>{
+            !eventData["data"][day.date] ? eventData["data"][day.date]=exercise.duration : eventData["data"][day.date]+=exercise.duration
+          })
+          eventData["data"][day.date]+=""
+        })
+
+      }else{
+        eventData["name"]=specificEvent;
+        const daysWithExercise = await Day.find({$and:[{owner: owner},{"drinks.name":specificEvent}]});
+        daysWithExercise.forEach(day=>{
+          const exercise=day.exercises.find(exercise=>exercise.name===specificEvent)
+          eventData["data"][day.date]=exercise.duration+"";
+        })
+
+      }
       break;
+    
     default:
   }
-  //console.log('returning event data',eventData)
+
   return eventData;
+
 }
 
 router.get('/user/:id/options',(req,res,next)=>{
