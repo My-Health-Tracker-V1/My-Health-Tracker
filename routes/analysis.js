@@ -97,20 +97,47 @@ const getOutcomeData= async (owner,event)=>{
     });
   }
   return outcomeData;
+
 }
 
 const getEventData= async (owner,event,specificEvent)=>{
-  let eventData={"name":"","data":{}};
+
+  let eventData={"name":event,"data":{}};
+
   switch(event){
-    case("Sleep"):
-      eventData["name"]="Sleep";
+
+    case ("Sleep") :
       const daysWithSleep= await Day.find({$and:[{owner: owner},{"sleep.duration":{$exists:true}}]})
       daysWithSleep.forEach(day=>{
         eventData["data"][day.date]=day.sleep[0].duration+"";
-        
       })
-      //console.log(eventData)
-        
+      break;
+
+    case ("Foods") :
+      if(specificEvent.substring(0,3)==="All"){
+
+        const daysWithAnyFood = await Day.find({$and:[{owner: owner},{"foods.name":{$exists:true}}]})
+        daysWithAnyFood.forEach(day=>{
+          day.foods.forEach(food=>{
+            !eventData["data"][day.date] ? eventData["data"][day.date]=food.eatenPortion : eventData["data"][day.date]+=food.eatenPortion
+          })
+          eventData["data"][day.date]+=""
+        })
+
+      }else{
+
+        const daysWithFood = await Day.find({$and:[{owner: owner},{"foods.name":specificEvent}]});
+        daysWithFood.forEach(day=>{
+          const food=day.foods.find(food=>food.name===specificEvent)
+          eventData["data"][day.date]=food.eatenPortion+"";
+        })
+
+      }
+      break;
+
+    case ("Drinks") :
+    
+    case ("Exercise") :
       
       break;
     default:
