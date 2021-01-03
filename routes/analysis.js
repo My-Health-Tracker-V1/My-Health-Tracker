@@ -90,9 +90,10 @@ const getOutcomeData= async (owner,event)=>{
     });
   }else{
     outcomeData["name"]=event;
-    const daysWithEvent= await Day.find({$and:[{owner: owner},{"symptoms.name":event}]});
-    daysWithEvent.forEach(day=>{
-      outcomeData["data"][day.date]=day.symptom.energyLevel+'';
+    const daysWithSymptom= await Day.find({$and:[{owner: owner},{"symptoms.name":event}]});
+    daysWithSymptom.forEach(day=>{
+      const symptom= day.symptoms.find(symptom=>symptom.name===event);
+      outcomeData["data"][day.date]=symptom.intensity+'';
     });
   }
   return outcomeData;
