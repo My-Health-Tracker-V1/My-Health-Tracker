@@ -48,11 +48,11 @@ const getDataFromDay=(day,event,specificEvent)=>{
       let totalFoodConsumption=0;
       if(day.foods.length>0){
         if(specificEvent.substring(0,3)==="All"){
-          day.foods.forEach(food=>totalFoodConsumption+=food.eatenPortions);
+          day.foods.forEach(food=>totalFoodConsumption+=food.eatenPortion);
         }else{
           day.foods.forEach(food=>{
             if (food.name===specificEvent)
-            totalFoodConsumption+=food.eatenPortions} );
+            totalFoodConsumption+=food.eatenPortion} );
         }
       }else
         totalFoodConsumption='';
@@ -76,6 +76,46 @@ const getDataFromDay=(day,event,specificEvent)=>{
 
   }
 
+}
+
+const getOutcomeData= async (owner,event)=>{
+
+  let outcomeData={"name":"","data":{}};
+
+  if(event==="Energy"){
+    outcomeData["name"]="Energy";
+    const daysWithEnergy= await Day.find({$and:[{owner: owner},{energy:{$exists:true}}]});
+    daysWithEnergy.forEach(day=>{
+      outcomeData["data"][day.date]=day.energy.energyLevel+'';
+    });
+  }else{
+    outcomeData["name"]=event;
+    const daysWithEvent= await Day.find({$and:[{owner: owner},{"symptoms.name":event}]});
+    daysWithEvent.forEach(day=>{
+      outcomeData["data"][day.date]=day.symptom.energyLevel+'';
+    });
+  }
+  return outcomeData;
+}
+
+const getEventData= async (owner,event,specificEvent)=>{
+  let eventData={"name":"","data":{}};
+  switch(event){
+    case("Sleep"):
+      eventData["name"]="Sleep";
+      const daysWithSleep= await Day.find({$and:[{owner: owner},{"sleep.duration":{$exists:true}}]})
+      daysWithSleep.forEach(day=>{
+        eventData["data"][day.date]=day.sleep[0].duration+"";
+        
+      })
+      //console.log(eventData)
+        
+      
+      break;
+    default:
+  }
+  //console.log('returning event data',eventData)
+  return eventData;
 }
 
 router.get('/user/:id/options',(req,res,next)=>{
@@ -198,30 +238,42 @@ router.get('/user/:id/options',(req,res,next)=>{
     .catch(err => res.json(err))
   })
 
- router.get('/user/:id/selected-data/:outcome/:event/:specificEvent',(req,res,next)=>{
-  
-  if(req.params.outcome==='Energy'){
-    
-    Day.find({$and:[{owner: req.params.id},{energy:{$exists:true}}]})
-    .then(days=>{
-      const dataArr=[{"name":"Energy","data":{}},{"name":req.params.specificEvent, "data":{}}];
-      days.forEach(day=>{
-        dataArr[0]["data"][day.date]=day.energy.energyLevel+'';
-        //console.log(day.date,getDataFromDay(day,req.params.event,req.params.specificEvent))
-        if(getDataFromDay(day,req.params.event,req.params.specificEvent))
-          dataArr[1]["data"][day.date]=getDataFromDay(day,req.params.event,req.params.specificEvent);
-      });
-      res.json(dataArr)
-    })
-    .catch(err=>res.json(err))
+router.get('/user/:id/selected-data/:outcome/:event/:specificEvent', async(req,res,next)=>{
 
-  }else{
-    Day.find({$and:[{owner: req.params.id},{symptoms: {name:req.params.outcome}}]})
-    .then(days=>{
-      console.log(days)
-    })
-    .catch(err=>res.json(err))
+  const dataArr=[];
+  try{
+    dataArr[0]= await getOutcomeData(req.params.id,req.params.outcome);
+    dataArr[1]= await getEventData(req.params.id,req.params.event,req.params.specificEvent);
+    res.json(dataArr);
   }
+  catch (err){
+    res.json(err);
+  }
+  
+ 
+  //  if(req.params.outcome==='Energy'){
+     
+  //    Day.find({$and:[{owner: req.params.id},{energy:{$exists:true}}]})
+  //    .then(async days=>{
+  //      const dataArr=[{"name":"Energy","data":{}},{"name":"","data":{}}];
+  //     days.forEach(day=>{
+  //       dataArr[0]["data"][day.date]=day.energy.energyLevel+'';
+  //     });
+  //      dataArr[1]= await getEventData(req.params.id,req.params.event,req.params.specificEvent);
+  //     console.log('in router',dataArr)
+  //     res.json(dataArr)
+      
+  //   })
+  //   .catch(err=>res.json(err))
+    
+  // }else{
+  //   Day.find({$and:[{owner: req.params.id},{symptoms: {name:req.params.outcome}}]})
+  //   .then(days=>{
+  //     console.log(days)
+  //   })
+  //   .catch(err=>res.json(err))
+  // }
+
   
  })
 
