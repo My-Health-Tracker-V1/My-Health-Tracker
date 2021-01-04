@@ -87,10 +87,10 @@ router.put('/:id', (req, res, next) => {
 
   User.findByIdAndUpdate(req.params.id,update,{ new: true })
     .then(() => {
-      res.json({ message: `User profile with ${req.params.id} was successfully updated.` });
+      res.json({ message: `Your profile was successfully updated!` });
     })
     .catch(err => {
-      res.json(err);
+      res.json({ errorMessage: err.message });
     })
 });
 
@@ -102,7 +102,7 @@ router.delete('/:id', (req, res, next) => {
 
   User.findByIdAndDelete(req.params.id)
     .then(() => {
-      res.status(200).json({ message: `Project with ${req.params.id} is removed successfully.` });
+      res.status(200).json({ message: `${req.params.id} is removed successfully.` });
     })
     .catch(err => {
       res.json(err);
