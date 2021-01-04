@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 export default class FoodBase extends Component {
   constructor(props) {
@@ -36,7 +36,6 @@ export default class FoodBase extends Component {
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(name, value);
     if(name==='date') {
       this.setState({
         date: value

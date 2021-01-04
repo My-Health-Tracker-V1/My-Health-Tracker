@@ -4,13 +4,10 @@ const router = express.Router();
 const Day = require('../models/Day');
 const User = require('../models/User');
 
- 
 router.post('/user/:id/day/:date', (req, res) => {
   const { date, startTime, name, category, servingAmount, servingSize } = req.body;
-  console.log('this is req.params.id', req.params)
   Day.findOne({$and: [{owner: req.params.id}, {date: req.params.date}]})
     .then (day => {
-      console.log('this is the day', day)
       if(day !== null) {
         Day.findByIdAndUpdate(day._id,
           { $push: {"drinks": 
@@ -54,7 +51,6 @@ router.put('/user/:userId/day/:date/:drinkId/delete', (req, res, next) => {
   .then(dbDay => {
     const newDrinks = dbDay.drinks.filter(drink => 
       drink.id !== req.params.drinkId);
-    console.log(newDrinks);
     Day.findOneAndUpdate({$and: [{owner: req.params.userId}, 
                                  {date: req.params.date}]},
                         {drinks: newDrinks}, {new: true})
@@ -70,7 +66,6 @@ router.put('/user/:userId/day/:date/:drinkId/edit', (req, res, next) => {
   Day.findOne({$and: [{owner: req.params.userId}, 
     {date: req.params.date}]})
     .then(dbDay => {
-      console.log(dbDay);
       const newDrinks = dbDay.drinks;
       const changedIdx = newDrinks.findIndex(drink => drink.id == req.params.drinkId);
       newDrinks[changedIdx].startTime = drink.startTime;

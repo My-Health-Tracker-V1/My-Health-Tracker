@@ -9,20 +9,19 @@ router.post('/signup', (req, res, next) => {
   const { email, password } = req.body;
 
   if (password.length < 8) {
-    return res.status(400).json({ message: 'Your password must be 8 chars minimum' });
+    return res.status(400).json({ message: 'The password must be 8 characters long' });
   }
   if (email === '') {
-    return res.status(400).json({ message: 'Your email cannot be empty' });
+    return res.status(400).json({ message: 'The email cannot be empty' });
   }
   
   User.findOne({ email: email })
     .then(found => {
       if (found !== null) {
-        return res.status(400).json({ message: 'Your email is already taken' });
+        return res.status(400).json({ message: 'The email is already taken' });
       } else {
         const salt = bcrypt.genSaltSync();
         const hash = bcrypt.hashSync(password, salt);
-
         User.create({
           email: email,
           password: hash,

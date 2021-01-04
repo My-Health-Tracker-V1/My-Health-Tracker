@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { Component } from 'react';
+import React from 'react';
 import TopBar from '../../shared/TopBar';
 import BottomNavbar from '../../shared/BottomNavbar';
 import DateTimeInput from '../helper-components/DateTimeInput'

@@ -26,9 +26,9 @@ export default class DrinkIngrForm extends Component {
             </form>
             <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
               <div>
-              {this.props.editing && <a onClick={this.props.handleDeleteDrink} 
+              {this.props.editing && <button onClick={this.props.handleDeleteDrink} 
               data-key={this.props.drink._id} className="f6 link dim br-pill ba bw1 ph2 mt3 pv2 mb4 mr2 dib dark-blue">
-              ✖️ Delete Drink</a>}
+              ✖️ Delete Drink</button>}
               </div>
               <form onSubmit={this.props.editing? 
                 this.props.handleEditDrink : this.props.handleSubmit}>

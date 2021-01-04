@@ -387,7 +387,6 @@ const users = [
     for (let i = 0; i < user.days.length; i++) {
       user.days[i] = await daysLoop(user.days[i]);
     }
-    console.log(user);
     await User.create(user);
   })
    

@@ -27,10 +27,15 @@ export default class FoodEntry extends FoodBase {
   }
 
 // API
+
+  componentDidMount = () => {
+    this.getIngredientsFromEdamam();
+    this.getRecipeFromEdamam()
+  }
+
   getIngredientsFromEdamam = () => {
     axios.get(`https://api.edamam.com/api/food-database/v2/parser?ingr=apple&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`)
      .then(res => {
-       console.log(res.data);
        this.setState({
          ingredients: res.data.hints.map(hint => hint.food)
        })   
@@ -43,7 +48,6 @@ export default class FoodEntry extends FoodBase {
   getRecipeFromEdamam = () => {
     axios.get("https://api.edamam.com/search?q=chicken&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf")
      .then(res => {
-       console.log(res.data);
        this.setState({
          recipes: res.data.hits.map(hit => {return {...hit.recipe, healthLabels: hit.recipe.healthLabels[0]}})
        })
@@ -61,10 +65,7 @@ export default class FoodEntry extends FoodBase {
     }
   }
 
-  componentDidMount = () => {
-    this.getIngredientsFromEdamam();
-    this.getRecipeFromEdamam()
-  }
+  
 
 // populate ingredient data to ingredient form
   handleClick = event => {

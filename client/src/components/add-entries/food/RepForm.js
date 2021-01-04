@@ -55,24 +55,24 @@ export default class RepForm extends Component {
         <div style={{padding: "20px 0 5px 0"}}>
           { this.props.food.ingredients.map((ingr, index) => {
             return (
-              <div>
-                <a onClick={this.props.editing? this.props.toggleEditIngr : ()=>{}} data-key={index} 
-                className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green">{ingr.name}</a>
-                {this.props.editing && <a onClick={this.props.handleDeleteIngredient} data-key={index}  
-                className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"> ✖️ </a>}
+              <div key={ingr._id}>
+                <button onClick={this.props.editing? this.props.toggleEditIngr : ()=>{}} key={ingr._id} data-key={index} 
+                className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green">{ingr.name}</button>
+                {this.props.editing && <button onClick={this.props.handleDeleteIngredient} data-key={index}  
+                className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"> ✖️ </button>}
               </div>)
           })}
         </div>
 
-          {this.props.editing && <a onClick={this.props.toggleAddIngr} 
-          className="f7 link dim br4 ba ph2 pv1 mb3 dib dark-green"> ➕ Add a new ingredient</a>}
+          {this.props.editing && <button onClick={this.props.toggleAddIngr} 
+          className="f7 link dim br4 ba ph2 pv1 mb3 dib dark-green"> ➕ Add a new ingredient</button>}
           {editInterface}
           {addInterface}
           <div style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
             <div>
-              {this.props.editing && <a onClick={this.props.handleDeleteFood} 
+              {this.props.editing && <button onClick={this.props.handleDeleteFood} 
               data-key={this.props.food._id} className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue">
-              ✖️ Delete Food</a>}
+              ✖️ Delete Food</button>}
             </div>
             <form onSubmit={this.props.editing? 
                           this.props.editRecipeSubmit : this.props.handleSubmit}>

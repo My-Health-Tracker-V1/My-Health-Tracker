@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { signup } from '../../services/auth';
-import TopBar from '../shared/TopBar'
+import TopBar from '../shared/TopBar';
+import AuthForm from '../auth/AuthForm'
 
 
 export default class Signup extends Component {
@@ -41,7 +42,8 @@ export default class Signup extends Component {
       <div>
         <TopBar icon='health-icon' title='My Health Diary'/>
         <form onSubmit={this.handleSubmit} className="pt5 flex flex-column">
-          <div className="flex flex-column items-center">
+          <AuthForm {...this.state} handleChange={this.handleChange} handleSubmit={this.handleSubmit}/>
+          {/* <div className="flex flex-column items-center">
             <label className="mv1" htmlFor='email'>Email: </label>
             <input
               type='text'
@@ -62,7 +64,7 @@ export default class Signup extends Component {
               onChange={this.handleChange}
               className="mt1 mb3 w5"
             />
-          </div>
+          </div> */}
           <div className="w-100 pa3 mr2">
             <button className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue" 
             type='submit'> Signup 
