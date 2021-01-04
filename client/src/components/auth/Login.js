@@ -64,7 +64,7 @@ export default class Login extends Component {
           </div>
 
           <div className="w-100 pa3 mr2">
-            <button className="f6 link dim br-pill ba bw1 ph3 pv2 mb2 dib dark-blue" 
+            <button className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue" 
                     type='submit'> Login 
             </button>
           </div>
