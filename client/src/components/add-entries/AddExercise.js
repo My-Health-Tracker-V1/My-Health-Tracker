@@ -48,12 +48,10 @@ export default class AddExercise extends Component {
 
     axios.delete(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{params:exerciseToDeleteId})
       .then(res=>{
-        console.log(res)
         this.props.history.push("/dashboard")
         })
       .catch(err=>console.log(err))
   }
-
 
   handleEditing=event=>{
 
@@ -61,7 +59,7 @@ export default class AddExercise extends Component {
     
     const updatedExercise=this.state;
 
-    axios.put(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:[this.state.id,updatedExercise]})
+    axios.put(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:updatedExercise})
     .then(res=>{
       this.props.history.push("/dashboard")
       })
