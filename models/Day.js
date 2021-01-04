@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const daySchema = new Schema({
   date: {
     type: String
-    //default: (new Date()).toISOString().split('T')[0]
   },
 
   owner: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -31,7 +30,6 @@ const daySchema = new Schema({
     },
     servingAmount: Number,
     servingSize: String,
-    // ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
   }],
 
   
