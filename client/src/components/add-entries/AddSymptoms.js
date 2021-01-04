@@ -44,9 +44,9 @@ export default class AddSymptoms extends Component {
 
     event?.preventDefault();
 
-    const symptomToDelete=this.state;
+    const symptomToDeleteId=this.state.id;
 
-    axios.delete(`/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,{data:symptomToDelete})
+    axios.delete(`/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,{params:symptomToDeleteId})
       .then(res=>{
         this.props.history.push("/dashboard")
       })

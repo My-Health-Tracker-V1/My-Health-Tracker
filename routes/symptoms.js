@@ -85,15 +85,7 @@ router.delete('/user/:id/day/:date',(req,res,next)=>{
 
   Day.findOne({$and:[{owner: req.params.id},{date: req.params.date}]})
     .then(day=>{
-      
-      Day.findByIdAndUpdate(day._id,
-        {$pull:
-          {symptoms:
-            { 
-              name: req.body.name, 
-              startTime: req.body.startTime,
-              intensity:req.body.intensity
-            }}},{new:true})
+      Day.findByIdAndUpdate( day._id, { $pull: { symptoms: { _id: req.query["0"] } } }, { new:true } )
         .then(updatedDay=>{
           res.status(204).json(updatedDay);
         })

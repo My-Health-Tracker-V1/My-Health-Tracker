@@ -36,12 +36,7 @@ export default class AddExercise extends Component {
       .then(res=>{
         this.props.history.push("/dashboard")
       })
-      .catch(err=>console.log(err))
-    
-    console.log(exerciseEntry)
-    // if(this.state.saveToFrequent){
-    //   //add logic to save to frequent entries
-    // }
+      .catch(err=>console.log(err))  
 
   }
 
@@ -49,15 +44,14 @@ export default class AddExercise extends Component {
 
     event?.preventDefault();
 
-    const exerciseToDelete=this.state;
+    const exerciseToDeleteId=this.state.id;
 
-    axios.delete(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:exerciseToDelete})
+    axios.delete(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{params:exerciseToDeleteId})
       .then(res=>{
         this.props.history.push("/dashboard")
         })
       .catch(err=>console.log(err))
   }
-
 
   handleEditing=event=>{
 
@@ -65,7 +59,7 @@ export default class AddExercise extends Component {
     
     const updatedExercise=this.state;
 
-    axios.put(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:[this.state.id,updatedExercise]})
+    axios.put(`/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,{data:updatedExercise})
     .then(res=>{
       this.props.history.push("/dashboard")
       })
