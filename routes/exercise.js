@@ -56,44 +56,26 @@ router.post('/user/:id/day/:date',(req,res,next)=>{
 })
 
 router.put('/user/:id/day/:date',(req,res,next)=>{
-  Day.findOne({$and:[{owner: req.params.id},{date: req.params.date}]})
-  .then(day=>{
-      const filteredExercise = day.exercises.filter(exercise => exercise._id == req.body.data[0])
-      const index = day.exercises.indexOf(filteredExercise[0])
-      
-      const exercisesArr=[...day.exercises];
 
-      exercisesArr[index].startTime=req.body.data[1].startTime;
-      exercisesArr[index].name=req.body.data[1].name;
-      exercisesArr[index].intensityLevel=req.body.data[1].intensityLevel;
-      exercisesArr[index].duration=req.body.data[1].duration;
-      
-        Day.findByIdAndUpdate(day._id,{exercises:exercisesArr},{new:true})
-          .then(updatedDay=>{
-            res.status(201).json(updatedDay);
-          })
-          .catch(err=>res.json(err))
-
-    }).catch(err=>{
-      res.json(err);
-    })
+  Day.findOneAndUpdate({$and:[{owner: req.params.id},{date: req.params.date}],"exercises._id":req.body.data.id},
+    {$set:{
+      "exercises.$.startTime":req.body.data.startTime,
+      "exercises.$.name":req.body.data.name,
+      "exercises.$.intensityLevel":req.body.data.intensityLevel,
+      "exercises.$.duration":req.body.data.duration
+    }},{new:true})
+      .then(updatedDay=>{
+        res.status(201).json(updatedDay)
+      })
+      .catch(err=>res.json(err))
 
 })
 
 router.delete('/user/:id/day/:date',(req,res,next)=>{
-  console.log('deleting',req.params)
+
   Day.findOne({$and:[{owner: req.params.id},{date: req.params.date}]})
     .then(day=>{
-      console('heeeeere', day)
-      Day.findByIdAndUpdate(day._id,{$pull:
-        {exercises:
-          { 
-            // _id : req.body.data[0]
-            name: req.body.name, 
-            startTime: req.body.startTime,
-            intensityLevel:req.body.intensityLevel,
-            duration: req.body.duration
-          }}},{new:true})
+      Day.findByIdAndUpdate( day._id, { $pull: { exercises: { _id: req.query["0"] } } }, { new:true } )
         .then(updatedDay=>{
           res.status(204).json(updatedDay);
         })
@@ -104,6 +86,7 @@ router.delete('/user/:id/day/:date',(req,res,next)=>{
     .catch(err=>{
       res.json(err);
     })
+
 })
 
 module.exports = router;
