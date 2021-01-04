@@ -22,4 +22,20 @@ router.get('/user/:id/day/:date/',(req,res,next)=>{
     .catch(err => console.log(err))
 })
 
+router.get('/user/:id',(req,res,next)=>{
+  Day.find({owner: req.params.id})
+    .populate({
+      path: 'foods',
+      populate:{
+        path: 'ingredients',
+        model: 'Ingredient'
+      }
+    })
+    .then(days=> {
+      res.json(days)
+      }
+    )
+    .catch(err => console.log(err))
+})
+
 module.exports = router;

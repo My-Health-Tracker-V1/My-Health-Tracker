@@ -4,13 +4,20 @@ import { FormRow } from '../helper-components/Rows'
 
 export default class RepForm extends Component {
 
+  capitalizeFirstLetter = string => {
+    const splitStr = string.toLowerCase().split(' ');
+    for(let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    return splitStr.join(' ')
+  }
+
   render() {
     let editInterface;
     if(this.props.edit === true) {
       editInterface = <IngrForm {...this.props} 
                       handleChange={this.props.handleChange} 
                       handleSubmit={this.props.handleSingleSubmit}
-                      saveIngr2Rep={this.props.saveIngr2Rep}
                       />    
     } else {
       editInterface = <></>
@@ -21,7 +28,6 @@ export default class RepForm extends Component {
                     handleChange={this.props.handleChange} 
                     handleSubmit={this.props.handleAddSubmit}
                     handleEdit={this.props.handleEdit} 
-                    saveIngr2Rep={this.props.saveIngr2Rep}
                     addNewIngr={this.props.addNewIngr}
                     />
     } else {
@@ -30,12 +36,12 @@ export default class RepForm extends Component {
 
     return (
       <div>
-        {this.props.editing ? (<h3 className="f5 db">What did you eat? </h3>) 
-        : (<h3 className="f5 db">Add a Recipe:</h3>)}
+      {this.props.editing ? (<h3 className="f5 db">What did you eat? </h3>)
+       : (<h3 className="f5 db"> Add a recipe </h3>)}
         
         <form onSubmit={this.props.editing? 
                         this.props.editRecipeSubmit : this.props.handleSubmit}>
-          <FormRow value={this.props.food.name} title={this.props.editing ? ("Food Name: "): ("Recipe Name: ")}
+          <FormRow value={this.capitalizeFirstLetter(this.props.food.name)} title={this.props.editing ? ("Food Name: "): ("Recipe Name: ")}
                    type="text" id="recipeName" name="recipeName"
                    handleChange={this.props.handleChange}/>
           <FormRow value={this.props.food.portion} title="Yield"

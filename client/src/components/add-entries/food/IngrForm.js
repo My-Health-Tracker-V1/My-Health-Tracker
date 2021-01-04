@@ -3,16 +3,23 @@ import { FormRow }from '../helper-components/Rows'
 
 export default class IngrForm extends Component {
 
+  capitalizeFirstLetter = string => {
+    const splitStr = string.toLowerCase().split(' ');
+    for(let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1)
+    }
+    return splitStr.join(' ')
+  }
+
   render() {
     
     return (
       <div>
           <h3 className="f6 db">Custom single ingredient</h3>
             <div>
-                <form onSubmit={this.props.editing? 
-                      this.props.handleEdit : this.props.handleSubmit}>
+                <form>
                   <div className="custom-ingredient">
-                    <FormRow value={this.props.tempIngredient.name} title="Name: "
+                    <FormRow value={this.capitalizeFirstLetter(this.props.tempIngredient.name)} title="Name: "
                              type="text" id="name" placeholder="e.g. Apple" name="name" 
                              handleChange={this.props.handleChange}/>
                     <FormRow value={this.props.tempIngredient.brand} title="Brand: "
@@ -40,7 +47,7 @@ export default class IngrForm extends Component {
                         className="f7 link dim br4 ba ph2 pv1 mb4 dib dark-green mr2"> ✔️ Save Ingredient
                      </button>)
                      : (
-                      <form onSubmit={this.props.editing? this.props.handleEdit : this.props.handleSubmit}>
+                      <form onSubmit={this.props.handleSubmit}>
                         <button type='submit' 
                         className="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue ma3"> Save Ingredient
                         </button>

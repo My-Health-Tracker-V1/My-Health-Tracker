@@ -21,7 +21,7 @@ export default function BottomNavbar() {
           <span className="f6 db">add</span>
         </Link>
 
-        <Link to='/add-frequent' className="link blue hover-silver dib mh2 tc">
+        <Link to='/add-recipes' className="link blue hover-silver dib mh3 tc">
           <Icons icon="recipes"/>
           <span className="f6 db">Recipes</span>
         </Link>

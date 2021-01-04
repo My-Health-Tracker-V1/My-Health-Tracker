@@ -29,7 +29,6 @@ export default class DrinkEdit extends Component {
     const drinkId = event.target.getAttribute('data-key')
     axios.put(`/api/drinks/user/${this.state.user._id}/day/${this.state.date}/${drinkId}/delete`)
     .then(res => {
-      console.log(res);
       this.props.history.push("/dashboard")
     })
     .catch(err=>console.log(err))
@@ -38,7 +37,6 @@ export default class DrinkEdit extends Component {
   handleChange = event => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(name, value);
     this.setState({
       [name]: value
     });
@@ -46,22 +44,22 @@ export default class DrinkEdit extends Component {
 
   handleEditDrink = event => {
     event.preventDefault();
-    const newDrink = this.state.drink;
-    newDrink.name = this.state.name;
-    newDrink.category = this.state.category;
-    newDrink.servingAmount = this.state.servingAmount;
-    newDrink.servingSize = this.state.servingSize;
-    newDrink.startTime = this.state.startTime;
-    this.setState({
-      drink: newDrink
+    this.setState(state => {
+      return {
+        drink: {...state.drink,
+                name: state.name,
+                category: state.category,
+                servingAmount: state.servingAmount,
+                servingSize: state.servingSize,
+                startTime: state.startTime
+              }
+            }
     });
     const payload = {
       user: this.state.user,
       date: this.state.date,
       drink: this.state.drink
     };
-    
-    console.log(payload);
     axios.put(`/api/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.drinkId}/edit`,
      payload)
       .then(() => {

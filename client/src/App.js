@@ -17,7 +17,7 @@ import DrinkEdit from './components/add-entries/drink/DrinkEdit';
 
 //Components for the BottomNavBar Links
 import Analysis from './components/nav-bar-options/Analysis'
-import AddFrequent from './components/nav-bar-options/AddFrequent'
+import Recipes from './components/nav-bar-options/Recipes'
 import Settings from './components/nav-bar-options/Settings'
 import AddItem from './components/nav-bar-options/AddItem'
 
@@ -78,7 +78,7 @@ class App extends React.Component {
       {/* Routes in BottomNavBar  */}
       <Route exact path='/add-item' component={AddItem}/>
       <Route exact path='/analysis' render={(props) => <Analysis user={this.state.user} {...props}/>}/>
-      <Route exact path='/add-frequent' component={AddFrequent}/>
+      <Route exact path='/add-recipes' render={(props) => <Recipes user={this.state.user} {...props}/>}/>
       <Route exact path='/settings' render={(props) => <Settings user={this.state.user} setUser={this.setUser} {...props}/>}/>
 
       

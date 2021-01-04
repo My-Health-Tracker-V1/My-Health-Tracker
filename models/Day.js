@@ -12,7 +12,10 @@ const daySchema = new Schema({
   foods: [{
     startTime: String,
     name: String,
-    imgUrl: String,
+    imgUrl: {
+      type: String,
+      default: "../public/images/food.svg"
+    },
     portion: Number, 
     eatenPortion: Number, 
     ingredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
