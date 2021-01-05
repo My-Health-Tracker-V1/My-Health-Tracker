@@ -30,7 +30,6 @@ export default class FoodEntry extends FoodBase {
     this.state.editing = false;
   }
 
-
   getIngredientsFromEdamam = () => {
     axios
       .get(
@@ -90,7 +89,7 @@ export default class FoodEntry extends FoodBase {
           name: clickedIngr.label,
           brand: clickedIngr.brand,
           category: clickedIngr.category,
-          imgUrl: clickedIngr.image
+          imgUrl: clickedIngr.image,
         },
       };
     });
@@ -204,7 +203,7 @@ export default class FoodEntry extends FoodBase {
               portion: 1,
               eatenPortion: 1,
               startTime: state.tempStartTime,
-              imgUrl: state.tempIngredient.imgUrl
+              imgUrl: state.tempIngredient.imgUrl,
             },
           };
         },
@@ -226,7 +225,7 @@ export default class FoodEntry extends FoodBase {
         }
       );
     } else {
-      console.log("validation failed");
+      this.props.history.push("/add/Foods");
     }
   };
 
@@ -241,7 +240,7 @@ export default class FoodEntry extends FoodBase {
               ...state.food,
               name: this.capitalizeFirstLetter(state.food.name),
               startTime: state.tempStartTime,
-              imgUrl: state.food.imgUrl
+              imgUrl: state.food.imgUrl,
             },
           };
         },

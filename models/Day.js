@@ -13,10 +13,7 @@ const daySchema = new Schema(
       {
         startTime: String,
         name: String,
-        imgUrl: {
-          type: String,
-          default: "../public/images/dish.png",
-        },
+        imgUrl: String,
         portion: Number,
         eatenPortion: Number,
         ingredients: [{ type: Schema.Types.ObjectId, ref: "Ingredient" }],
