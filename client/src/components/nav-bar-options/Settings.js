@@ -7,7 +7,6 @@ import Icons from "../shared/Icons";
 import axios from "axios";
 
 export default class Settings extends React.Component {
-  
   state = {
     newEmail: "",
     newPassword: "",

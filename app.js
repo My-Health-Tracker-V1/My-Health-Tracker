@@ -1,37 +1,41 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const bodyParser   = require('body-parser');
-const cookieParser = require('cookie-parser');
-const express      = require('express');
-const favicon      = require('serve-favicon');
-const mongoose     = require('mongoose');
-const logger       = require('morgan');
-const path         = require('path');
-const cors         = require('cors');
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const express = require("express");
+const favicon = require("serve-favicon");
+const mongoose = require("mongoose");
+const logger = require("morgan");
+const path = require("path");
+const cors = require("cors");
 
-const session = require('express-session');
-const passport = require('passport');
+const session = require("express-session");
+const passport = require("passport");
 
-require('./configs/passport');
+require("./configs/passport");
 
 mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost/food-health', {
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/food-health", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
   })
-  .then(x => {
-    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+  .then((x) => {
+    console.log(
+      `Connected to Mongo! Database name: "${x.connections[0].name}"`
+    );
   })
-  .catch(err => {
-    console.error('Error connecting to mongo', err)
+  .catch((err) => {
+    console.error("Error connecting to mongo", err);
   });
 
-const app_name = require('./package.json').name;
-const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
+const app_name = require("./package.json").name;
+const debug = require("debug")(
+  `${app_name}:${path.basename(__filename).split(".")[0]}`
+);
 
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require("connect-mongo")(session);
 
 const app = express();
 
@@ -44,82 +48,80 @@ app.use(
     resave: true,
     store: new MongoStore({
       // when the session cookie has an expiration date
-      // connect-mongo will use it, otherwise it will create a new 
+      // connect-mongo will use it, otherwise it will create a new
       // one and use ttl - time to live - in that case one day
       mongooseConnection: mongoose.connection,
-      ttl: 24 * 60 * 60 * 1000
-    })
+      ttl: 24 * 60 * 60 * 1000,
+    }),
   })
-)
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 // Middleware Setup
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Express View engine setup
 
-app.use(require('node-sass-middleware')({
-  src:  path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  sourceMap: true
-}));
-      
-
-app.use(express.static(path.join(__dirname, "/client/build")));
-app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
-
-
-// default value for title local
-app.locals.title = 'My Health Tracker';
-
-// ADD CORS SETTINGS HERE TO ALLOW CROSS-ORIGIN INTERACTION:
- 
 app.use(
-  cors({
-    credentials: true,
-    origin: ['http://localhost:3000'] // <== this will be the URL of our React app (it will be running on port 3000)
+  require("node-sass-middleware")({
+    src: path.join(__dirname, "public"),
+    dest: path.join(__dirname, "public"),
+    sourceMap: true,
   })
 );
 
+app.use(express.static(path.join(__dirname, "/client/build")));
+app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 
-const auth = require('./routes/auth');
-app.use('/api/auth', auth);
+// default value for title local
+app.locals.title = "My Health Tracker";
 
-const users = require('./routes/users');
-app.use('/api/users', users)
+// ADD CORS SETTINGS HERE TO ALLOW CROSS-ORIGIN INTERACTION:
 
-const days = require('./routes/days');
-app.use('/api/days', days)
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:3000"], // <== this will be the URL of our React app (it will be running on port 3000)
+  })
+);
 
-const ingredients = require('./routes/ingredients');
-app.use('/api/ingredients', ingredients)
+const auth = require("./routes/auth");
+app.use("/api/auth", auth);
 
-const drinks = require('./routes/drinks');
-app.use('/api/drinks', drinks)
+const users = require("./routes/users");
+app.use("/api/users", users);
 
-const energy = require('./routes/energy');
-app.use('/api/energy', energy)
+const days = require("./routes/days");
+app.use("/api/days", days);
 
-const exercise = require('./routes/exercise');
-app.use('/api/exercise', exercise)
+const ingredients = require("./routes/ingredients");
+app.use("/api/ingredients", ingredients);
 
-const sleep = require('./routes/sleep');
-app.use('/api/sleep', sleep)
+const drinks = require("./routes/drinks");
+app.use("/api/drinks", drinks);
 
-const symptoms = require('./routes/symptoms');
-app.use('/api/symptoms', symptoms)
+const energy = require("./routes/energy");
+app.use("/api/energy", energy);
 
-const analysis = require('./routes/analysis');
-app.use('/api/analysis',analysis)
+const exercise = require("./routes/exercise");
+app.use("/api/exercise", exercise);
 
-app.use((req, res) => {  
-  // If no routes match, send them the React HTML.  
+const sleep = require("./routes/sleep");
+app.use("/api/sleep", sleep);
+
+const symptoms = require("./routes/symptoms");
+app.use("/api/symptoms", symptoms);
+
+const analysis = require("./routes/analysis");
+app.use("/api/analysis", analysis);
+
+app.use((req, res) => {
+  // If no routes match, send them the React HTML.
   res.sendFile(__dirname + "/client/build/index.html");
 });
 

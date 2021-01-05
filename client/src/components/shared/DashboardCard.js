@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Icons from "../shared/Icons";
 
 export default function DashboardCard(props) {
-
   function returnCard(
     element,
     icon,
@@ -125,5 +124,4 @@ export default function DashboardCard(props) {
 
     default:
   }
-  
 }
