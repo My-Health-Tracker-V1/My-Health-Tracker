@@ -12,6 +12,7 @@ router.post("/user/:id/day/:date", (req, res) => {
     category,
     servingAmount,
     servingSize,
+    imgUrl
   } = req.body;
   Day.findOne({
     $and: [{ owner: req.params.id }, { date: req.params.date }],
@@ -25,7 +26,7 @@ router.post("/user/:id/day/:date", (req, res) => {
               startTime,
               name,
               category,
-              imgUrl: "",
+              imgUrl,
               servingAmount,
               servingSize,
             },
@@ -45,9 +46,9 @@ router.post("/user/:id/day/:date", (req, res) => {
         owner: req.params.id,
         drinks: [
           {
-            startTime: startTime,
+            startTime,
             name,
-            imgUrl: "",
+            imgUrl,
             category,
             servingAmount,
             servingSize,

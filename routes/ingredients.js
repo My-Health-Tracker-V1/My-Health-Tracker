@@ -28,6 +28,7 @@ router.post("/user/:id/day/:date", (req, res) => {
       category: ing.category,
       servingAmount: ing.servingAmount,
       servingSize: ing.servingSize,
+      imgUrl: ing.imgUrl,
       owner: req.params.id,
     };
   });
@@ -45,7 +46,7 @@ router.post("/user/:id/day/:date", (req, res) => {
                 name: food.name,
                 portion: food.portion,
                 eatenPortion: food.eatenPortion,
-                imgUrl: "",
+                imgUrl: food.imgUrl,
                 ingredients: dbIngredients,
               },
             },
@@ -71,7 +72,7 @@ router.post("/user/:id/day/:date", (req, res) => {
                 name: food.name,
                 portion: food.portion,
                 eatenPortion: food.eatenPortion,
-                imgUrl: "",
+                imgUrl: food.imgUrl,
                 ingredients: dbIngredients,
               },
             ],
@@ -111,6 +112,7 @@ router.post("/recipe/user/:id/day/:date", (req, res) => {
     servingSize,
     portion,
     eatenPortion,
+    imgUrl
   } = req.body;
   Day.findOne({
     $and: [{ owner: req.params.id }, { date: req.params.date }],
@@ -122,6 +124,7 @@ router.post("/recipe/user/:id/day/:date", (req, res) => {
         category,
         servingAmount,
         servingSize,
+        imgUrl,
         owner: req.params.id,
       }).then((dbIngredient) => {
         Day.findByIdAndUpdate(
@@ -133,7 +136,7 @@ router.post("/recipe/user/:id/day/:date", (req, res) => {
                 name: recipeName,
                 portion: portion,
                 eatenPortion: eatenPortion,
-                imgUrl: "",
+                imgUrl: imgUrl,
                 ingredients: dbIngredient,
               },
             },
@@ -154,6 +157,7 @@ router.post("/recipe/user/:id/day/:date", (req, res) => {
         category: category,
         servingAmount: servingAmount,
         servingSize: servingSize,
+        imgUrl: imgUrl,
         owner: req.params.id,
       })
         .then((dbIngredient) => {
@@ -163,7 +167,7 @@ router.post("/recipe/user/:id/day/:date", (req, res) => {
             foods: [
               {
                 startTime: startTime,
-                imgUrl: "",
+                imgUrl: imgUrl,
                 name: recipeName,
                 portion: portion,
                 eatenPortion: eatenPortion,

@@ -22,6 +22,7 @@ export default class FoodEntry extends FoodBase {
       name: "",
       portion: "",
       eatenPortion: "",
+      imgUrl: "",
       ingredients: [],
     };
     this.state.ingredients = [];
@@ -29,12 +30,6 @@ export default class FoodEntry extends FoodBase {
     this.state.editing = false;
   }
 
-  // API
-
-  componentDidMount = () => {
-    this.getIngredientsFromEdamam();
-    this.getRecipeFromEdamam();
-  };
 
   getIngredientsFromEdamam = () => {
     axios
@@ -68,15 +63,20 @@ export default class FoodEntry extends FoodBase {
       });
   };
 
+  componentDidMount = () => {
+    this.getIngredientsFromEdamam();
+    this.getRecipeFromEdamam();
+  };
+
   apiFormat = (apiObj) => {
     return {
       name: apiObj.text,
       servingAmount: apiObj.weight,
+      imgUrl: apiObj.image,
       servingSize: "g",
     };
   };
 
-  // populate ingredient data to ingredient form
   handleClick = (event) => {
     event.preventDefault();
     const key = event.target.getAttribute("data-key");
@@ -90,12 +90,12 @@ export default class FoodEntry extends FoodBase {
           name: clickedIngr.label,
           brand: clickedIngr.brand,
           category: clickedIngr.category,
+          imgUrl: clickedIngr.image
         },
       };
     });
   };
 
-  // populate recipe data to recipe form
   handleClickRecipe = (event) => {
     event.preventDefault();
     const key = event.target.getAttribute("data-key");
@@ -107,6 +107,7 @@ export default class FoodEntry extends FoodBase {
           name: clickedRecipe.label,
           portion: clickedRecipe.yield,
           category: clickedRecipe.healthLabels,
+          imgUrl: clickedRecipe.image,
           ingredients: clickedRecipe.ingredients.map(this.apiFormat),
         },
       };
@@ -203,6 +204,7 @@ export default class FoodEntry extends FoodBase {
               portion: 1,
               eatenPortion: 1,
               startTime: state.tempStartTime,
+              imgUrl: state.tempIngredient.imgUrl
             },
           };
         },
@@ -239,6 +241,7 @@ export default class FoodEntry extends FoodBase {
               ...state.food,
               name: this.capitalizeFirstLetter(state.food.name),
               startTime: state.tempStartTime,
+              imgUrl: state.food.imgUrl
             },
           };
         },
