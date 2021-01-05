@@ -18,27 +18,8 @@ router.get('/', (req, res, next) => {
     })
 });
 
-// Get a ingredient by Id
-router.get('/:id', (req, res, next) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    res.status(400).json({ message: 'Specified id is not valid' });
-    return;
-  }
-  Ingredient.findById(req.params.id)
-    .populate('owner')
-    .then(ingredient => {
-      if (!ingredient) {
-        res.status(404).json(ingredient);
-      } else {
-        res.status(200).json(ingredient);
-      }
-    })
-    .catch(err => {
-      res.json(err);
-    })
-});
 
-// LoggedIn user want to create a single food Ingredient
+// create a single food Ingredient
 router.post('/user/:id/day/:date', (req, res) => {
   const { user, date, food} = req.body;
   const ingredients = food.ingredients.map(ing => {
@@ -107,8 +88,6 @@ router.post('/user/:id/day/:date', (req, res) => {
     }
   })
 })
-
- 
 
 // add a recipe
 router.post('/recipe/user/:id/day/:date', (req, res) => {
