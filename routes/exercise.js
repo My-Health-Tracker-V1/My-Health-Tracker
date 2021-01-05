@@ -40,7 +40,6 @@ router.post("/user/:id/day/:date", (req, res, next) => {
         };
         Day.create(newDay)
           .then((dbDay) => {
-            console.log("day created:", dbDay);
             User.findByIdAndUpdate(req.params.id, {
               $push: { days: dbDay._id },
             }).then((user) => {
@@ -80,23 +79,18 @@ router.put("/user/:id/day/:date", (req, res, next) => {
 });
 
 router.delete("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      Day.findByIdAndUpdate(
-        day._id,
-        { $pull: { exercises: { _id: req.query["0"] } } },
-        { new: true }
-      )
-        .then((updatedDay) => {
-          res.status(204).json(updatedDay);
-        })
-        .catch((err) => {
-          res.json(err);
-        });
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+      "exercises._id": req.query["0"],
+    },
+    { $pull: { exercises: { _id: req.query["0"] } } },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;

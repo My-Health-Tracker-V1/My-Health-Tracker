@@ -121,5 +121,7 @@ export default function DashboardCard(props) {
           drink.name
         )
       );
+
+    default:
   }
 }

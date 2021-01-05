@@ -51,38 +51,36 @@ router.post("/user/:id/day/:date", (req, res, next) => {
 });
 
 router.put("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      const updatedEnergy = {
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+    },
+    {
+      energy: {
         startTime: req.body.data.startTime,
         energyLevel: req.body.data.energyLevel,
-      };
-
-      Day.findByIdAndUpdate(day._id, { energy: updatedEnergy }, { new: true })
-        .then((updatedDay) => {
-          res.status(201).json(updatedDay);
-        })
-        .catch((err) => res.json(err));
+      },
+    },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 router.delete("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      Day.findByIdAndUpdate(day._id, { $unset: { energy: 1 } }, { new: true })
-        .then((updatedDay) => {
-          res.status(204).json(updatedDay);
-        })
-        .catch((err) => {
-          res.json(err);
-        });
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+    },
+    { $unset: { energy: 1 } },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;

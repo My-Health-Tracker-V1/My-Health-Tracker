@@ -48,7 +48,6 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.setDate();
     this.getUserData();
   }
 

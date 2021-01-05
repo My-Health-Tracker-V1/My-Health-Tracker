@@ -11,7 +11,7 @@ export default class AddExercise extends Component {
       this.props.location.state?.element.startTime ||
       new Date().toLocaleTimeString("en-US", { hour12: false }).substring(0, 5),
     name: this.props.location.state?.element.name,
-    intensityLevel: this.props.location.state?.element.intensityLevel,
+    intensityLevel: this.props.location.state?.element.intensityLevel || 5,
     duration: this.props.location.state?.element.duration,
     id: this.props.location.state?.element._id,
     editing: this.props.location.state?.editing,

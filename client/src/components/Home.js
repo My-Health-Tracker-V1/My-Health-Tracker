@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import TopBar from "./shared/TopBar";
 
-export default function Home(props) {
+export default function Home() {
   return (
     <div>
       <TopBar icon="health-icon" title="My Health Diary" />

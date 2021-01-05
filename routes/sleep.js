@@ -58,55 +58,39 @@ router.post("/user/:id/day/:date", (req, res, next) => {
 });
 
 router.put("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      const filteredSleep = day.sleep.filter(
-        (sleep) => sleep._id == req.body.data[0]
-      );
-      const index = day.sleep.indexOf(filteredSleep[0]);
-
-      const sleepArr = [...day.sleep];
-
-      sleepArr[index].startTime = req.body.data[1].startTime;
-      sleepArr[index].notes = req.body.data[1].notes;
-      sleepArr[index].duration = req.body.data[1].duration;
-
-      Day.findByIdAndUpdate(day._id, { sleep: sleepArr }, { new: true })
-        .then((updatedDay) => {
-          res.status(201).json(updatedDay);
-        })
-        .catch((err) => res.json(err));
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+      "sleep._id": req.body.data.id,
+    },
+    {
+      $set: {
+        "sleep.$.startTime": req.body.data.startTime,
+        "sleep.$.notes": req.body.data.notes,
+        "sleep.$.duration": req.body.data.duration,
+      },
+    },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 router.delete("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      Day.findByIdAndUpdate(
-        day._id,
-        {
-          $pull: {
-            sleep: {
-              startTime: req.body.startTime,
-              duration: req.body.duration,
-            },
-          },
-        },
-        { new: true }
-      )
-        .then((updatedDay) => {
-          res.status(204).json(updatedDay);
-        })
-        .catch((err) => {
-          res.json(err);
-        });
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+      "sleep._id": req.query["0"],
+    },
+    { $pull: { sleep: { _id: req.query["0"] } } },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;

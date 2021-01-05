@@ -35,8 +35,7 @@ export default class Calendar extends Component {
             id="left-arrow"
             onClick={this.handleArrowClick}
           >
-            {" "}
-            {"<"}{" "}
+            {"<"}
           </a>
           <form className="link tc dim gray f6 f5-ns dib mh2">
             <input

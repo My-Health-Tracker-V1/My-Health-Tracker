@@ -58,49 +58,40 @@ router.post("/user/:id/day/:date", (req, res, next) => {
 });
 
 router.put("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      const filteredSymptom = day.symptoms.filter(
-        (symptom) => symptom._id == req.body.data[0]
-      );
-      const index = day.symptoms.indexOf(filteredSymptom[0]);
-
-      const symptomArr = [...day.symptoms];
-
-      symptomArr[index].startTime = req.body.data[1].startTime;
-      symptomArr[index].name = req.body.data[1].name;
-      symptomArr[index].intensity = req.body.data[1].intensity;
-      symptomArr[index].notes = req.body.data[1].notes;
-
-      Day.findByIdAndUpdate(day._id, { symptoms: symptomArr }, { new: true })
-        .then((updatedDay) => {
-          res.status(201).json(updatedDay);
-        })
-        .catch((err) => res.json(err));
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+      "symptoms._id": req.body.data.id,
+    },
+    {
+      $set: {
+        "symptoms.$.startTime": req.body.data.startTime,
+        "symptoms.$.name": req.body.data.name,
+        "symptoms.$.intensity": req.body.data.intensity,
+        "symptoms.$.notes": req.body.data.notes,
+      },
+    },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 router.delete("/user/:id/day/:date", (req, res, next) => {
-  Day.findOne({ $and: [{ owner: req.params.id }, { date: req.params.date }] })
-    .then((day) => {
-      Day.findByIdAndUpdate(
-        day._id,
-        { $pull: { symptoms: { _id: req.query["0"] } } },
-        { new: true }
-      )
-        .then((updatedDay) => {
-          res.status(204).json(updatedDay);
-        })
-        .catch((err) => {
-          res.json(err);
-        });
+  Day.findOneAndUpdate(
+    {
+      $and: [{ owner: req.params.id }, { date: req.params.date }],
+      "symptoms._id": req.query["0"],
+    },
+    { $pull: { symptoms: { _id: req.query["0"] } } },
+    { new: true }
+  )
+    .then((updatedDay) => {
+      res.status(201).json(updatedDay);
     })
-    .catch((err) => {
-      res.json(err);
-    });
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
