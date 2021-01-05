@@ -12,7 +12,8 @@ export default class AddSleep extends Component {
     duration:this.props.location.state?.element.duration,
     notes:this.props.location.state?.element.notes,
     id:this.props.location.state?.element._id,
-    editing:this.props.location.state?.editing
+    editing:this.props.location.state?.editing,
+    errors: {}
   }
 
   handleChange=event=>{
@@ -25,11 +26,26 @@ export default class AddSleep extends Component {
 
   }
 
+  handleValidation = () => {
+    let duration = this.state.duration;
+    let errors = {};
+    let formIsValid = true;
+    
+    if(!duration) {
+      formIsValid = false;
+      errors["duration"] = "Duration cannot be empty"
+    }
+    
+    this.setState({errors: errors});
+    return formIsValid
+  }
+
   handleSubmit=event=>{
 
     event?.preventDefault();
     
-    const sleepEntry=this.state;
+    if(this.handleValidation()) {
+      const sleepEntry=this.state;
 
     axios.post(`/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,sleepEntry)
       .then(res=>{
@@ -37,6 +53,8 @@ export default class AddSleep extends Component {
       })
       .catch(err=>console.log(err))
 
+    }
+    
   }
 
   handleDelete=event=>{
@@ -56,13 +74,16 @@ export default class AddSleep extends Component {
 
     event?.preventDefault();
 
-    const updatedSleep=this.state;
+    if(this.handleValidation()) {
+      const updatedSleep=this.state;
 
     axios.put(`/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,{data:[this.state.id,updatedSleep]})
     .then(res=>{
       this.props.history.push("/dashboard")
     })
     .catch(err=>console.log(err))
+    }
+    
   }
 
   render() {
@@ -85,6 +106,7 @@ export default class AddSleep extends Component {
               <label htmlFor="duration" className="f6 mt3">Duration: </label>
               <input onChange={this.handleChange} value={this.state.duration} type="number" min="0" max="24" id="duration" name="duration" className="mb2 w3"/><span> hrs</span>
             </div>
+            <span style={{color: "red"}}>{this.state.errors["duration"]}</span>
 
             <label htmlFor="notes" className="f6 mt3">Notes:</label>
             <input onChange={this.handleChange} value={this.state.notes} type="textarea" id="notes" name="notes" className="mb2"/>

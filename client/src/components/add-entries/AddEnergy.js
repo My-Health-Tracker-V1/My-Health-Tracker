@@ -79,7 +79,7 @@ export default class AddEnergy extends Component {
 
             <label htmlFor="energyLevel" className=" f6 mt3">Energy Level:</label>
             <input onChange={this.handleChange} value={this.state.energyLevel} type="range" name="energyLevel" min="1" max="10" className="mt1 mb3"/>
-            
+
             <button type="submit" className="f6 w4 dim ph3 pv2 mt3 dib white bg-dark-blue br-pill b--dark-blue">Save</button>
           
           </form>
