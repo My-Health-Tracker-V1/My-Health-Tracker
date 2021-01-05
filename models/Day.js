@@ -15,7 +15,7 @@ const daySchema = new Schema(
         name: String,
         imgUrl: {
           type: String,
-          default: "../public/images/food.svg",
+          default: "../public/images/dish.png",
         },
         portion: Number,
         eatenPortion: Number,
