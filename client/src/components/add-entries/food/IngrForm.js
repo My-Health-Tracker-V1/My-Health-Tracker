@@ -22,6 +22,7 @@ export default class IngrForm extends Component {
                     <FormRow value={this.capitalizeFirstLetter(this.props.tempIngredient.name)} title="Name: "
                              type="text" id="name" placeholder="e.g. Apple" name="name" 
                              handleChange={this.props.handleChange}/>
+                    <span style={{color: "red"}}>{this.props.errors["name"]}</span>
                     <FormRow value={this.props.tempIngredient.brand} title="Brand: "
                              type="text" id="category" placeholder="e.g. Edeka" name="brand"
                              handleChange={this.props.handleChange}/>
@@ -32,6 +33,7 @@ export default class IngrForm extends Component {
                              type="number" id="servingAmount" placeholder="e.g. 3" name="servingAmount"
                              min="0"
                              handleChange={this.props.handleChange}/>
+                    <span style={{color: "red"}}>{this.props.errors["servingAmount"]}</span>
                     <FormRow value={this.props.tempIngredient.servingSize} title="Unit: "
                              type='text' id='servingSize' placeholder="e.g. piece" name='servingSize' 
                              handleChange={this.props.handleChange}/>

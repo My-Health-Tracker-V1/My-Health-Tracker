@@ -15,42 +15,65 @@ export default class FoodEdit extends FoodBase {
 
   editIngrSave = event => {
     event.preventDefault();
-    this.setState(state => {
-      state.food.ingredients.splice(state.tempIngIdx, 1, state.tempIngredient);
-      return {food: state.food,
-              edit: false,
-              tempIngredient: {
-                              name: '',
-                              brand: '',
-                              category: '',
-                              servingAmount: '',
-                              servingSize: ''}
-              }
-    })
+    if(this.handleSingleValidation()) {
+      this.setState(state => {
+        state.food.ingredients.splice(state.tempIngIdx, 1, state.tempIngredient);
+        return {food: state.food,
+                edit: false,
+                tempIngredient: {
+                                name: '',
+                                brand: '',
+                                category: '',
+                                servingAmount: '',
+                                servingSize: ''}
+                }
+      })
+    } 
   }
 
   addNewIngrSave = event => {
     event.preventDefault();
-    this.setState(state => {
-      return {food: {...state.food, 
-                    ingredient: state.food.ingredients.push(state.tempIngredient)},
-              add: false}
-    })
+    if(this.handleSingleValidation()) {
+      this.setState(state => {
+        return {food: {...state.food, 
+                      ingredient: state.food.ingredients.push(state.tempIngredient)},
+                add: false}
+      })
+    } 
+  }
+
+  handleRecipeValidation = () => {
+    let food = this.state.food;
+    let errors = {};
+    let formIsValid = true;
+  
+    if(!food["name"]) {
+      formIsValid = false;
+      errors["name"] = "Food name cannot be empty"
+    }
+    if(food["eatenPortion"] === "") {
+      formIsValid = false;
+      errors["eatenPortion"] = "Your portion cannot be empty"
+    }
+    this.setState({errors: errors});
+    return formIsValid
   }
 
   editRecipeSubmit = event => {
       event.preventDefault();
-      const payload = {
-        user: this.state.user,
-        date: this.state.date,
-        food: this.state.food
-      };
-      axios.put(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}/${this.state.food._id}/edit`, payload)
-        .then(() => {
-          this.props.history.push("/dashboard")
-        })
-        .catch(err => console.log(err))
-    }
+      if(this.handleRecipeValidation()) {
+        const payload = {
+          user: this.state.user,
+          date: this.state.date,
+          food: this.state.food
+        };
+        axios.put(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}/${this.state.food._id}/edit`, payload)
+          .then(() => {
+            this.props.history.push("/dashboard")
+          })
+          .catch(err => console.log(err))
+      }
+  }
 
 // delete
   handleDeleteIngredient = event => {

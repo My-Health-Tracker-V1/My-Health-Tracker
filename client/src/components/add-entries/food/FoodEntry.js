@@ -23,7 +23,6 @@ export default class FoodEntry extends FoodBase {
     this.state.ingredients = [];
     this.state.recipes = [];
     this.state.editing = false;
-
   }
 
 // API
@@ -64,8 +63,6 @@ export default class FoodEntry extends FoodBase {
       servingSize: 'g'
     }
   }
-
-  
 
 // populate ingredient data to ingredient form
   handleClick = event => {
@@ -145,49 +142,72 @@ export default class FoodEntry extends FoodBase {
     })
   }
 
+  handleRecipeValidation = () => {
+    let food = this.state.food;
+    let errors = {};
+    let formIsValid = true;
+  
+    if(!food["name"]) {
+      formIsValid = false;
+      errors["name"] = "Food name cannot be empty"
+    }
+    if(food["eatenPortion"] === "") {
+      formIsValid = false;
+      errors["eatenPortion"] = "Your portion cannot be empty"
+    }
+    this.setState({errors: errors});
+    return formIsValid
+  }
+  
 // Submit Single form
   handleSingleSubmit = event => {
     event.preventDefault();
-    this.setState(state => {
-      return {food: {...state.food,
-                      ingredients: [state.tempIngredient],
-                      name: this.capitalizeFirstLetter(state.tempIngredient.name),
-                      portion: 1,
-                      eatenPortion: 1,
-                      startTime: state.tempStartTime}
-              }
-    }, () => {
-      const payload = {
-        user: this.state.user,
-        date: this.state.date,
-        food: this.state.food
-      };
-      axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
-        .then(() => {
-          this.props.history.push("/dashboard")
-        })
-        .catch(err => console.log(err))})
+    if(this.handleSingleValidation()) {
+      this.setState(state => {
+        return {food: {...state.food,
+                        ingredients: [state.tempIngredient],
+                        name: this.capitalizeFirstLetter(state.tempIngredient.name),
+                        portion: 1,
+                        eatenPortion: 1,
+                        startTime: state.tempStartTime}
+                }
+      }, () => {
+        const payload = {
+          user: this.state.user,
+          date: this.state.date,
+          food: this.state.food
+        };
+        axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
+          .then(() => {
+            this.props.history.push("/dashboard")
+          })
+          .catch(err => console.log(err))})
+    } else {
+      console.log('validation failed')
+    }
   }
 
 // Submit Recipe form
   handleRecipeSubmit = event => {
     event.preventDefault();
-    this.setState(state => {
-      return {food: {...state.food,
-              name: this.capitalizeFirstLetter(state.food.name),
-              startTime: state.tempStartTime}}
-    }, () => {
-      const payload = {
-        user: this.state.user,
-        date: this.state.date,
-        food: this.state.food
-      };
-      axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
-        .then(() => {
-          this.props.history.push("/dashboard")
-        })
-        .catch(err => console.log(err))
-    });
+    if(this.handleRecipeValidation()) {
+      this.setState(state => {
+        return {food: {...state.food,
+                name: this.capitalizeFirstLetter(state.food.name),
+                startTime: state.tempStartTime}}
+      }, () => {
+        const payload = {
+          user: this.state.user,
+          date: this.state.date,
+          food: this.state.food
+        };
+        axios.post(`/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`, payload)
+          .then(() => {
+            this.props.history.push("/dashboard")
+          })
+          .catch(err => console.log(err))
+      });
+    }
   }
   
   render() {

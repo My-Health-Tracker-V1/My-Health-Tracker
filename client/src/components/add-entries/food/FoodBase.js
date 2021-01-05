@@ -21,7 +21,8 @@ export default class FoodBase extends Component {
       tempIngId: '',
       selectedIngredient: false,
       handleShowSingle: true,
-      query: ''
+      query: '',
+      errors: {}
     }
   }
 
@@ -70,4 +71,26 @@ export default class FoodBase extends Component {
       });
     };
   }
+
+  handleSingleValidation = () => {
+    let tempIngredient = this.state.tempIngredient;
+    let errors = {};
+    let formIsValid = true;
+    
+    if(!tempIngredient["name"]) {
+      console.log("name")
+      formIsValid = false;
+      errors["name"] = "Food name cannot be empty"
+    }
+    if(!tempIngredient["servingAmount"]) {
+      console.log("servingamount")
+      formIsValid = false;
+      errors["servingAmount"] = "Serving amount cannot be empty"
+    }
+    this.setState({errors: errors});
+    return formIsValid
+  }
 }
+
+
+

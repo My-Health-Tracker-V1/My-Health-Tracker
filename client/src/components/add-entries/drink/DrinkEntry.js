@@ -22,7 +22,8 @@ export default class AddDrinks extends Component {
     drinks:[],
     query: '',
     apiCategory: '',
-    editing: false
+    editing: false,
+    errors: {}
   }
   
   // API
@@ -92,9 +93,28 @@ export default class AddDrinks extends Component {
     })
   }
 
+  handleDrinkValidation = () => {
+    let name = this.state.name;
+    let servingAmount = this.state.servingAmount;
+    let errors = {};
+    let formIsValid = true;
+    
+    if(!name) {
+      formIsValid = false;
+      errors["name"] = "Drink name cannot be empty"
+    }
+    if(!servingAmount) {
+      formIsValid = false;
+      errors["servingAmount"] = "Serving amount cannot be empty"
+    }
+    this.setState({errors: errors});
+    return formIsValid
+  }
+
   handleSubmit = event => {
     event.preventDefault();
-    const payload = this.state;
+    if(this.handleDrinkValidation()) {
+      const payload = this.state;
     axios.post(`/api/drinks/user/${this.props.user._id}/day/${this.state.date}`, payload)
       .then(() => {
         this.setState({
@@ -108,6 +128,7 @@ export default class AddDrinks extends Component {
         this.props.history.push("/dashboard")
       })
       .catch(err => console.log(err))
+    }
   }
 
   

@@ -44,12 +44,14 @@ export default class RepForm extends Component {
           <FormRow value={this.capitalizeFirstLetter(this.props.food.name)} title={this.props.editing ? ("Food Name: "): ("Recipe Name: ")}
                    type="text" id="recipeName" name="recipeName"
                    handleChange={this.props.handleChange}/>
+          <span style={{color: "red"}}>{this.props.errors["name"]}</span>
           <FormRow value={this.props.food.portion} title="Yield"
                    type="number" id="portion" name="portion" min="0"
                    handleChange={this.props.handleChange}/>
           <FormRow value={this.props.food.eatenPortion} title="Your Portion"
                    type="number" id="eatenPortion" name="eatenPortion" min="0"
                    handleChange={this.props.handleChange}/>
+          <span style={{color: "red"}}>{this.props.errors["eatenPortion"]}</span>
         </form>
         
         <div style={{padding: "20px 0 5px 0"}}>

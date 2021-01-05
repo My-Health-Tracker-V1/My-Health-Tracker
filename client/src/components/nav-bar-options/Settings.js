@@ -55,7 +55,7 @@ export default class Settings extends React.Component {
           {this.state.showForm && 
           <form onSubmit={this.handleSubmit} className='flex flex-column items-center' action="POST">
             <label className="f6 mt3" htmlFor="new-email">New email:</label>
-            <input className="mb2" id="new-email" name="newEmail" onChange={this.handleChange} value={this.state.newEmail} type="text"/>
+            <input className="mb2" id="new-email" name="newEmail" onChange={this.handleChange} value={this.state.newEmail} type="email"/>
             <label className="f6 mt3" htmlFor="newPassword">New password:</label>
             <input className="mb2" id="new-password" name="newPassword" onChange={this.handleChange} value={this.state.newPassword} type="password"/>
             <button className="f6 w4 dim ph3 pv2 mt3 dib white bg-dark-green br-pill b--dark-green" type="submit">Update</button>

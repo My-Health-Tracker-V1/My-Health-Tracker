@@ -7,7 +7,7 @@ export default class AuthForm extends Component {
         <div className="flex flex-column items-center">
               <label className="mv1" htmlFor='email'> Email: </label>
               <input
-                type='text'
+                type='email'
                 name='email'
                 value={this.props.email}
                 onChange={this.props.handleChange}

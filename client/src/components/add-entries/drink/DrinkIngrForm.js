@@ -12,6 +12,7 @@ export default class DrinkIngrForm extends Component {
                 <FormRow value={this.props.name} title="Name: "
                         type="text" id="name" placeholder="Water" name="name" 
                         handleChange={this.props.handleChange}/>
+                <span style={{color: "red"}}>{this.props.errors["name"]}</span>
                 <SelectRow options={options} title="Category: "
                         id="category" name="category"
                         handleChange={this.props.handleChange}/>
@@ -20,6 +21,7 @@ export default class DrinkIngrForm extends Component {
                         type="number" id="servingAmount" placeholder="300" name="servingAmount"
                         min="0"
                         handleChange={this.props.handleChange}/>
+                 <span style={{color: "red"}}>{this.props.errors["servingAmount"]}</span>
                 <FormRow value={this.props.servingSize} title="Unit: "
                         type='text' id='servingSize' placeholder="ml" name='servingSize' 
                         handleChange={this.props.handleChange}/>
