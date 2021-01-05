@@ -12,7 +12,7 @@ export default class AddSymptoms extends Component {
       this.props.location.state?.element.startTime ||
       new Date().toLocaleTimeString("en-US", { hour12: false }).substring(0, 5),
     name: this.props.location.state?.element.name,
-    intensity: this.props.location.state?.element.intensity,
+    intensity: this.props.location.state?.element.intensity || 5,
     notes: this.props.location.state?.element.notes,
     id: this.props.location.state?.element._id,
     editing: this.props.location.state?.editing,
