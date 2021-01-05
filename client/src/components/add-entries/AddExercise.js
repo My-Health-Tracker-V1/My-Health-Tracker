@@ -15,6 +15,7 @@ export default class AddExercise extends Component {
     duration: this.props.location.state?.element.duration,
     id: this.props.location.state?.element._id,
     editing: this.props.location.state?.editing,
+    errors: {},
   };
 
   handleChange = (event) => {
@@ -25,20 +26,41 @@ export default class AddExercise extends Component {
     });
   };
 
+  handleValidation = () => {
+    let duration = this.state.duration;
+    let name = this.state.name;
+    let errors = {};
+    let formIsValid = true;
+
+    if (!duration) {
+      formIsValid = false;
+      errors["duration"] = "Duration cannot be empty";
+    }
+    if (!name) {
+      formIsValid = false;
+      errors["name"] = "Name cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  };
+
   handleSubmit = (event) => {
     event?.preventDefault();
 
-    const exerciseEntry = this.state;
+    if (this.handleValidation()) {
+      const exerciseEntry = this.state;
 
-    axios
-      .post(
-        `/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,
-        exerciseEntry
-      )
-      .then((res) => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .post(
+          `/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,
+          exerciseEntry
+        )
+        .then((res) => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   handleDelete = (event) => {
@@ -60,17 +82,19 @@ export default class AddExercise extends Component {
   handleEditing = (event) => {
     event?.preventDefault();
 
-    const updatedExercise = this.state;
+    if (this.handleValidation()) {
+      const updatedExercise = this.state;
 
-    axios
-      .put(
-        `/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,
-        { data: updatedExercise }
-      )
-      .then((res) => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .put(
+          `/api/exercise/user/${this.props.user._id}/day/${this.state.startDate}`,
+          { data: updatedExercise }
+        )
+        .then((res) => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   render() {
@@ -156,6 +180,7 @@ export default class AddExercise extends Component {
                 );
               })}
             </select>
+            <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
 
             <label htmlFor="intensityLevel" className=" f6 mt3">
               Intensity:
@@ -186,6 +211,9 @@ export default class AddExercise extends Component {
               />
               <span> hrs</span>
             </div>
+            <span style={{ color: "red" }}>
+              {this.state.errors["duration"]}
+            </span>
 
             <button
               type="submit"

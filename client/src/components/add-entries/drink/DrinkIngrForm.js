@@ -21,6 +21,7 @@ export default class DrinkIngrForm extends Component {
             name="name"
             handleChange={this.props.handleChange}
           />
+          <span style={{ color: "red" }}>{this.props.errors["name"]}</span>
           <SelectRow
             options={options}
             title="Category: "
@@ -39,6 +40,9 @@ export default class DrinkIngrForm extends Component {
             min="0"
             handleChange={this.props.handleChange}
           />
+          <span style={{ color: "red" }}>
+            {this.props.errors["servingAmount"]}
+          </span>
           <FormRow
             value={this.props.servingSize}
             title="Unit: "
@@ -58,13 +62,13 @@ export default class DrinkIngrForm extends Component {
         >
           <div>
             {this.props.editing && (
-              <a
+              <button
                 onClick={this.props.handleDeleteDrink}
                 data-key={this.props.drink._id}
                 className="f6 link dim br-pill ba bw1 ph2 mt3 pv2 mb4 mr2 dib dark-blue"
               >
                 ✖️ Delete Drink
-              </a>
+              </button>
             )}
           </div>
           <form

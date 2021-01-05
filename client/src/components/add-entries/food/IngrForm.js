@@ -29,6 +29,7 @@ export default class IngrForm extends Component {
                 name="name"
                 handleChange={this.props.handleChange}
               />
+              <span style={{ color: "red" }}>{this.props.errors["name"]}</span>
               <FormRow
                 value={this.props.tempIngredient.brand}
                 title="Brand: "
@@ -57,6 +58,9 @@ export default class IngrForm extends Component {
                 min="0"
                 handleChange={this.props.handleChange}
               />
+              <span style={{ color: "red" }}>
+                {this.props.errors["servingAmount"]}
+              </span>
               <FormRow
                 value={this.props.tempIngredient.servingSize}
                 title="Unit: "

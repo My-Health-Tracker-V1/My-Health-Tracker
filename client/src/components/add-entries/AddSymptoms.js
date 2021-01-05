@@ -16,6 +16,7 @@ export default class AddSymptoms extends Component {
     notes: this.props.location.state?.element.notes,
     id: this.props.location.state?.element._id,
     editing: this.props.location.state?.editing,
+    errors: {},
   };
 
   handleChange = (event) => {
@@ -26,20 +27,36 @@ export default class AddSymptoms extends Component {
     });
   };
 
+  handleValidation = () => {
+    let name = this.state.name;
+    let errors = {};
+    let formIsValid = true;
+
+    if (!name) {
+      formIsValid = false;
+      errors["name"] = "Name cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  };
+
   handleSubmit = (event) => {
     event?.preventDefault();
 
-    const symptomEntry = this.state;
+    if (this.handleValidation()) {
+      const symptomEntry = this.state;
 
-    axios
-      .post(
-        `/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,
-        symptomEntry
-      )
-      .then((res) => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .post(
+          `/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,
+          symptomEntry
+        )
+        .then((res) => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   handleDelete = (event) => {
@@ -61,17 +78,19 @@ export default class AddSymptoms extends Component {
   handleEditing = (event) => {
     event?.preventDefault();
 
-    const updatedSymptom = this.state;
+    if (this.handleValidation()) {
+      const updatedSymptom = this.state;
 
-    axios
-      .put(
-        `/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,
-        { data: updatedSymptom }
-      )
-      .then((res) => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .put(
+          `/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,
+          { data: [this.state.id, updatedSymptom] }
+        )
+        .then((res) => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   render() {
@@ -146,6 +165,7 @@ export default class AddSymptoms extends Component {
                 );
               })}
             </select>
+            <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
 
             <label htmlFor="intensity" className=" f6 mt3">
               Intensity:

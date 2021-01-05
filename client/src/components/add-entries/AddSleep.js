@@ -15,6 +15,7 @@ export default class AddSleep extends Component {
     notes: this.props.location.state?.element.notes,
     id: this.props.location.state?.element._id,
     editing: this.props.location.state?.editing,
+    errors: {},
   };
 
   handleChange = (event) => {
@@ -25,26 +26,42 @@ export default class AddSleep extends Component {
     });
   };
 
+  handleValidation = () => {
+    let duration = this.state.duration;
+    let errors = {};
+    let formIsValid = true;
+
+    if (!duration) {
+      formIsValid = false;
+      errors["duration"] = "Duration cannot be empty";
+    }
+
+    this.setState({ errors: errors });
+    return formIsValid;
+  };
+
   handleSubmit = (event) => {
     event?.preventDefault();
 
-    const sleepEntry = this.state;
+    if (this.handleValidation()) {
+      const sleepEntry = this.state;
 
-    axios
-      .post(
-        `/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,
-        sleepEntry
-      )
-      .then((res) => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .post(
+          `/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,
+          sleepEntry
+        )
+        .then((res) => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   handleDelete = (event) => {
     event?.preventDefault();
 
-    const sleepToDeleteId = this.state.id;
+    const sleepToDelete = this.state;
 
     axios
       .delete(
@@ -60,17 +77,19 @@ export default class AddSleep extends Component {
   handleEditing = (event) => {
     event?.preventDefault();
 
-    const updatedSleep = this.state;
+    if (this.handleValidation()) {
+      const updatedSleep = this.state;
 
-    axios
-      .put(
-        `/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,
-        { data: updatedSleep }
-      )
-      .then((res) => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .put(
+          `/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,
+          { data: [this.state.id, updatedSleep] }
+        )
+        .then((res) => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   render() {
@@ -126,6 +145,9 @@ export default class AddSleep extends Component {
               />
               <span> hrs</span>
             </div>
+            <span style={{ color: "red" }}>
+              {this.state.errors["duration"]}
+            </span>
 
             <label htmlFor="notes" className="f6 mt3">
               Notes:

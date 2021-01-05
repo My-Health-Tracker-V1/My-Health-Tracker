@@ -16,7 +16,6 @@ router.get("/", (req, res, next) => {
       },
     })
     .then((users) => {
-      console.log(users);
       res.status(200).json(users);
     })
     .catch((err) => {
@@ -40,9 +39,7 @@ router.get("/:id", (req, res, next) => {
       },
     })
     .then((user) => {
-      console.log("this is the response", user);
       if (!user) {
-        console.log("no User");
         res.status(404).json(user);
       } else {
         res.status(200).json(user);
@@ -83,12 +80,10 @@ router.put("/:id", (req, res, next) => {
 
   User.findByIdAndUpdate(req.params.id, update, { new: true })
     .then(() => {
-      res.json({
-        message: `User profile with ${req.params.id} was successfully updated.`,
-      });
+      res.json({ message: `Your profile was successfully updated!` });
     })
     .catch((err) => {
-      res.json(err);
+      res.json({ errorMessage: err.message });
     });
 });
 
@@ -102,9 +97,7 @@ router.delete("/:id", (req, res, next) => {
     .then(() => {
       res
         .status(200)
-        .json({
-          message: `Project with ${req.params.id} is removed successfully.`,
-        });
+        .json({ message: `${req.params.id} is removed successfully.` });
     })
     .catch((err) => {
       res.json(err);

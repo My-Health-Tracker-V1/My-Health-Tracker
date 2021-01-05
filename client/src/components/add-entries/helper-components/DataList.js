@@ -13,12 +13,13 @@ export default class DataList extends Component {
           border: "solid 1px #ccc",
         }}
       >
-        {this.props.data.map((item) => {
+        {this.props.data.map((item, index) => {
           return (
-            <article className="dt w-100 bb b--black-05 pb2 mt2">
+            <article className="dt w-100 bb b--black-05 pb2 mt2" key={index}>
               <div className="dtc w2 w3-ns v-mid">
                 <img
                   src={item[this.props.img]}
+                  alt=""
                   className="ba b--black-10 db br-100 w2 w3-ns h2 h3-ns"
                 />
               </div>
@@ -35,7 +36,6 @@ export default class DataList extends Component {
                   <button
                     className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60"
                     onClick={this.props.handleClick}
-                    key={item[this.props.key]}
                     data-key={item[this.props.dataKey]}
                   >
                     + Add

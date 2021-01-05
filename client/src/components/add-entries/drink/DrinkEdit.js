@@ -23,6 +23,7 @@ export default class DrinkEdit extends Component {
     query: "",
     apiCategory: "",
     editing: true,
+    errors: {},
   };
 
   handleDeleteDrink = (event) => {
@@ -46,34 +47,54 @@ export default class DrinkEdit extends Component {
     });
   };
 
+  handleDrinkValidation = () => {
+    let name = this.state.name;
+    let servingAmount = this.state.servingAmount;
+    let errors = {};
+    let formIsValid = true;
+
+    if (!name) {
+      formIsValid = false;
+      errors["name"] = "Drink name cannot be empty";
+    }
+    if (!servingAmount) {
+      formIsValid = false;
+      errors["servingAmount"] = "Serving amount cannot be empty";
+    }
+    this.setState({ errors: errors });
+    return formIsValid;
+  };
+
   handleEditDrink = (event) => {
     event.preventDefault();
-    this.setState((state) => {
-      return {
-        drink: {
-          ...state.drink,
-          name: state.name,
-          category: state.category,
-          servingAmount: state.servingAmount,
-          servingSize: state.servingSize,
-          startTime: state.startTime,
-        },
+    if (this.handleDrinkValidation()) {
+      this.setState((state) => {
+        return {
+          drink: {
+            ...state.drink,
+            name: state.name,
+            category: state.category,
+            servingAmount: state.servingAmount,
+            servingSize: state.servingSize,
+            startTime: state.startTime,
+          },
+        };
+      });
+      const payload = {
+        user: this.state.user,
+        date: this.state.date,
+        drink: this.state.drink,
       };
-    });
-    const payload = {
-      user: this.state.user,
-      date: this.state.date,
-      drink: this.state.drink,
-    };
-    axios
-      .put(
-        `/api/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.drinkId}/edit`,
-        payload
-      )
-      .then(() => {
-        this.props.history.push("/dashboard");
-      })
-      .catch((err) => console.log(err));
+      axios
+        .put(
+          `/api/drinks/user/${this.state.user._id}/day/${this.state.date}/${this.state.drinkId}/edit`,
+          payload
+        )
+        .then(() => {
+          this.props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   render() {

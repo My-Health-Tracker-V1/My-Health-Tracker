@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 
 export default class FoodBase extends Component {
   constructor(props) {
@@ -25,6 +25,7 @@ export default class FoodBase extends Component {
       selectedIngredient: false,
       handleShowSingle: true,
       query: "",
+      errors: {},
     };
   }
 
@@ -40,7 +41,6 @@ export default class FoodBase extends Component {
   handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(name, value);
     if (name === "date") {
       this.setState({
         date: value,
@@ -74,5 +74,22 @@ export default class FoodBase extends Component {
         tempIngredient: newIngredient,
       });
     }
+  };
+
+  handleSingleValidation = () => {
+    let tempIngredient = this.state.tempIngredient;
+    let errors = {};
+    let formIsValid = true;
+
+    if (!tempIngredient["name"]) {
+      formIsValid = false;
+      errors["name"] = "Food name cannot be empty";
+    }
+    if (!tempIngredient["servingAmount"]) {
+      formIsValid = false;
+      errors["servingAmount"] = "Serving amount cannot be empty";
+    }
+    this.setState({ errors: errors });
+    return formIsValid;
   };
 }

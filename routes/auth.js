@@ -7,33 +7,34 @@ const passport = require("passport");
 
 router.post("/signup", (req, res, next) => {
   const { email, password } = req.body;
-
+  if (email === "" || password === "") {
+    return res
+      .status(400)
+      .json({ message: "Email or password cannot be empty" });
+  }
   if (password.length < 8) {
     return res
       .status(400)
-      .json({ message: "Your password must be 8 chars minimum" });
+      .json({ message: "The password must be 8 characters long" });
   }
-  if (email === "") {
-    return res.status(400).json({ message: "Your email cannot be empty" });
-  }
-
   User.findOne({ email: email }).then((found) => {
     if (found !== null) {
-      return res.status(400).json({ message: "Your email is already taken" });
+      return res.status(400).json({ message: "The email is already taken" });
     } else {
       const salt = bcrypt.genSaltSync();
       const hash = bcrypt.hashSync(password, salt);
-
       User.create({
         email: email,
         password: hash,
       })
         .then((dbUser) => {
           req.login(dbUser, (err) => {
-            if (err) {
+            if (err instanceof mongoose.Error.ValidationError) {
+              return res.status(500).json({ message: err.message });
+            } else if (err.code === 11000) {
               return res
                 .status(500)
-                .json({ message: "Error while attempting to login" });
+                .json({ message: "Please enter a valid email address" });
             }
             return res.status(200).json(dbUser);
           });

@@ -63,6 +63,7 @@ export default class RepForm extends Component {
             name="recipeName"
             handleChange={this.props.handleChange}
           />
+          <span style={{ color: "red" }}>{this.props.errors["name"]}</span>
           <FormRow
             value={this.props.food.portion}
             title="Yield"
@@ -81,30 +82,34 @@ export default class RepForm extends Component {
             min="0"
             handleChange={this.props.handleChange}
           />
+          <span style={{ color: "red" }}>
+            {this.props.errors["eatenPortion"]}
+          </span>
         </form>
 
         <div style={{ padding: "20px 0 5px 0" }}>
           {this.props.food.ingredients.map((ingr, index) => {
             return (
-              <div>
-                <a
+              <div key={ingr._id}>
+                <button
                   onClick={
                     this.props.editing ? this.props.toggleEditIngr : () => {}
                   }
+                  key={ingr._id}
                   data-key={index}
                   className="f7 link dim br2 ph1 pv1 mb2 pa4 mr2 dib white bg-dark-green"
                 >
                   {ingr.name}
-                </a>
+                </button>
                 {this.props.editing && (
-                  <a
+                  <button
                     onClick={this.props.handleDeleteIngredient}
                     data-key={index}
                     className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-pink"
                   >
                     {" "}
                     ✖️{" "}
-                  </a>
+                  </button>
                 )}
               </div>
             );
@@ -112,13 +117,13 @@ export default class RepForm extends Component {
         </div>
 
         {this.props.editing && (
-          <a
+          <button
             onClick={this.props.toggleAddIngr}
             className="f7 link dim br4 ba ph2 pv1 mb3 dib dark-green"
           >
             {" "}
             ➕ Add a new ingredient
-          </a>
+          </button>
         )}
         {editInterface}
         {addInterface}
@@ -131,13 +136,13 @@ export default class RepForm extends Component {
         >
           <div>
             {this.props.editing && (
-              <a
+              <button
                 onClick={this.props.handleDeleteFood}
                 data-key={this.props.food._id}
                 className="f6 link dim br-pill ba bw1 ph2 pv2 mb4 mr3 dib dark-blue"
               >
                 ✖️ Delete Food
-              </a>
+              </button>
             )}
           </div>
           <form

@@ -3,17 +3,17 @@ import React from "react";
 function FormRow(props) {
   return (
     <div>
-      <label htmlFor={props.name} className="f6 w3 dib">
-        {props.title}
+      <label htmlFor={props.name || ""} className="f6 w3 dib">
+        {props.title || ""}
       </label>
       <input
         className="f6 pa1 mr3 ml1 w4 mv1"
         type={props.type}
         id={props.id}
         placeholder={props.placeholder}
-        name={props.name}
-        value={props.value}
-        onChange={props.handleChange}
+        name={props.name || ""}
+        value={props.value || ""}
+        onChange={(event) => props.handleChange(event)}
       />
     </div>
   );
@@ -24,17 +24,22 @@ function SelectRow(props) {
     <div>
       <label htmlFor={props.id} className="f6 w3 dib">
         {" "}
-        {props.title}{" "}
+        {props.title || ""}{" "}
       </label>
       <select
         className="f6 pa1 mr3 ml1 w4 mv1"
-        value={props.value}
+        value={props.value || ""}
         id={props.id}
-        name={props.name}
-        onChange={props.handleSelectCategory}
+        name={props.name || ""}
+        onChange={(event) => props.handleSelectCategory(event)}
       >
         {props.options.map((option) => {
-          return <option value={option}> {option} </option>;
+          return (
+            <option key={option} value={option}>
+              {" "}
+              {option}{" "}
+            </option>
+          );
         })}
       </select>
     </div>

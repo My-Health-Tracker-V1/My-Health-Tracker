@@ -10,7 +10,7 @@ export default class AddEnergy extends Component {
     startTime:
       this.props.location.state?.element.startTime ||
       new Date().toLocaleTimeString("en-US", { hour12: false }).substring(0, 5),
-    energyLevel: this.props.location.state?.element.energyLevel,
+    energyLevel: this.props.location.state?.element.energyLevel || 5,
     editing: this.props.location.state?.editing,
   };
 
