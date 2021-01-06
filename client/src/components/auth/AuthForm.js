@@ -5,10 +5,7 @@ export default class AuthForm extends Component {
     return (
       <div>
         <div className="flex flex-column items-center">
-          <label className="mv1" htmlFor="email">
-            {" "}
-            Email:{" "}
-          </label>
+          <label className="mv1" htmlFor="email"> Email: </label>
           <input
             type="email"
             name="email"

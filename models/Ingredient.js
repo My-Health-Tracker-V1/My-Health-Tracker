@@ -8,6 +8,7 @@ const ingredientSchema = new Schema(
     category: String,
     servingAmount: Number,
     servingSize: String,
+    imgUrl: String,
     owner: { type: Schema.Types.ObjectId, ref: "User" },
   },
 

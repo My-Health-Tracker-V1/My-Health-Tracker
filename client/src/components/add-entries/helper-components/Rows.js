@@ -22,23 +22,17 @@ function FormRow(props) {
 function SelectRow(props) {
   return (
     <div>
-      <label htmlFor={props.id} className="f6 w3 dib">
-        {" "}
-        {props.title || ""}{" "}
-      </label>
+      <label htmlFor={props.id} className="f6 w3 dib"> {props.title || ""} </label>
       <select
         className="f6 pa1 mr3 ml1 w4 mv1"
         value={props.value || ""}
         id={props.id}
         name={props.name || ""}
-        onChange={(event) => props.handleSelectCategory(event)}
+        onChange={(event) => props.handleChange(event)}
       >
         {props.options.map((option) => {
           return (
-            <option key={option} value={option}>
-              {" "}
-              {option}{" "}
-            </option>
+            <option key={option} value={option}> {option} </option>
           );
         })}
       </select>

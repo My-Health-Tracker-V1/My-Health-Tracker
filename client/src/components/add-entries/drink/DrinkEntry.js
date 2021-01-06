@@ -20,6 +20,7 @@ export default class AddDrinks extends Component {
     category: this.props.location.state?.element.drinks[0].category,
     servingAmount: this.props.location.state?.element.drinks[0].servingAmount,
     servingSize: this.props.location.state?.element.drinks[0].servingSize,
+    imgUrl: "",
     drinks: [],
     query: "",
     apiCategory: "",
@@ -72,6 +73,7 @@ export default class AddDrinks extends Component {
     );
     this.setState({
       name: clickedDrink.strDrink,
+      imgUrl: clickedDrink.strDrinkThumb
     });
   };
 
@@ -171,7 +173,7 @@ export default class AddDrinks extends Component {
             id="apiCategory"
             name="apiCategory"
             value={this.state.apiCategory}
-            handleSelectCategory={this.handleSelectCategory}
+            handleChange={this.handleSelectCategory}
           />
           <SearchField
             query={this.state.query}
