@@ -61,7 +61,7 @@ export default class AddSleep extends Component {
   handleDelete = (event) => {
     event?.preventDefault();
 
-    const sleepToDelete = this.state;
+    const sleepToDeleteId = this.state.id;
 
     axios
       .delete(
@@ -83,7 +83,7 @@ export default class AddSleep extends Component {
       axios
         .put(
           `/api/sleep/user/${this.props.user._id}/day/${this.state.startDate}`,
-          { data: [this.state.id, updatedSleep] }
+          { data: updatedSleep }
         )
         .then((res) => {
           this.props.history.push("/dashboard");

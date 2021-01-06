@@ -84,7 +84,7 @@ export default class AddSymptoms extends Component {
       axios
         .put(
           `/api/symptoms/user/${this.props.user._id}/day/${this.state.startDate}`,
-          { data: [this.state.id, updatedSymptom] }
+          { data: updatedSymptom }
         )
         .then((res) => {
           this.props.history.push("/dashboard");
