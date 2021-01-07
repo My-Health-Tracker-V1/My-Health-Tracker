@@ -58,9 +58,15 @@ export default class Analysis extends Component {
         }`
       )
       .then((res) => {
-        this.setState({
-          selectedData: [...res.data],
-        });
+        if (typeof res.data !== "string") {
+          this.setState({
+            selectedData: [...res.data],
+          });
+        } else {
+          this.setState({
+            selectedData: [],
+          });
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -72,7 +78,7 @@ export default class Analysis extends Component {
   render() {
     let chartTitle;
     let yTitle;
-    
+
     if (this.state.selectedOutcome === "Energy") {
       chartTitle = "Energy Level & ";
       yTitle = "Energy Level";
