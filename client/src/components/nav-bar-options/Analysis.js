@@ -158,7 +158,9 @@ export default class Analysis extends Component {
             </select>
           </div>
 
-          {this.state.selectedEvent === "Sleep" || !this.state.selectedEvent ? (
+          {this.state.selectedEvent === "Sleep" ||
+          this.state.selectedEvent === "Select" ||
+          !this.state.selectedEvent ? (
             <></>
           ) : (
             <div className="flex items-center">
@@ -183,7 +185,10 @@ export default class Analysis extends Component {
             </div>
           )}
 
-          {this.state.selectedData.length === 0 ? (
+          {this.state.selectedData.length === 0 ||
+          this.state.selectedOutcome === "Select" ||
+          this.state.selectedEvent === "Select" ||
+          this.state.selectedSpecificEvent === "Select" ? (
             <></>
           ) : (
             <div>
