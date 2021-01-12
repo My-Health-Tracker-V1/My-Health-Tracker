@@ -1,6 +1,6 @@
-# MERN-stack | My Health Tracker
+# My Health Tracker | MERN-stack App
 
-A MERN-stack app allowing users to keep track of their eating, sleeping and exercise habits as well as their physical well-being. Provided analytics of accumulated data to discover correlations among these features. 
+A MERN-stack app allowing users to keep track of their eating, sleeping and exercise habits as well as their physical well-being. The app also allows for analytics of accumulated data to discover correlations among these features. 
 
 ## Technologies
 
@@ -17,28 +17,28 @@ email: jasmin.tea@gmail.com
 password: rjj8uN9qVAtmt8B
 ```
 
-## Try the codes on your localhost
+## Try the code on your localhost
 
 ### Step 1 | Fork this repo
 
-Click `Fork` to making a copy of this project on your remote repo
+Click `Fork` to make a copy of this project
 
 ### Step 2 | Clone this repo
-Go to your terminal and navigate to the directory where you want to clone the remote repo to your local machine
+Go to your terminal, navigate to a directory and clone the repo to your local machine
 
 ```shell
 $ git clone <Repo-HTTPS>
 ```
 ### Step 3 | Run the backend server
-Run the following codes in the roots folder of `my-health-tracker`
+Run the following code within the folder `my-health-tracker`
 
 ```shell
 $ cd my-health-tracker
 $ npm install
 $ npm run dev
 ```
-### Step 4 | Start the react app
-Open another terminal pane and nagivate into the `client` folder
+### Step 4 | Launch the react app
+Open another terminal window and nagivate to the `client` folder
 
 ```shell
 $ cd my-health-tracker/client
