@@ -1,14 +1,12 @@
-![image](Users/xiaomei/Downloads/activity-tracker.png)
-
 # MERN STACK | My Health Tracker
 
 A MERN-stack app allowing users to keep track of their eating, sleeping and exercise habits as well as their physical well-being. Provided analytics of accumulated data to discover correlations among these features. 
 
-## Technologies used
+## Technologies
 
-Frontend: React.js, axios
-Backend: Express.js, Node.js, MongoDB, REST API
-Styling library: https://tachyons.io/
+- **Frontend:** `React.js`, `axios`
+- **Backend:** Express.js, Node.js, MongoDB, REST API
+- **Styling library:** https://tachyons.io/
 
 ## Try the deployed app on Heroku
 
