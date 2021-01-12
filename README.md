@@ -4,6 +4,7 @@ A MERN-stack app allowing users to keep track of their eating, sleeping and exer
 
 ## Technologies
 
+- **Language:** `JavaScript`
 - **Frontend:** `React.js`, `axios`
 - **Backend:** `Express.js`, `Node.js`, `MongoDB`, `REST API`
 - **Styling library:** https://tachyons.io/
