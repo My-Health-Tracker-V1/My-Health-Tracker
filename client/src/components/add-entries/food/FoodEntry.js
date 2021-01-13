@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TopBar from "../../shared/TopBar";
 import BottomNavbar from "../../shared/BottomNavbar";
 import DateTimeInput from "../helper-components/DateTimeInput";
@@ -7,68 +7,113 @@ import DataList from "../helper-components/DataList";
 import SearchField from "../helper-components/SearchField";
 import IngrForm from "./IngrForm";
 import RepForm from "./RepForm";
-import FoodBase from "./FoodBase";
+import { useFoodbase } from "./FoodBase";
 import "./FoodEntry.css";
 
-export default class FoodEntry extends FoodBase {
-  constructor(props) {
-    super(props);
-    this.state.food = {
-      startTime:
-        this.props.location.state?.element.startTime ||
-        new Date()
-          .toLocaleTimeString("en-US", { hour12: false })
-          .substring(0, 5),
-      name: "",
-      portion: "",
-      eatenPortion: "",
-      imgUrl: "",
-      ingredients: [],
-    };
-    this.state.ingredients = [];
-    this.state.recipes = [];
-    this.state.editing = false;
-  }
+export default function FoodEntry(props) {
+  const [
+    user,
+    setUser,
+    date,
+    setDate,
+    tempStartTime,
+    setTempStartTime,
+    tempIngredient,
+    setTempIngredient,
+    food,
+    setFood,
+    add,
+    setAdd,
+    edit,
+    setEdit,
+    tempIngId,
+    setTempIngId,
+    selectedIngredient,
+    setSelectedIngredient,
+    handleShowSingle,
+    setHandleShowSingle,
+    query,
+    setQuery,
+    errors,
+    setErrors,
+    handleChange,
+    handleSingleValidation,
+    capitalizeFirstLetter,
+  ] = useFoodbase(props);
 
+  const [ingredients, setIngredients] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [editing, setEditing] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
-  getIngredientsFromEdamam = () => {
+  useEffect(() => {
+    if (submit && handleShowSingle) {
+      setSubmit(false);
+      const payload = {
+        user: user,
+        date: date,
+        food: food,
+      };
+      axios
+        .post(`/api/ingredients/user/${props.user._id}/day/${date}`, payload)
+        .then(() => {
+          props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
+
+    if (submit && !handleShowSingle) {
+      setSubmit(false);
+      const payload = {
+        user: user,
+        date: date,
+        food: food,
+      };
+      axios
+        .post(`/api/ingredients/user/${props.user._id}/day/${date}`, payload)
+        .then(() => {
+          props.history.push("/dashboard");
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [food]);
+
+  const getIngredientsFromEdamam = () => {
     axios
       .get(
         `https://api.edamam.com/api/food-database/v2/parser?ingr=apple&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`
       )
       .then((res) => {
-        this.setState({
-          ingredients: res.data.hints.map((hint) => hint.food),
-        });
+        setIngredients(res.data.hints.map((hint) => hint.food));
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  getRecipeFromEdamam = () => {
+  const getRecipeFromEdamam = () => {
     axios
       .get(
         "https://api.edamam.com/search?q=chicken&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf"
       )
       .then((res) => {
-        this.setState({
-          recipes: res.data.hits.map((hit) => {
+        setRecipes(
+          res.data.hits.map((hit) => {
             return { ...hit.recipe, healthLabels: hit.recipe.healthLabels[0] };
-          }),
-        });
+          })
+        );
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  componentDidMount = () => {
-    this.getIngredientsFromEdamam();
-    this.getRecipeFromEdamam();
-  };
+  useEffect(() => {
+    getIngredientsFromEdamam();
+    getRecipeFromEdamam();
+  }, []);
 
-  apiFormat = (apiObj) => {
+  const apiFormat = (apiObj) => {
     return {
       name: apiObj.text,
       servingAmount: apiObj.weight,
@@ -77,105 +122,84 @@ export default class FoodEntry extends FoodBase {
     };
   };
 
-  handleClick = (event) => {
+  const handleClick = (event) => {
     event.preventDefault();
     const key = event.target.getAttribute("data-key");
-    this.setState((state) => {
-      const clickedIngr = state.ingredients.find(
-        (ingredient) => ingredient.foodId === key
-      );
-      return {
-        tempIngredient: {
-          ...state.tempIngredient,
-          name: clickedIngr.label,
-          brand: clickedIngr.brand,
-          category: clickedIngr.category,
-          imgUrl: clickedIngr.image
-        },
-      };
+    const clickedIngr = ingredients.find(
+      (ingredient) => ingredient.foodId === key
+    );
+    setTempIngredient({
+      ...tempIngredient,
+      name: clickedIngr.label,
+      brand: clickedIngr.brand,
+      category: clickedIngr.category,
+      imgUrl: clickedIngr.image,
     });
   };
 
-  handleClickRecipe = (event) => {
+  const handleClickRecipe = (event) => {
     event.preventDefault();
     const key = event.target.getAttribute("data-key");
-    this.setState((state) => {
-      const clickedRecipe = state.recipes.find((recipe) => recipe.uri === key);
-      return {
-        food: {
-          ...state.food,
-          name: clickedRecipe.label,
-          portion: clickedRecipe.yield,
-          category: clickedRecipe.healthLabels,
-          imgUrl: clickedRecipe.image,
-          ingredients: clickedRecipe.ingredients.map(this.apiFormat),
-        },
-      };
+    const clickedRecipe = recipes.find((recipe) => recipe.uri === key);
+    setFood({
+      ...food,
+      name: clickedRecipe.label,
+      portion: clickedRecipe.yield,
+      category: clickedRecipe.healthLabels,
+      imgUrl: clickedRecipe.image,
+      ingredients: clickedRecipe.ingredients.map(apiFormat),
     });
   };
 
-  // Handle search bar
-  handleSearch = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    this.setState({
-      [name]: value,
-    });
+  const handleSearch = (event) => {
+    const newQuery = event.target.value;
+    setQuery(newQuery);
   };
 
-  // Handle query
-  handleQuery = (event) => {
+  const handleQuery = (event) => {
     event?.preventDefault();
     axios
       .get(
-        `https://api.edamam.com/api/food-database/v2/parser?ingr=${this.state.query}&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`
+        `https://api.edamam.com/api/food-database/v2/parser?ingr=${query}&app_id=a8d04f87&app_key=9bef4ef3849ca36424acf675dc4bde39`
       )
       .then((res) => {
-        this.setState({
-          query: event.target.value,
-          ingredients: res.data.hints.map((hint) => hint.food),
-        });
+        // don't need this
+        setQuery(event.target.value);
+        setIngredients(res.data.hints.map((hint) => hint.food));
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  handleRecipeQuery = (event) => {
+  const handleRecipeQuery = (event) => {
     event?.preventDefault();
     axios
       .get(
-        `https://api.edamam.com/search?q=${this.state.recipeQuery}&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf`
+        `https://api.edamam.com/search?q=${query}&app_id=94c8109f&app_key=9368a28ab0cd2aa9f4ecde91644867cf`
       )
       .then((res) => {
-        this.setState({
-          recipeQuery: event.target.value,
-          recipes: res.data.hits.map((hit) => {
+        setQuery(event.target.value);
+        setRecipes(
+          res.data.hits.map((hit) => {
             return { ...hit.recipe, healthLabels: hit.recipe.healthLabels[0] };
-          }),
-        });
+          })
+        );
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  // Toggle Recipe
-  toggleRecipe = () => {
-    this.setState({
-      handleShowSingle: false,
-    });
+  const toggleRecipe = () => {
+    setHandleShowSingle(false);
   };
 
-  toggleSingle = () => {
-    this.setState({
-      handleShowSingle: true,
-    });
+  const toggleSingle = () => {
+    setHandleShowSingle(true);
   };
 
-  handleRecipeValidation = () => {
-    let food = this.state.food;
-    let errors = {};
+  const handleRecipeValidation = () => {
     let formIsValid = true;
 
     if (!food["name"]) {
@@ -186,177 +210,141 @@ export default class FoodEntry extends FoodBase {
       formIsValid = false;
       errors["eatenPortion"] = "Your portion cannot be empty";
     }
-    this.setState({ errors: errors });
+    setErrors(errors);
     return formIsValid;
   };
 
-  // Submit Single form
-  handleSingleSubmit = (event) => {
+  const handleSingleSubmit = (event) => {
     event.preventDefault();
-    if (this.handleSingleValidation()) {
-      this.setState(
-        (state) => {
-          return {
-            food: {
-              ...state.food,
-              ingredients: [state.tempIngredient],
-              name: this.capitalizeFirstLetter(state.tempIngredient.name),
-              portion: 1,
-              eatenPortion: 1,
-              startTime: state.tempStartTime,
-              imgUrl: state.tempIngredient.imgUrl
-            },
-          };
-        },
-        () => {
-          const payload = {
-            user: this.state.user,
-            date: this.state.date,
-            food: this.state.food,
-          };
-          axios
-            .post(
-              `/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`,
-              payload
-            )
-            .then(() => {
-              this.props.history.push("/dashboard");
-            })
-            .catch((err) => console.log(err));
-        }
-      );
+    if (handleSingleValidation()) {
+      setSubmit(true);
+      setFood({
+        ...food,
+        ingredients: [tempIngredient],
+        name: capitalizeFirstLetter(tempIngredient.name),
+        portion: 1,
+        eatenPortion: 1,
+        startTime: tempStartTime,
+        imgUrl: tempIngredient.imgUrl,
+      });
     } else {
-      this.props.history.push("/add/Foods")
+      props.history.push("/add/Foods");
     }
   };
 
-  // Submit Recipe form
-  handleRecipeSubmit = (event) => {
+  const handleRecipeSubmit = (event) => {
     event.preventDefault();
-    if (this.handleRecipeValidation()) {
-      this.setState(
-        (state) => {
-          return {
-            food: {
-              ...state.food,
-              name: this.capitalizeFirstLetter(state.food.name),
-              startTime: state.tempStartTime,
-              imgUrl: state.food.imgUrl
-            },
-          };
-        },
-        () => {
-          const payload = {
-            user: this.state.user,
-            date: this.state.date,
-            food: this.state.food,
-          };
-          axios
-            .post(
-              `/api/ingredients/user/${this.props.user._id}/day/${this.state.date}`,
-              payload
-            )
-            .then(() => {
-              this.props.history.push("/dashboard");
-            })
-            .catch((err) => console.log(err));
-        }
-      );
+    if (handleRecipeValidation()) {
+      setSubmit(true);
+      setFood({
+        ...food,
+        name: capitalizeFirstLetter(food.name),
+        startTime: tempStartTime,
+        imgUrl: food.imgUrl,
+      });
+    } else {
+      props.history.push("/add/Foods");
     }
   };
 
-  render() {
-    let dataComponent, formComponent, searchField, title;
-    if (this.state.handleShowSingle) {
-      dataComponent = (
-        <DataList
-          data={this.state.ingredients}
-          img="image"
-          heading="label"
-          subtitle="category"
-          key="foodId"
-          dataKey="foodId"
-          handleClick={this.handleClick}
-        />
-      );
-      formComponent = (
-        <IngrForm
-          {...this.state}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSingleSubmit}
-        />
-      );
-      searchField = (
-        <SearchField
-          handleSearch={this.handleSearch}
-          handleQuery={this.handleQuery}
-          query={this.state.query}
-          placeholder="Ingredients in your dish..."
-        />
-      );
-      title = <h4>Suggested Foods</h4>;
-    } else {
-      dataComponent = (
-        <DataList
-          data={this.state.recipes}
-          img="image"
-          heading="label"
-          subtitle="healthLabels"
-          key="uri"
-          dataKey="uri"
-          handleClick={this.handleClickRecipe}
-        />
-      );
-      formComponent = (
-        <RepForm
-          {...this.state}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleRecipeSubmit}
-        />
-      );
-      searchField = (
-        <SearchField
-          handleSearch={this.handleSearch}
-          handleQuery={this.handleRecipeQuery}
-          query={this.state.query}
-          placeholder="Find your recipe..."
-        />
-      );
-      title = <h4>Suggested Recipes</h4>;
-    }
-
-    return (
-      <div>
-        <TopBar title="Foods" icon="Foods" />
-        <div className="pt3 pb6">
-          <DateTimeInput
-            startTime={this.state.tempStartTime}
-            date={this.state.date}
-            handleChange={this.handleChange}
-          />
-          <button
-            className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
-            onClick={this.toggleSingle}
-          >
-            {" "}
-            + Add a single food
-          </button>
-          <button
-            className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue"
-            onClick={this.toggleRecipe}
-          >
-            {" "}
-            + Add a recipe
-          </button>
-          <div>
-            {title}
-            {searchField}
-            {dataComponent}
-            {formComponent}
-          </div>
-        </div>
-        <BottomNavbar />
-      </div>
+  let dataComponent, formComponent, searchField, title;
+  if (handleShowSingle) {
+    dataComponent = (
+      <DataList
+        data={ingredients}
+        img="image"
+        heading="label"
+        subtitle="category"
+        key="foodId"
+        dataKey="foodId"
+        handleClick={handleClick}
+      />
     );
+    formComponent = (
+      <IngrForm
+        add={add}
+        tempIngredient={tempIngredient}
+        errors={errors}
+        edit={edit}
+        editing={editing}
+        handleChange={handleChange}
+        handleSubmit={handleSingleSubmit}
+      />
+    );
+    searchField = (
+      <SearchField
+        handleSearch={handleSearch}
+        handleQuery={handleQuery}
+        query={query}
+        placeholder="Ingredients in your dish..."
+      />
+    );
+    title = <h4>Suggested Foods</h4>;
+  } else {
+    dataComponent = (
+      <DataList
+        data={recipes}
+        img="image"
+        heading="label"
+        subtitle="healthLabels"
+        key="uri"
+        dataKey="uri"
+        handleClick={handleClickRecipe}
+      />
+    );
+    formComponent = (
+      <RepForm
+        add={add}
+        food={food}
+        tempIngredient={tempIngredient}
+        errors={errors}
+        edit={edit}
+        editing={editing}
+        handleChange={handleChange}
+        handleSubmit={handleRecipeSubmit}
+      />
+    );
+    searchField = (
+      <SearchField
+        handleSearch={handleSearch}
+        handleQuery={handleRecipeQuery}
+        query={query}
+        placeholder="Find your recipe..."
+      />
+    );
+    title = <h4>Suggested Recipes</h4>;
   }
+  return (
+    <div>
+      <TopBar title="Foods" icon="Foods" />
+      <div className="pt3 pb6">
+        <DateTimeInput
+          startTime={tempStartTime}
+          date={date}
+          handleChange={handleChange}
+        />
+        <button
+          className="f6 link dim br4 ph2 pv1 mb2 dib white bg-dark-blue"
+          onClick={toggleSingle}
+        >
+          {" "}
+          + Add a single food
+        </button>
+        <button
+          className="f6 link dim br4 ph3 pv1 mb2 dib white bg-dark-blue"
+          onClick={toggleRecipe}
+        >
+          {" "}
+          + Add a recipe
+        </button>
+        <div>
+          {title}
+          {searchField}
+          {dataComponent}
+          {formComponent}
+        </div>
+      </div>
+      <BottomNavbar />
+    </div>
+  );
 }

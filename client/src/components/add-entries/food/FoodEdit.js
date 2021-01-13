@@ -4,7 +4,7 @@ import TopBar from "../../shared/TopBar";
 import BottomNavbar from "../../shared/BottomNavbar";
 import DateTimeInput from "../helper-components/DateTimeInput";
 import RepForm from "./RepForm";
-import FoodBase from "./FoodBase";
+import {FoodBase} from "./FoodBase";
 
 export default class FoodEdit extends FoodBase {
   constructor(props) {
